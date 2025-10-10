@@ -184,9 +184,13 @@ var pendingAdd=null;
     document.getElementById('acceptTerms').addEventListener('click', accept);
     document.getElementById('declineTerms').addEventListener('click', decline);
   }
-  window.ensureTermsThen = function(fn){
-    if(localStorage.getItem(KEY)==='1'){ fn(); }
-    else { pendingAdd = fn; if(bg) bg.style.display='flex'; }
+  ensureTermsThen(()=>{
+  if(found) found.qty++; else cart.push({id, qty:1});
+  setCart(cart);
+  ybPlayAdd(); // 🔊 add-to-cart sound
+  alert('Added. Will this fill the void?');
+});
+
   }
 })(); 
 </script>
