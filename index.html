@@ -190,5 +190,52 @@ var pendingAdd=null;
   }
 })(); 
 </script>
+  <script>
+// ---- Yellow Basket SFX (ultra-light, no assets) ----
+let ybAudioCtx;
+function ybEnsureCtx(){
+  ybAudioCtx = ybAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
+  if (ybAudioCtx.state === 'suspended') ybAudioCtx.resume();
+}
+
+// Add-to-cart blip (ascending)
+function ybPlayAdd(){
+  if (document.body.classList.contains('lb')) return; // mute kapag Low-Bandwidth Mode
+  try {
+    ybEnsureCtx();
+    const t = ybAudioCtx.currentTime;
+    const o = ybAudioCtx.createOscillator();
+    const g = ybAudioCtx.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(440, t);
+    o.frequency.exponentialRampToValueAtTime(660, t + 0.08);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.20, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    o.connect(g); g.connect(ybAudioCtx.destination);
+    o.start(t); o.stop(t + 0.2);
+  } catch(e){}
+}
+
+// Confirm/checkout blip (descending)
+function ybPlayConfirm(){
+  if (document.body.classList.contains('lb')) return;
+  try {
+    ybEnsureCtx();
+    const t = ybAudioCtx.currentTime;
+    const o = ybAudioCtx.createOscillator();
+    const g = ybAudioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(880, t);
+    o.frequency.exponentialRampToValueAtTime(440, t + 0.12);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+    o.connect(g); g.connect(ybAudioCtx.destination);
+    o.start(t); o.stop(t + 0.16);
+  } catch(e){}
+}
+</script>
+
 </body>
 </html>
