@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Receipt — Yellow Basket</title>
+<style>
+  :root { --ink:#222; --line:#ececec; }
+  body { font:16px/1.5 system-ui; margin:0; color:var(--ink); }
+  header { border-bottom:1px solid var(--line); padding:12px 16px; }
+  .wrap { max-width:800px; margin:0 auto; padding:16px; }
+  table{width:100%; border-collapse:collapse;}
+  th,td{padding:8px; border-bottom:1px solid var(--line); text-align:left;}
+  .muted{opacity:.7; font-size:12px;}
+  .stamp{display:inline-block; border:2px solid #000; padding:6px 10px; border-radius:8px; font-weight:700}
+  .success{background:#eaffea}
+  @media print { header a { display:none } }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <a href="index.html">← Yellow Basket</a>
+</header>
+<main class="wrap">
+  <h1>Receipt</h1>
+  <p class="muted" id="when"></p>
+  <table id="lines">
+    <thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Line</th></tr></thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr><td colspan="3">Subtotal</td><td id="subtotal">₱0.00</td></tr>
+      <tr><td colspan="3">Payment</td><td id="payment">—</td></tr>
+      <tr><td colspan="3"><strong>Total Paid</strong></td><td id="paid">₱0.00</td></tr>
+    </tfoot>
+  </table>
+  <p id="exposureStamp"></p>
+  <p class="muted" id="notes"></p>
+  <p><button onclick="window.print()">Print</button> <a href="index.html">Back to Shop</a></p>
+</main>
+<script>
+(function(){
+  const raw = localStorage.getItem('yb_last_order');
+  if(!raw){ document.getElementById('lines').insertAdjacentHTML('afterend','<p>No order found.</p>'); return; }
+  const o = JSON.parse(raw);
+  const when = new Date(o.ts).toLocaleString();
+  document.getElementById('when').textContent = 'Order time: ' + when;
+  const tb = document.querySelector('#lines tbody');
+  tb.innerHTML = o.items.map(it => `<tr>
+    <td>${it.title}</td><td>${it.qty}</td><td>₱${it.unit.toFixed(2)}</td><td>₱${it.line.toFixed(2)}</td>
+  </tr>`).join('');
+  document.getElementById('subtotal').textContent = '₱' + o.sum.toFixed(2);
+
+  let payLabel = o.method === 'exposure' ? 'Exposure (Promised Visibility)' : (o.method === 'cod' ? 'Cash on Delivery (Conceptual)' : 'Card');
+  if(o.promo){ payLabel += ` + Promo: ${o.promo}`; }
+  document.getElementById('payment').textContent = payLabel;
+  document.getElementById('paid').textContent = '₱' + o.discounted.toFixed(2);
+
+  if(o.method === 'exposure'){
+    document.getElementById('exposureStamp').innerHTML = '<span class="stamp">PAID WITH EXPOSURE</span>';
+    document.getElementById('notes').textContent = 'Balance due in rent, groceries, and rest: still outstanding. Compensation recorded as perceived reach (+0).';
+  } else {
+    document.getElementById('notes').textContent = 'This transaction is fictional. Any resemblance to real payments is coincidental.';
+  }
+})();
+</script>
+</body>
+</html>

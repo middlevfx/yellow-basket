@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Yellow Basket</title>
+<meta name="description" content="A lightweight e-commerce satire from Low Bandwidth Dreams."/>
+<style>
+  :root { --ink:#222; --line:#ececec; --accent:#f0c400; }
+  * { box-sizing: border-box; }
+  body { font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin:0; color:var(--ink); background:#fff; }
+  header, footer { padding:12px 16px; border-bottom:1px solid var(--line); }
+  footer { border-top:1px solid var(--line); border-bottom:none; }
+  a { color:inherit; }
+  .brand { font-weight:700; letter-spacing:0.2px; }
+  .note { font-size:12px; opacity:.7; }
+  .wrap { max-width:1000px; margin:0 auto; }
+  .grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); padding:16px; }
+  .card { border:1px solid var(--line); padding:12px; display:flex; flex-direction:column; border-radius:12px; }
+  .card img { width:100%; height:120px; object-fit:contain; background:#fff; border:1px dashed var(--line); border-radius:10px; }
+  .price { margin-top:auto; font-weight:600; }
+  .btn { display:inline-block; padding:6px 10px; border:1px solid var(--ink); text-decoration:none; border-radius:10px; }
+  .btn + .btn { margin-left:6px; }
+  .badge { font-size:12px; border:1px dashed var(--accent); padding:2px 6px; border-radius:8px; display:inline-block; }
+  .strip { background: repeating-linear-gradient(45deg, #fff, #fff 8px, #fffbcc 8px, #fffbcc 16px); border-bottom:1px solid var(--line); }
+  .hero { padding:10px 16px; }
+
+  /* Low‑Bandwidth mode */
+  body.lb img { display:none !important; }
+  body.lb .glitch::before, body.lb .glitch::after { animation: none !important; text-shadow: none !important; transform:none !important; }
+  body.lb .strip { background:#fff !important; }
+
+  /* Terms modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:99}
+  .modal{background:#fff;border:1px solid var(--line);border-radius:14px;max-width:560px;width:92%;padding:16px}
+  .modal h2{margin:0 0 8px 0}
+  .modal p{margin:0 0 8px 0}
+  .modal .btns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <div class="brand">Yellow Basket</div>
+    <nav>
+      <a href="cart.html">Cart (<span id="cartCount">0</span>)</a> · <a href="abandoned.html">Abandoned</a>
+    </nav>
+  </div>
+
+<div class="wrap" style="padding:6px 16px; border-top:1px solid var(--line); font-size:13px;">
+  <label><input type="checkbox" id="lbToggle"> Low‑Bandwidth Mode</label>
+</div>
+</header>
+
+
+<div class="strip">
+  <div class="wrap hero">
+    <span class="glitch" data-text="SALE">SALE</span> Up to -100% on intangible goods. <span id="saleTimer" class="note"></span><br/>
+    <strong>Low Bandwidth Dreams</strong> · satire/critical shop about desire, debt, and scroll-fatigue.
+    <div class="note">Loads fast. Feelings may buffer.</div>
+  </div>
+</div>
+
+<main class="wrap">
+  <noscript>Basic mode: JS is off. You can still read product titles—capitalism requires no scripting.</noscript>
+  <div class="grid" id="grid"></div>
+</main>
+
+
+<div class="modal-bg" id="termsBg">
+  <div class="modal">
+    <h2>Terms of Desire</h2>
+    <p>By adding items, you acknowledge: purchases may not cure emptiness; algorithms may profile your longing; midnight scrolling may persist.</p>
+    <p class="muted">You can leave anytime. We will still be here, blinking.</p>
+    <div class="btns">
+      <button id="declineTerms">Maybe later</button>
+      <button id="acceptTerms">I desire and I consent</button>
+    </div>
+  </div>
+</div>
+<footer class="wrap">© Low Bandwidth Dreams · Made to load fast.</footer>
+
+<script>
+var pendingAdd=null;
+(async function(){
+  try{
+    const res = await fetch('data/products.json');
+    const items = await res.json();
+    const grid = document.getElementById('grid');
+    grid.innerHTML = items.map(p => `
+      <article class="card">
+        <img src="${p.img}" alt="${p.title}" loading="lazy" />
+        <h3>${p.title}</h3>
+        <p class="badge">${p.status === 'out_of_stock' ? 'Out of Stock' : 'In Stock'}</p>
+        <p>${p.short}</p>
+        <div class="price">₱${p.price.toFixed(2)}</div>
+        <p>
+          <a class="btn" href="product.html?id=${encodeURIComponent(p.id)}">View</a>
+          ${p.status !== 'out_of_stock' ? `<button class="btn" data-add="${p.id}">Add to Cart</button>` : ``}
+        </p>
+      </article>
+    `).join('');
+
+    function getCart(){ return JSON.parse(localStorage.getItem('yb_cart')||'[]'); }
+    function setCart(c){ localStorage.setItem('yb_cart', JSON.stringify(c)); updateCount(); }
+    function updateCount(){ document.getElementById('cartCount').textContent = getCart().reduce((a,b)=>a+b.qty,0); }
+    updateCount();
+
+    grid.addEventListener('click', e=>{
+      const id = e.target?.dataset?.add;
+      if(!id) return;
+      const cart = getCart();
+      const found = cart.find(x=>x.id===id);
+      if(found) found.qty++; else cart.push({id, qty:1});
+      setCart(cart);
+      alert('Added. Will this fill the void?');
+    });
+  }catch(err){
+    console.error(err);
+  }
+})();
+
+  // SALE COUNTDOWN (persistent)
+  function getSaleEnd() {
+    const key = 'yb_sale_end';
+    let end = localStorage.getItem(key);
+    if (!end) {
+      // default: 48 hours from first visit
+      end = Date.now() + 1000 * 60 * 60 * 48;
+      localStorage.setItem(key, String(end));
+    }
+    return parseInt(end, 10);
+  }
+  function renderCountdown(el) {
+    const end = getSaleEnd();
+    function tick(){
+      const t = end - Date.now();
+      if (t <= 0) { el.textContent = "SALE ENDED — or did it?"; return; }
+      const s = Math.floor(t / 1000);
+      const d = Math.floor(s / 86400);
+      const h = Math.floor((s % 86400) / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const ss = s % 60;
+      el.textContent = `Ends in ${d}d ${h}h ${m}m ${ss}s`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  function applySaleFormatting(container){
+    container.querySelectorAll('.price').forEach(p => {
+      const text = p.textContent.trim();
+      const match = text.match(/₱([0-9]+\.[0-9]{2})/);
+      if(!match) return;
+      const price = parseFloat(match[1]);
+      const discounted = Math.max(0, price - Math.round(price * 0.15)); // playful 15% off
+      p.innerHTML = `<s style="opacity:.6">₱${price.toFixed(2)}</s> ₱${discounted.toFixed(2)}`;
+    });
+  }
+  const saleTimerEl = document.getElementById('saleTimer');
+  if (saleTimerEl) renderCountdown(saleTimerEl);
+  applySaleFormatting(document);
+
+
+// Low‑Bandwidth toggle
+(function(){
+  const key='yb_lb';
+  const checked = localStorage.getItem(key)==='1';
+  if(checked) document.body.classList.add('lb');
+  const lb = document.getElementById('lbToggle');
+  if(lb){ lb.checked = checked; lb.addEventListener('change', ()=>{
+    if(lb.checked){ localStorage.setItem(key,'1'); document.body.classList.add('lb'); }
+    else { localStorage.removeItem(key); document.body.classList.remove('lb'); }
+  }); }
+})();
+
+// Terms modal logic
+(function(){
+  const KEY='yb_terms_ok';
+  const bg=document.getElementById('termsBg');
+  const accept=()=>{ localStorage.setItem(KEY,'1'); bg.style.display='none'; pendingAdd && pendingAdd(); pendingAdd=null; };
+  const decline=()=>{ bg.style.display='none'; pendingAdd=null; };
+  if(bg){
+    document.getElementById('acceptTerms').addEventListener('click', accept);
+    document.getElementById('declineTerms').addEventListener('click', decline);
+  }
+  window.ensureTermsThen = function(fn){
+    if(localStorage.getItem(KEY)==='1'){ fn(); }
+    else { pendingAdd = fn; if(bg) bg.style.display='flex'; }
+  }
+})(); 
+</script>
+</body>
+</html>
