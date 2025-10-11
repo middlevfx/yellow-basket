@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Your Cart · Yellow Basket</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-body{
-  font-family:'IBM Plex Sans',system-ui,sans-serif;
+body {
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
   background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
-  margin:0;padding:2rem;color:#222;
+  margin:0; padding:2rem; color:#222;
 }
-h1,h2{font-family:'Space Grotesk',sans-serif;}
-a{color:#000;text-decoration:none;}
-button{background:#000;color:#fff;padding:.7rem 1.2rem;border:none;cursor:pointer;}
-button:hover{background:#333;}
-footer{font-family:'Courier New',monospace;text-align:center;margin-top:3rem;font-size:.8rem;}
+h1,h2 { font-family:'Space Grotesk', sans-serif; }
+button {
+  background:#000; color:#fff; border:none; border-radius:6px;
+  padding:0.6rem 1.2rem; cursor:pointer;
+}
+button:hover { background:#333; }
+a { color:#000; text-decoration:none; }
+.cart-box {
+  border:1px solid #ddd; border-radius:10px; padding:1rem; background:#fff; max-width:500px;
+}
+footer {
+  text-align:center; font-family:'Courier New', monospace;
+  margin-top:3rem; font-size:0.85rem;
+}
 </style>
 </head>
 <body>
 <h1>Your Cart</h1>
 <p>Na-add mo na lahat ng gusto mong bilhin. Pero tanong: gusto ka rin ba ng mga ‘yon?</p>
 
+<div class="cart-box">
+  <p><strong>Items:</strong> Assorted dreams, desires, and digital dust.</p>
+  <p><strong>Subtotal:</strong> ₱0.00 + feelings</p>
+</div>
+
+<br/>
 <button onclick="checkout()">Pay with Exposure</button>
 <p id="msg"></p>
+
+<a href="index.html">← Continue shopping</a>
 
 <footer>© 2025 Low Bandwidth Dreams</footer>
 
 <script>
 function checkout(){
-  const s=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
-  s.play();
-  setTimeout(()=>{window.location.href='receipt.html';},1200);
+  const snd=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+  snd.play();
+  document.getElementById('msg').innerText="Processing payment in clout units…";
+  setTimeout(()=>{window.location.href='receipt.html';},1500);
 }
 </script>
 </body>
