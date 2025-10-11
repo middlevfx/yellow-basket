@@ -1,245 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Yellow Basket</title>
-<meta name="description" content="A lightweight e-commerce satire from Low Bandwidth Dreams."/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yellow Basket · Low Bandwidth Dreams</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#222; --line:#ececec; --accent:#f0c400; }
-  * { box-sizing: border-box; }
-  body { font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin:0; color:var(--ink); background:#fff; }
-  header, footer { padding:12px 16px; border-bottom:1px solid var(--line); }
-  footer { border-top:1px solid var(--line); border-bottom:none; }
-  a { color:inherit; }
-  .brand { font-weight:700; letter-spacing:0.2px; }
-  .note { font-size:12px; opacity:.7; }
-  .wrap { max-width:1000px; margin:0 auto; }
-  .grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); padding:16px; }
-  .card { border:1px solid var(--line); padding:12px; display:flex; flex-direction:column; border-radius:12px; }
-  .card img { width:100%; height:120px; object-fit:contain; background:#fff; border:1px dashed var(--line); border-radius:10px; }
-  .price { margin-top:auto; font-weight:600; }
-  .btn { display:inline-block; padding:6px 10px; border:1px solid var(--ink); text-decoration:none; border-radius:10px; }
-  .btn + .btn { margin-left:6px; }
-  .badge { font-size:12px; border:1px dashed var(--accent); padding:2px 6px; border-radius:8px; display:inline-block; }
-  .strip { background: repeating-linear-gradient(45deg, #fff, #fff 8px, #fffbcc 8px, #fffbcc 16px); border-bottom:1px solid var(--line); }
-  .hero { padding:10px 16px; }
-
-  /* Low‑Bandwidth mode */
-  body.lb img { display:none !important; }
-  body.lb .glitch::before, body.lb .glitch::after { animation: none !important; text-shadow: none !important; transform:none !important; }
-  body.lb .strip { background:#fff !important; }
-
-  /* Terms modal */
-  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:99}
-  .modal{background:#fff;border:1px solid var(--line);border-radius:14px;max-width:560px;width:92%;padding:16px}
-  .modal h2{margin:0 0 8px 0}
-  .modal p{margin:0 0 8px 0}
-  .modal .btns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  body {
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
+    background-attachment:fixed;margin:0;padding:0;line-height:1.5;color:#222;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
+  .wrap{max-width:600px;margin:0 auto;padding:2rem;}
+  .product-title{cursor:pointer;display:inline-block;position:relative;transition:.2s;}
+  .product-title:hover{transform:skewX(-3deg);}
+  .product-title::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;color:#ff00aa;opacity:0;}
+  .product-title:hover::after{opacity:1;animation:glitch .2s infinite;}
+  @keyframes glitch{
+    0%{clip-path:polygon(0 0,100% 0,100% 50%,0 50%);}
+    50%{clip-path:polygon(0 50%,100% 50%,100% 100%,0 100%);}
+    100%{clip-path:polygon(0 0,100% 0,100% 50%,0 50%);}
+  }
+  .tagline{font-family:'Courier New',monospace;text-align:center;margin-top:2rem;font-size:.9rem;}
+  footer{font-family:'Courier New',monospace;text-align:center;padding:2rem 0;font-size:.8rem;}
+  .loader{display:none;text-align:center;padding-top:4rem;}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <div style="display:flex;align-items:center;justify-content:space-between;">
-    <div class="brand">Yellow Basket</div>
-    <nav>
-      <a href="cart.html">Cart (<span id="cartCount">0</span>)</a> · <a href="abandoned.html">Abandoned</a>
-    </nav>
-  </div>
-
-<div class="wrap" style="padding:6px 16px; border-top:1px solid var(--line); font-size:13px;">
-  <label><input type="checkbox" id="lbToggle"> Low‑Bandwidth Mode</label>
+<div class="wrap">
+  <h1>Yellow Basket</h1>
+  <p><em>Low Bandwidth Dreams</em> — satire/critical shop about desire, debt, and scroll-fatigue.</p>
+  <div id="products"></div>
 </div>
-</header>
+<div class="tagline">Shipped from Laguna — may kagat lang ni Mowgli — with love and lag.</div>
+<footer>© 2025 Low Bandwidth Dreams</footer>
 
-
-<div class="strip">
-  <div class="wrap hero">
-    <span class="glitch" data-text="SALE">SALE</span> Up to -100% on intangible goods. <span id="saleTimer" class="note"></span><br/>
-    <strong>Low Bandwidth Dreams</strong> · satire/critical shop about desire, debt, and scroll-fatigue.
-    <div class="note">Loads fast. Feelings may buffer.</div>
-  </div>
-</div>
-
-<main class="wrap">
-  <noscript>Basic mode: JS is off. You can still read product titles—capitalism requires no scripting.</noscript>
-  <div class="grid" id="grid"></div>
-</main>
-
-
-<div class="modal-bg" id="termsBg">
-  <div class="modal">
-    <h2>Terms of Desire</h2>
-    <p>By adding items, you acknowledge: purchases may not cure emptiness; algorithms may profile your longing; midnight scrolling may persist.</p>
-    <p class="muted">You can leave anytime. We will still be here, blinking.</p>
-    <div class="btns">
-      <button id="declineTerms">Maybe later</button>
-      <button id="acceptTerms">I desire and I consent</button>
-    </div>
-  </div>
-</div>
-<footer class="wrap">© Low Bandwidth Dreams · Made to load fast.</footer>
+<div class="loader" id="loader"><span id="loaderLine"></span></div>
 
 <script>
-var pendingAdd=null;
-(async function(){
-  try{
-    const res = await fetch('data/products.json');
-    const items = await res.json();
-    const grid = document.getElementById('grid');
-    grid.innerHTML = items.map(p => `
-      <article class="card">
-        <img src="${p.img}" alt="${p.title}" loading="lazy" />
-        <h3>${p.title}</h3>
-        <p class="badge">${p.status === 'out_of_stock' ? 'Out of Stock' : 'In Stock'}</p>
-        <p>${p.short}</p>
-        <div class="price">₱${p.price.toFixed(2)}</div>
-        <p>
-          <a class="btn" href="product.html?id=${encodeURIComponent(p.id)}">View</a>
-          ${p.status !== 'out_of_stock' ? `<button class="btn" data-add="${p.id}">Add to Cart</button>` : ``}
-        </p>
-      </article>
-    `).join('');
+const lines=[
+"Loading dreams…",
+"Caching heartbreaks for offline use…",
+"Laguna Lake reflections detected…",
+"Shipping from Laguna… please wait…",
+"Teka kumakain pa ako sa Maciang’s…",
+"Medj mainit pa yung lugaw sa Bonnette’s, paso dila ko… wait…"
+];
+function randomLine(){return lines[Math.floor(Math.random()*lines.length)];}
+document.getElementById('loader').style.display='block';
+document.getElementById('loaderLine').innerText=randomLine();
 
-    function getCart(){ return JSON.parse(localStorage.getItem('yb_cart')||'[]'); }
-    function setCart(c){ localStorage.setItem('yb_cart', JSON.stringify(c)); updateCount(); }
-    function updateCount(){ document.getElementById('cartCount').textContent = getCart().reduce((a,b)=>a+b.qty,0); }
-    updateCount();
-
-    grid.addEventListener('click', e=>{
-      const id = e.target?.dataset?.add;
-      if(!id) return;
-      const cart = getCart();
-      const found = cart.find(x=>x.id===id);
-      if(found) found.qty++; else cart.push({id, qty:1});
-      setCart(cart);
-      alert('Added. Will this fill the void?');
-    });
-  }catch(err){
-    console.error(err);
-  }
-})();
-
-  // SALE COUNTDOWN (persistent)
-  function getSaleEnd() {
-    const key = 'yb_sale_end';
-    let end = localStorage.getItem(key);
-    if (!end) {
-      // default: 48 hours from first visit
-      end = Date.now() + 1000 * 60 * 60 * 48;
-      localStorage.setItem(key, String(end));
-    }
-    return parseInt(end, 10);
-  }
-  function renderCountdown(el) {
-    const end = getSaleEnd();
-    function tick(){
-      const t = end - Date.now();
-      if (t <= 0) { el.textContent = "SALE ENDED — or did it?"; return; }
-      const s = Math.floor(t / 1000);
-      const d = Math.floor(s / 86400);
-      const h = Math.floor((s % 86400) / 3600);
-      const m = Math.floor((s % 3600) / 60);
-      const ss = s % 60;
-      el.textContent = `Ends in ${d}d ${h}h ${m}m ${ss}s`;
-    }
-    tick();
-    setInterval(tick, 1000);
-  }
-
-  function applySaleFormatting(container){
-    container.querySelectorAll('.price').forEach(p => {
-      const text = p.textContent.trim();
-      const match = text.match(/₱([0-9]+\.[0-9]{2})/);
-      if(!match) return;
-      const price = parseFloat(match[1]);
-      const discounted = Math.max(0, price - Math.round(price * 0.15)); // playful 15% off
-      p.innerHTML = `<s style="opacity:.6">₱${price.toFixed(2)}</s> ₱${discounted.toFixed(2)}`;
-    });
-  }
-  const saleTimerEl = document.getElementById('saleTimer');
-  if (saleTimerEl) renderCountdown(saleTimerEl);
-  applySaleFormatting(document);
-
-
-// Low‑Bandwidth toggle
-(function(){
-  const key='yb_lb';
-  const checked = localStorage.getItem(key)==='1';
-  if(checked) document.body.classList.add('lb');
-  const lb = document.getElementById('lbToggle');
-  if(lb){ lb.checked = checked; lb.addEventListener('change', ()=>{
-    if(lb.checked){ localStorage.setItem(key,'1'); document.body.classList.add('lb'); }
-    else { localStorage.removeItem(key); document.body.classList.remove('lb'); }
-  }); }
-})();
-
-// Terms modal logic
-(function(){
-  const KEY='yb_terms_ok';
-  const bg=document.getElementById('termsBg');
-  const accept=()=>{ localStorage.setItem(KEY,'1'); bg.style.display='none'; pendingAdd && pendingAdd(); pendingAdd=null; };
-  const decline=()=>{ bg.style.display='none'; pendingAdd=null; };
-  if(bg){
-    document.getElementById('acceptTerms').addEventListener('click', accept);
-    document.getElementById('declineTerms').addEventListener('click', decline);
-  }
-  ensureTermsThen(()=>{
-  if(found) found.qty++; else cart.push({id, qty:1});
-  setCart(cart);
-  ybPlayAdd(); // 🔊 add-to-cart sound
-  alert('Added. Will this fill the void?');
-});
-
-  }
-})(); 
+// sample items loader
+fetch('data/products.json')
+  .then(res=>res.json())
+  .then(data=>{
+    const c=document.getElementById('products');
+    c.innerHTML=data.map(p=>`<div><h3 class="product-title" data-text="${p.name}">${p.name}</h3><p>${p.desc}</p></div>`).join('');
+    document.getElementById('loader').style.display='none';
+  });
 </script>
-  <script>
-// ---- Yellow Basket SFX (ultra-light, no assets) ----
-let ybAudioCtx;
-function ybEnsureCtx(){
-  ybAudioCtx = ybAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
-  if (ybAudioCtx.state === 'suspended') ybAudioCtx.resume();
-}
-
-// Add-to-cart blip (ascending)
-function ybPlayAdd(){
-  if (document.body.classList.contains('lb')) return; // mute kapag Low-Bandwidth Mode
-  try {
-    ybEnsureCtx();
-    const t = ybAudioCtx.currentTime;
-    const o = ybAudioCtx.createOscillator();
-    const g = ybAudioCtx.createGain();
-    o.type = 'triangle';
-    o.frequency.setValueAtTime(440, t);
-    o.frequency.exponentialRampToValueAtTime(660, t + 0.08);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.20, t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-    o.connect(g); g.connect(ybAudioCtx.destination);
-    o.start(t); o.stop(t + 0.2);
-  } catch(e){}
-}
-
-// Confirm/checkout blip (descending)
-function ybPlayConfirm(){
-  if (document.body.classList.contains('lb')) return;
-  try {
-    ybEnsureCtx();
-    const t = ybAudioCtx.currentTime;
-    const o = ybAudioCtx.createOscillator();
-    const g = ybAudioCtx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(880, t);
-    o.frequency.exponentialRampToValueAtTime(440, t + 0.12);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-    o.connect(g); g.connect(ybAudioCtx.destination);
-    o.start(t); o.stop(t + 0.16);
-  } catch(e){}
-}
-</script>
-
 </body>
 </html>
