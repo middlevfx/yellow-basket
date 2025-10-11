@@ -1,138 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Your Cart — Yellow Basket</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart · Yellow Basket</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#222; --line:#ececec; }
-  body{font:16px/1.5 system-ui;margin:0;color:var(--ink);}
-  header{border-bottom:1px solid var(--line); padding:12px 16px;}
-  .wrap{max-width:900px;margin:0 auto;padding:16px;}
-  table{width:100%;border-collapse:collapse} td,th{border-bottom:1px solid var(--line);padding:8px;text-align:left}
-  tfoot td{font-weight:700}
-  .btn{display:inline-block;padding:8px 12px;border:1px solid var(--ink);border-radius:10px;text-decoration:none}
-  .muted{opacity:.7;font-size:12px}
-
-  /* Low‑Bandwidth mode */
-  body.lb img { display:none !important; }
-  body.lb .glitch::before, body.lb .glitch::after { animation: none !important; text-shadow: none !important; transform:none !important; }
-  body.lb .strip { background:#fff !important; }
-
-  /* Exposure modal */
-  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:99}
-  .modal{background:#fff;border:1px solid var(--line);border-radius:14px;max-width:560px;width:92%;padding:16px}
-  .modal h2{margin:0 0 8px 0}
-  .modal p{margin:0 0 8px 0}
-  .modal .btns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+body{
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
+  margin:0;padding:2rem;color:#222;
+}
+h1,h2{font-family:'Space Grotesk',sans-serif;}
+a{color:#000;text-decoration:none;}
+button{background:#000;color:#fff;padding:.7rem 1.2rem;border:none;cursor:pointer;}
+button:hover{background:#333;}
+footer{font-family:'Courier New',monospace;text-align:center;margin-top:3rem;font-size:.8rem;}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <a href="index.html">← Yellow Basket</a>
-  <span style="float:right">Cart (<span id="cartCount">0</span>) · <a href="abandoned.html">Abandoned</a></span>
+<h1>Your Cart</h1>
+<p>Na-add mo na lahat ng gusto mong bilhin. Pero tanong: gusto ka rin ba ng mga ‘yon?</p>
 
-<div class="wrap" style="padding:6px 16px; border-top:1px solid var(--line); font-size:13px;">
-  <label><input type="checkbox" id="lbToggle"> Low‑Bandwidth Mode</label>
-</div>
-</header>
+<button onclick="checkout()">Pay with Exposure</button>
+<p id="msg"></p>
 
-<main class="wrap">
-<div class="modal-bg" id="exposureBg">
-  <div class="modal">
-    <h2>“Pay with Exposure” Disclaimer</h2>
-    <p>Exposure is not legal tender. It cannot purchase rent, food, or rest. It occasionally buys likes.</p>
-    <p class="muted">If you proceed, your total will drop to ₱0.00 and your compensation will be recorded as: <em>“promised visibility.”</em></p>
-    <div class="btns">
-      <button id="exposureCancel">Cancel</button>
-      <button id="exposureProceed">Proceed anyway</button>
-    </div>
-  </div>
-</div>
-<h1>Cart</h1>
-<table id="t">
-  <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th></th></tr></thead>
-  <tbody></tbody>
-  <tfoot><tr><td colspan="2">Total</td><td id="total">₱0.00</td><td></td></tr></tfoot>
-</table>
-<div style="margin:12px 0; padding:10px; border:1px dashed var(--line); border-radius:10px">
-  <strong>Promo Code</strong><br/>
-  <input id="promoInput" placeholder="Enter code (e.g., SANAALL-15)" style="padding:6px; width:220px;"/>
-  <button id="applyPromo" class="btn">Apply</button>
-  <div id="promoMsg" class="muted"></div>
-</div>
-<div style="margin:12px 0; padding:10px; border:1px dashed var(--line); border-radius:10px">
-  <strong>Payment Method</strong><br/>
-  <label><input type="radio" name="pay" value="card" checked> Card</label>&nbsp;&nbsp;
-  <label><input type="radio" name="pay" value="cod"> Cash on Delivery (Conceptual)</label>&nbsp;&nbsp;
-  <label><input type="radio" name="pay" value="exposure"> Pay with Exposure</label>
-  <div id="exposureNote" class="muted" style="display:none; margin-top:6px">
-    “Pay with Exposure” lowers the amount to ₱0.00 and increases your <em>perceived reach</em> by +0.
-  </div>
-</div>
-<p class="muted">This checkout is performative. No money moves. Feelings do.</p>
-<button id="checkout" class="btn">Checkout</button>
-</main>
+<footer>© 2025 Low Bandwidth Dreams</footer>
+
 <script>
-function getCart(){ return JSON.parse(localStorage.getItem('yb_cart')||'[]'); }
-function setCart(c){ localStorage.setItem('yb_cart', JSON.stringify(c)); updateCount(); render(); }
-function updateCount(){ document.getElementById('cartCount').textContent = getCart().reduce((a,b)=>a+b.qty,0); }
-
-async function render(){
-  updateCount();
-  const db = await (await fetch('data/products.json')).json();
-  const cart = getCart();
-  const tbody = document.querySelector('#t tbody');
-  let sum = 0; let discountRate = discountFromCode(getPromo());
-  tbody.innerHTML = cart.map((c,i)=>{
-    const p = db.find(x=>x.id===c.id);
-    const line = p.price * c.qty; sum += line;
-    return `<tr>
-      <td>${p.title}</td>
-      <td><button data-dec="${i}">−</button> ${c.qty} <button data-inc="${i}">+</button></td>
-      <td>₱${line.toFixed(2)}</td>
-      <td><button data-save="${i}">Save for later</button> <button data-del="${i}">Remove</button></td>
-    </tr>`;
-  }).join('') || `<tr><td colspan="4">Your basket is empty. Desire persists.</td></tr>`;
-  const discounted = Math.max(0, sum - sum*discountRate);
-  document.getElementById('total').textContent = discountRate>0 ? `₱${sum.toFixed(2)} → ₱${discounted.toFixed(2)}` : `₱${sum.toFixed(2)}`;
-
-  tbody.addEventListener('click', e=>{
-    const save = e.target.dataset.save;
-    const inc = e.target.dataset.inc, dec = e.target.dataset.dec, del = e.target.dataset.del;
-    const c = getCart();
-    if(inc){ c[+inc].qty++; setCart(c); }
-    if(dec){ c[+dec].qty = Math.max(1, c[+dec].qty-1); setCart(c); }
-    if(del){ c.splice(+del,1); setCart(c); }
-    if(save){ const idx = +save; const item = c[idx]; c.splice(idx,1); setCart(c); const saved = getSaved(); saved.push({ ...item, ts: Date.now() }); setSaved(saved); alert('Saved for later. Naiwan ka na naman.'); }
-  }, { once:true });
+function checkout(){
+  const s=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+  s.play();
+  setTimeout(()=>{window.location.href='receipt.html';},1200);
 }
-
-document.getElementById('checkout').addEventListener('click', ()=>{
-  alert(`Terms of Desire:
-You added things to feel complete.
-The algorithm applauds. The void remains.
-
-By proceeding, you agree to our poetic T&Cs.`);
-});
-
-render();
-
-function getSaved(){ return JSON.parse(localStorage.getItem('yb_saved')||'[]'); }
-function setSaved(s){ localStorage.setItem('yb_saved', JSON.stringify(s)); }
-
-// Enhance render to include Save for later
-
-
-// Low‑Bandwidth toggle
-(function(){
-  const key='yb_lb';
-  const checked = localStorage.getItem(key)==='1';
-  if(checked) document.body.classList.add('lb');
-  const lb = document.getElementById('lbToggle');
-  if(lb){ lb.checked = checked; lb.addEventListener('change', ()=>{
-    if(lb.checked){ localStorage.setItem(key,'1'); document.body.classList.add('lb'); }
-    else { localStorage.removeItem(key); document.body.classList.remove('lb'); }
-  }); }
-})();
 </script>
 </body>
 </html>
