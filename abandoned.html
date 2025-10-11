@@ -1,64 +1,27 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Abandoned — Yellow Basket</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abandoned Cart · Yellow Basket</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#222; --line:#ececec; }
-  body { font:16px/1.5 system-ui; margin:0; color:var(--ink); }
-  header { border-bottom:1px solid var(--line); padding:12px 16px; }
-  .wrap { max-width:900px; margin:0 auto; padding:16px; }
-  .card { border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px; }
-  .muted { opacity:.7; font-size:12px; }
-  blockquote { margin:8px 0; padding-left:12px; border-left:3px solid var(--line); font-style:italic; }
+body{
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
+  margin:0;padding:2rem;color:#222;
+}
+h1{font-family:'Space Grotesk',sans-serif;}
+a{color:#000;text-decoration:none;}
+footer{font-family:'Courier New',monospace;text-align:center;margin-top:3rem;font-size:.8rem;}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <a href="index.html">← Yellow Basket</a>
-  <span style="float:right"><a href="cart.html">Cart</a></span>
-</header>
-<main class="wrap">
-  <h1>Abandoned Carts</h1>
-  <p class="muted">Mga bagay na <em>gusto mo</em> pero hindi mo pa binibitawan—o baka hindi mo na rin kailangan.</p>
-  <div id="list"></div>
-</main>
-<script>
-function getSaved(){ return JSON.parse(localStorage.getItem('yb_saved')||'[]'); }
-function clearSaved(){ localStorage.removeItem('yb_saved'); location.reload(); }
+<h1>Abandoned Cart</h1>
+<p>“Iniwan mong bukas ‘yung tab, pero hindi ko naman sinarado.”</p>
+<p>— the algorithm, whispering softly</p>
+<p><a href="index.html">Go back home</a></p>
 
-const MONOLOGUES = [
-  "Iniwan mo ako sa cart kahapon. Umabot na sa linggo pero hindi mo pa rin ako kayang i-checkout. Okay lang, natuto na akong huminga mag-isa.",
-  "Nakailang sale na, pero ako pa rin ang ‘save for later’. Hindi lahat ng naka-promo ay kailangan mo.",
-  "Kung bibili ka para mapuno ang loob, baka mabigat ang shipping.",
-  "Hindi ako mahal. Baka iba lang ang presyo ng payapa.",
-  "You added me for a reason. You didn’t checkout for a better reason."
-];
-
-async function render(){
-  const db = await (await fetch('data/products.json')).json();
-  const saved = getSaved();
-  const list = document.getElementById('list');
-  if(!saved.length){
-    list.innerHTML = '<p class="muted">Wala pang naiwan. Pero may naiwan ka bang iba?</p>';
-    return;
-  }
-  list.innerHTML = saved.map(s => {
-    const p = db.find(x=>x.id===s.id);
-    const msg = MONOLOGUES[Math.floor(Math.random()*MONOLOGUES.length)];
-    const when = new Date(s.ts).toLocaleString();
-    return `<article class="card">
-      <h3>${p ? p.title : s.id}</h3>
-      <blockquote>${msg}</blockquote>
-      <p class="muted">Na-save: ${when}</p>
-      <p>
-        <a class="btn" href="product.html?id=${encodeURIComponent(s.id)}">View</a>
-      </p>
-    </article>`;
-  }).join('') + '<p><button onclick="clearSaved()">Clear all</button></p>';
-}
-render();
-</script>
+<footer>© 2025 Low Bandwidth Dreams · made with love and lag</footer>
 </body>
 </html>
