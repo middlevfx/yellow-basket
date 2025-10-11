@@ -1,64 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Yellow Basket · Low Bandwidth Dreams</title>
+
+<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    font-family:'IBM Plex Sans',system-ui,sans-serif;
-    background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
-    background-attachment:fixed;margin:0;padding:0;line-height:1.5;color:#222;
-  }
-  h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
-  .wrap{max-width:600px;margin:0 auto;padding:2rem;}
-  .product-title{cursor:pointer;display:inline-block;position:relative;transition:.2s;}
-  .product-title:hover{transform:skewX(-3deg);}
-  .product-title::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;color:#ff00aa;opacity:0;}
-  .product-title:hover::after{opacity:1;animation:glitch .2s infinite;}
-  @keyframes glitch{
-    0%{clip-path:polygon(0 0,100% 0,100% 50%,0 50%);}
-    50%{clip-path:polygon(0 50%,100% 50%,100% 100%,0 100%);}
-    100%{clip-path:polygon(0 0,100% 0,100% 50%,0 50%);}
-  }
-  .tagline{font-family:'Courier New',monospace;text-align:center;margin-top:2rem;font-size:.9rem;}
-  footer{font-family:'Courier New',monospace;text-align:center;padding:2rem 0;font-size:.8rem;}
-  .loader{display:none;text-align:center;padding-top:4rem;}
+body {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  background: linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
+  margin: 0; padding: 0; color: #222;
+  overflow-x: hidden;
+}
+h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+a { color: inherit; text-decoration: none; }
+
+/* WRAPPER */
+.container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* HEADER */
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.cart-counter {
+  font-family:'Space Grotesk',sans-serif;
+  background:#000;color:#fff;
+  border-radius:30px;
+  padding:0.4rem 0.9rem;
+  font-size:0.9rem;
+}
+
+/* SALE TIMER */
+.sale-banner {
+  text-align:center;
+  background:#000;
+  color:#fff;
+  padding:0.6rem 1rem;
+  font-family:'Courier New', monospace;
+  animation:blink 2s infinite alternate;
+}
+@keyframes blink { from{opacity:1;} to{opacity:0.7;} }
+
+/* PRODUCTS GRID */
+.products {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+  gap:1.5rem;
+  margin-top:2rem;
+}
+.product {
+  background:#fffefc;
+  border:1px solid #eee;
+  border-radius:12px;
+  padding:1rem;
+  box-shadow:0 2px 5px rgba(0,0,0,0.05);
+  transition:transform 0.2s;
+}
+.product:hover { transform:translateY(-4px); }
+.product-title {
+  cursor:pointer;
+  position:relative;
+  display:inline-block;
+}
+.product-title:hover { transform:skewX(-3deg); color:#000; }
+.product-title::after {
+  content:attr(data-text);
+  position:absolute;left:0;top:0;width:100%;
+  color:#ff00aa;opacity:0;
+}
+.product-title:hover::after {opacity:1;animation:glitch .2s infinite;}
+@keyframes glitch {
+  0%{clip-path:polygon(0 0,100% 0,100% 50%,0 50%);}
+  50%{clip-path:polygon(0 50%,100% 50%,100% 100%,0 100%);}
+  100%{clip-path:polygon(0 0,100% 0,100% 50%,0 50%);}
+}
+.product img {
+  width:100%;border-radius:8px;margin-bottom:0.5rem;
+}
+button {
+  background:#111;color:#fff;
+  border:none;border-radius:6px;
+  padding:0.5rem 1rem;cursor:pointer;
+}
+button:hover {background:#333;}
+
+/* ALGORITHM SIDEBAR */
+.sidebar {
+  position:fixed;
+  right:10px;top:50%;
+  transform:translateY(-50%);
+  width:180px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:0.8rem;
+  font-size:0.85rem;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+.sidebar h4 {
+  font-family:'Space Grotesk';
+  margin-top:0;margin-bottom:0.4rem;
+  font-size:0.9rem;
+}
+
+/* FOOTER + TAGLINE */
+footer {
+  text-align:center;
+  font-family:'Courier New', monospace;
+  margin:3rem 0 2rem;
+  font-size:0.85rem;
+}
+
+/* LOADER */
+#loader {
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Courier New', monospace;
+  flex-direction:column;
+  transition:opacity 0.5s;
+  z-index:999;
+}
+#loader.fade { opacity:0; pointer-events:none; }
+
+@media(max-width:600px){
+  .sidebar{display:none;}
+}
 </style>
 </head>
+
 <body>
-<div class="wrap">
-  <h1>Yellow Basket</h1>
-  <p><em>Low Bandwidth Dreams</em> — satire/critical shop about desire, debt, and scroll-fatigue.</p>
-  <div id="products"></div>
+<div id="loader">
+  <div id="loaderLine">Loading dreams…</div>
 </div>
-<div class="tagline">Shipped from Laguna — may kagat lang ni Mowgli — with love and lag.</div>
-<footer>© 2025 Low Bandwidth Dreams</footer>
 
-<div class="loader" id="loader"><span id="loaderLine"></span></div>
+<div class="container">
+  <header>
+    <h1>Yellow Basket</h1>
+    <div class="cart-counter" id="cartCounter">🛒 0</div>
+  </header>
 
+  <div class="sale-banner">
+    SALE ends when you feel okay again · <span id="timer"></span>
+  </div>
+
+  <section class="products" id="products"></section>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <h4>Algorithm Recommends 🌀</h4>
+  <div id="recs"></div>
+</div>
+
+<footer>
+  Shipped from Laguna — may kagat lang ni Mowgli — with love and lag. <br/>
+  © 2025 Low Bandwidth Dreams
+</footer>
+
+<!-- SOUND + LOGIC -->
 <script>
-const lines=[
-"Loading dreams…",
-"Caching heartbreaks for offline use…",
-"Laguna Lake reflections detected…",
-"Shipping from Laguna… please wait…",
-"Teka kumakain pa ako sa Maciang’s…",
-"Medj mainit pa yung lugaw sa Bonnette’s, paso dila ko… wait…"
-];
-function randomLine(){return lines[Math.floor(Math.random()*lines.length)];}
-document.getElementById('loader').style.display='block';
-document.getElementById('loaderLine').innerText=randomLine();
+// Ambient hum (low volume)
+const hum = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_41bbd209a8.mp3?filename=ambient-room-tone-10418.mp3");
+hum.loop = true;
+hum.volume = 0.08;
+hum.play().catch(()=>{});
 
-// sample items loader
+// Loader lines
+const lines = [
+  "Caching heartbreaks for offline use…",
+  "Laguna Lake reflections detected…",
+  "Shipping from Laguna… please wait…",
+  "Teka kumakain pa ako sa Maciang’s…",
+  "Medj mainit pa yung lugaw sa Bonnette’s, paso dila ko… wait…"
+];
+document.getElementById('loaderLine').innerText = lines[Math.floor(Math.random()*lines.length)];
+setTimeout(()=>document.getElementById('loader').classList.add('fade'),1800);
+
+// SALE TIMER
+function startTimer(){
+  let sec=59;
+  setInterval(()=>{
+    document.getElementById('timer').innerText="00:"+ (sec<10?"0"+sec:sec);
+    sec--; if(sec<0) sec=59;
+  },1000);
+}
+startTimer();
+
+// Load products
 fetch('data/products.json')
-  .then(res=>res.json())
+  .then(r=>r.json())
   .then(data=>{
-    const c=document.getElementById('products');
-    c.innerHTML=data.map(p=>`<div><h3 class="product-title" data-text="${p.name}">${p.name}</h3><p>${p.desc}</p></div>`).join('');
-    document.getElementById('loader').style.display='none';
+    const wrap=document.getElementById('products');
+    wrap.innerHTML=data.map((p,i)=>`
+      <div class="product">
+        <img src="assets/placeholder.svg" alt="${p.name}" />
+        <h3 class="product-title" data-text="${p.name}">${p.name}</h3>
+        <p>${p.desc}</p>
+        <button onclick="addToCart('${p.name}')">Add to Cart</button>
+      </div>
+    `).join('');
+    loadRecs(data);
   });
+
+// Add to Cart logic
+let cartCount=0;
+function addToCart(name){
+  const snd=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+  snd.play();
+  cartCount++;
+  document.getElementById('cartCounter').innerText="🛒 "+cartCount;
+  if(cartCount===3){window.location.href='cart.html';}
+}
+
+// Algorithm Recommends
+function loadRecs(data){
+  const recs=document.getElementById('recs');
+  const randoms=data.sort(()=>0.5-Math.random()).slice(0,3);
+  recs.innerHTML=randoms.map(r=>`<div>• ${r.name}</div>`).join('');
+}
 </script>
 </body>
 </html>
