@@ -1,8 +1,42 @@
 [
-  {"name":"Premium Pagod (500g)","desc":"Pagod na may pinanggalingan. Pinulbos mula sa biyahe sa SLEX, overtime sa chat, at maling akala. Brew mo bago matulog."},
-  {"name":"Peace of Mind (Fake Copy)","desc":"Naglo-load pa rin hanggang ngayon. Baka sa next update na dumating."},
-  {"name":"Clout Water (330ml)","desc":"Tubig na may halong validation. Refreshing sa una, nakaka-ubos sa dulo."},
-  {"name":"Wi-Fi Tears (Pocket Edition)","desc":"Luha mula sa mabagal na signal. Limited connection lang per area."},
-  {"name":"Laguna Lake Mist (Refill Pack)","desc":"Amoy isda, ulan, at mga bagay na hindi mo na mababalikan."},
-  {"name":"Tambay Time Voucher","desc":"Redeemable kahit saan may ilaw, upuan, at kwentong bitin."}
+  {
+    "name": "Premium Pagod (500g)",
+    "desc": "Pagod na may pinanggalingan. Pinulbos mula sa biyahe sa SLEX, overtime sa chat, at maling akala. Brew mo bago matulog."
+  },
+  {
+    "name": "Peace of Mind (Fake Copy)",
+    "desc": "Naglo-load pa rin hanggang ngayon. Baka sa next update na dumating."
+  },
+  {
+    "name": "Clout Water (330ml)",
+    "desc": "Tubig na may halong validation. Refreshing sa una, nakaka-ubos sa dulo."
+  },
+  {
+    "name": "Wi-Fi Tears (Pocket Edition)",
+    "desc": "Luha mula sa mabagal na signal. Limited connection lang per area."
+  },
+  {
+    "name": "Laguna Lake Mist (Refill Pack)",
+    "desc": "Amoy isda, ulan, at mga bagay na hindi mo na mababalikan."
+  },
+  {
+    "name": "Tambay Time Voucher",
+    "desc": "Redeemable kahit saan may ilaw, upuan, at kwentong bitin."
+  },
+  {
+    "name": "Mowgli’s Bite Mark (NFT)",
+    "desc": "Certified authentic ng aso kong marunong mag-existential dread."
+  },
+  {
+    "name": "Algorithmic Anxiety Pills (Chewable)",
+    "desc": "Inumin tuwing may bagong notification na hindi para sa’yo."
+  },
+  {
+    "name": "Laguna-core Starter Pack",
+    "desc": "Kasama: tricycle reflection, baha memory, at isang plastic cup ng ice tubig."
+  },
+  {
+    "name": "Add to Cart pero Emotional™ Hoodie",
+    "desc": "100% digital cotton. Mainit kahit wala kang kasama."
+  }
 ]
