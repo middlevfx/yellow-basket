@@ -1,197 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Product — Yellow Basket</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product · Yellow Basket</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#222; --line:#ececec; }
-  body { font:16px/1.5 system-ui; margin:0; color:var(--ink); }
-  .wrap { max-width:900px; margin:0 auto; padding:16px; }
-  header { border-bottom:1px solid var(--line); padding:12px 16px; }
-  a { color:inherit; }
-  .layout { display:grid; grid-template-columns: 1fr 1.2fr; gap:16px; }
-  img { width:100%; height:auto; border:1px solid var(--line); border-radius:12px; }
-  .btn { display:inline-block; padding:8px 12px; border:1px solid var(--ink); border-radius:10px; text-decoration:none; }
-  .meta { font-size:12px; opacity:.7; }
-  @media (max-width:720px){ .layout { grid-template-columns: 1fr; } }
-
-  /* Low‑Bandwidth mode */
-  body.lb img { display:none !important; }
-  body.lb .glitch::before, body.lb .glitch::after { animation: none !important; text-shadow: none !important; transform:none !important; }
-  body.lb .strip { background:#fff !important; }
-
-  /* Terms modal */
-  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:99}
-  .modal{background:#fff;border:1px solid var(--line);border-radius:14px;max-width:560px;width:92%;padding:16px}
-  .modal h2{margin:0 0 8px 0}
-  .modal p{margin:0 0 8px 0}
-  .modal .btns{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+body{
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
+  margin:0;padding:2rem;color:#222;
+}
+h1,h2{font-family:'Space Grotesk',sans-serif;}
+a{color:#000;text-decoration:none;}
+button{background:#111;color:#fff;padding:.7rem 1.2rem;border:none;cursor:pointer;}
+button:hover{background:#333;}
+footer{font-family:'Courier New',monospace;text-align:center;margin-top:3rem;font-size:.8rem;}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <a href="index.html">← Yellow Basket</a>
-  <span style="float:right"><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></span>
+<h1>Product Details</h1>
+<p>Welcome to the low-signal section of Yellow Basket.  
+Every item here is half dream, half data packet.</p>
 
-<div class="wrap" style="padding:6px 16px; border-top:1px solid var(--line); font-size:13px;">
-  <label><input type="checkbox" id="lbToggle"> Low‑Bandwidth Mode</label>
-</div>
-</header>
+<button onclick="addToCart()">Add to Cart</button>
+<p id="msg"></p>
 
-
-<main class="wrap">
-  <div id="view"></div>
-</main>
+<footer>© 2025 Low Bandwidth Dreams · Shipped from Laguna — may kagat lang ni Mowgli — with love and lag.</footer>
 
 <script>
-function qs(name){ const p=new URLSearchParams(location.search); return p.get(name); }
-function getCart(){ return JSON.parse(localStorage.getItem('yb_cart')||'[]'); }
-function setCart(c){ localStorage.setItem('yb_cart', JSON.stringify(c)); updateCount(); }
-function updateCount(){ document.getElementById('cartCount').textContent = getCart().reduce((a,b)=>a+b.qty,0); }
-
-var pendingAdd=null;
-(async function(){
-  updateCount();
-  const id = qs('id');
-  const db = await (await fetch('data/products.json')).json();
-  const p = db.find(x=>x.id===id);
-  const view = document.getElementById('view');
-  if(!p){ view.innerHTML = '<p>Item not found. Desire misplaced.</p>'; return; }
-  view.innerHTML = `
-    <div class="layout">
-      <div><img src="${p.img}" alt="${p.title}"/></div>
-      <div>
-        <h1><span class="glitch" data-text="SALE">SALE</span> ${p.title}</h1>
-        <p class="meta">Category: ${p.category} · ${p.tags.join(', ')}</p>
-        <p>${p.long}</p>
-        <p><strong>₱${p.price.toFixed(2)}</strong></p>
-        ${p.status !== 'out_of_stock' ? `<button id="add" class="btn">Add to Cart</button>` : `<span class="meta">Out of Stock (like peace of mind)</span>`}
-      </div>
-    </div>
-  `;
-  const btn = document.getElementById('add');
-  if(btn){
-    btn.addEventListener('click', ()=>{
-      const cart = getCart();
-      const found = cart.find(x=>x.id===p.id);
-      if(found) found.qty++; else cart.push({id:p.id, qty:1});
-      setCart(cart);
-      alert('Added. The algorithm nods.');
-    });
-  }
-})();
-
-  // SALE COUNTDOWN (persistent)
-  function getSaleEnd() {
-    const key = 'yb_sale_end';
-    let end = localStorage.getItem(key);
-    if (!end) {
-      // default: 48 hours from first visit
-      end = Date.now() + 1000 * 60 * 60 * 48;
-      localStorage.setItem(key, String(end));
-    }
-    return parseInt(end, 10);
-  }
-  function renderCountdown(el) {
-    const end = getSaleEnd();
-    function tick(){
-      const t = end - Date.now();
-      if (t <= 0) { el.textContent = "SALE ENDED — or did it?"; return; }
-      const s = Math.floor(t / 1000);
-      const d = Math.floor(s / 86400);
-      const h = Math.floor((s % 86400) / 3600);
-      const m = Math.floor((s % 3600) / 60);
-      const ss = s % 60;
-      el.textContent = `Ends in ${d}d ${h}h ${m}m ${ss}s`;
-    }
-    tick();
-    setInterval(tick, 1000);
-  }
-
-  // Attach a timer under the header link
-  const header = document.querySelector('header.wrap');
-  if(header){
-    const span = document.createElement('div');
-    span.className = 'meta';
-    span.id = 'saleTimer';
-    header.appendChild(span);
-    renderCountdown(span);
-  }
-
-
-// Low‑Bandwidth toggle
-(function(){
-  const key='yb_lb';
-  const checked = localStorage.getItem(key)==='1';
-  if(checked) document.body.classList.add('lb');
-  const lb = document.getElementById('lbToggle');
-  if(lb){ lb.checked = checked; lb.addEventListener('change', ()=>{
-    if(lb.checked){ localStorage.setItem(key,'1'); document.body.classList.add('lb'); }
-    else { localStorage.removeItem(key); document.body.classList.remove('lb'); }
-  }); }
-})();
-
-// Terms modal logic
-(function(){
-  const KEY='yb_terms_ok';
-  const bg=document.getElementById('termsBg');
-  const accept=()=>{ localStorage.setItem(KEY,'1'); bg.style.display='none'; pendingAdd && pendingAdd(); pendingAdd=null; };
-  const decline=()=>{ bg.style.display='none'; pendingAdd=null; };
-  if(bg){
-    document.getElementById('acceptTerms').addEventListener('click', accept);
-    document.getElementById('declineTerms').addEventListener('click', decline);
-  }
-  window.ensureTermsThen = function(fn){
-    if(localStorage.getItem(KEY)==='1'){ fn(); }
-    else { pendingAdd = fn; if(bg) bg.style.display='flex'; }
-  }
-})(); 
-</script>
-  <script>
-// ---- Yellow Basket SFX (ultra-light, no assets) ----
-let ybAudioCtx;
-function ybEnsureCtx(){
-  ybAudioCtx = ybAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
-  if (ybAudioCtx.state === 'suspended') ybAudioCtx.resume();
-}
-
-// Add-to-cart blip (ascending)
-function ybPlayAdd(){
-  if (document.body.classList.contains('lb')) return; // mute kapag Low-Bandwidth Mode
-  try {
-    ybEnsureCtx();
-    const t = ybAudioCtx.currentTime;
-    const o = ybAudioCtx.createOscillator();
-    const g = ybAudioCtx.createGain();
-    o.type = 'triangle';
-    o.frequency.setValueAtTime(440, t);
-    o.frequency.exponentialRampToValueAtTime(660, t + 0.08);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.20, t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-    o.connect(g); g.connect(ybAudioCtx.destination);
-    o.start(t); o.stop(t + 0.2);
-  } catch(e){}
-}
-
-// Confirm/checkout blip (descending)
-function ybPlayConfirm(){
-  if (document.body.classList.contains('lb')) return;
-  try {
-    ybEnsureCtx();
-    const t = ybAudioCtx.currentTime;
-    const o = ybAudioCtx.createOscillator();
-    const g = ybAudioCtx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(880, t);
-    o.frequency.exponentialRampToValueAtTime(440, t + 0.12);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-    o.connect(g); g.connect(ybAudioCtx.destination);
-    o.start(t); o.stop(t + 0.16);
-  } catch(e){}
+function addToCart(){
+  const s=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+  s.play();
+  document.getElementById('msg').innerText='Item added to cart (emotionally).';
 }
 </script>
 </body>
