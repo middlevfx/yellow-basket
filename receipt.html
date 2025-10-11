@@ -1,29 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Receipt · Yellow Basket</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
 <style>
-body{
+body {
   font-family:'IBM Plex Sans',system-ui,sans-serif;
   background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
-  margin:0;padding:2rem;color:#222;
+  margin:0;padding:2rem;color:#222;text-align:center;
 }
-h1,h2{font-family:'Space Grotesk',sans-serif;}
-a{color:#000;text-decoration:none;}
-footer{font-family:'Courier New',monospace;text-align:center;margin-top:3rem;font-size:.8rem;}
+h1{font-family:'Space Grotesk',sans-serif;}
+pre {
+  font-family:'Courier New',monospace;
+  background:#fff;border:1px solid #ddd;border-radius:8px;
+  display:inline-block;text-align:left;padding:1rem 1.5rem;
+}
+button{
+  background:#111;color:#fff;border:none;border-radius:6px;
+  padding:0.6rem 1.2rem;margin-top:1rem;cursor:pointer;
+}
+button:hover{background:#333;}
+footer{
+  font-family:'Courier New',monospace;
+  font-size:0.85rem;margin-top:3rem;
+}
 </style>
 </head>
 <body>
-<h1>Receipt</h1>
-<p>Payment method: <strong>Exposure</strong></p>
-<p>Delivery: soon™</p>
-<p>Status: emotionally fulfilled</p>
+<h1>🧾 Receipt</h1>
+<p>Payment Method: <strong>Exposure</strong></p>
 
-<a href="index.html">← Back to shop</a>
+<pre>
+╭──────────────────────────────╮
+│   LOW BANDWIDTH DREAMS       │
+│   144 kbps Cyber Purok │
+│                              │
+│   ITEM(S): Assorted Pagod     │
+│   TOTAL:  ₱0.00 + Feelings   │
+│   STATUS: Emotionally Fulfilled │
+│                              │
+│   “Shipped from Laguna —      │
+│   may kagat lang ni Mowgli.”  │
+╰──────────────────────────────╯
+</pre>
 
-<footer>© 2025 Low Bandwidth Dreams · “Buffering gratitude…”</footer>
+<p>Thank you for your exposure.<br/>
+Your art will be processed once connection stabilizes.</p>
+
+<button onclick="window.location.href='index.html'">← Back to Shop</button>
+<br/>
+<a href="abandoned.html" style="font-size:0.8rem;">View Abandoned Carts</a>
+
+<footer>© 2025 Low Bandwidth Dreams · buffering gratitude...</footer>
 </body>
 </html>
