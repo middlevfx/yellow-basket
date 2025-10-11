@@ -53,5 +53,135 @@ function checkout(){
   setTimeout(()=>{window.location.href='receipt.html';},1500);
 }
 </script>
+
+  <!-- IMPULSE UPDATE · Yellow Basket v7 -->
+<style>
+/* POPUP OVERLAY */
+#impulsePopup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: 'Space Grotesk', sans-serif;
+  z-index: 9999;
+  text-align: center;
+  color: #111;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+#impulsePopup.active {
+  opacity: 1;
+  pointer-events: all;
+}
+#impulsePopup button {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+#impulsePopup button:hover {
+  background: #333;
+}
+
+/* PAYMENT MODAL */
+#paymentModal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 320px;
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 1.2rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  z-index: 99999;
+  display: none;
+  box-shadow: 5px 5px 0 #000;
+}
+#paymentModal h3 {
+  margin-top: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+#paymentModal label {
+  display: block;
+  margin: 0.5rem 0;
+}
+#paymentModal button {
+  margin-top: 1rem;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+</style>
+
+<div id="impulsePopup">
+  <h2>⚠️ Flash Deal: Emotional Stability (Ends in <span id="rushTimer">5:00</span>)</h2>
+  <p>Detected location: <strong>98B Escolta Buma-Block Party</strong></p>
+  <p>Hurry up bago ka ma-overthink ulit! Only 3 left (in your heart).</p>
+  <button onclick="openPaymentModal()">Proceed to Checkout Now</button>
+</div>
+
+<div id="paymentModal">
+  <h3>Choose a Payment Method</h3>
+  <label><input type="radio" name="pay" checked> Exposure (Creative Credit)</label>
+  <label><input type="radio" name="pay"> Card (VISA / Feeling Secure)</label>
+  <label><input type="radio" name="pay"> E-Wallet (GCash / PayMaya / Emo Coins)</label>
+  <label><input type="radio" name="pay"> NvrPayLater™ (Sabay utang, sabay iyak)</label>
+  <label><input type="radio" name="pay"> Flood Control Taxes (Charged to Barangay Budget)</label>
+  <button onclick="completeImpulse()">Confirm Payment</button>
+</div>
+
+<script>
+// Show popup after 10s or first add-to-cart
+let impulseShown = false;
+function showImpulsePopup(){
+  if(impulseShown) return;
+  impulseShown = true;
+  document.getElementById('impulsePopup').classList.add('active');
+  startRushTimer();
+}
+setTimeout(showImpulsePopup, 10000);
+
+// Rush timer countdown
+function startRushTimer(){
+  let mins = 5, secs = 0;
+  setInterval(()=>{
+    secs--;
+    if(secs < 0){ secs = 59; mins--; }
+    if(mins < 0){ mins = 0; secs = 0; }
+    document.getElementById('rushTimer').textContent = `${mins}:${secs<10?'0'+secs:secs}`;
+  }, 1000);
+}
+
+// Open payment modal
+function openPaymentModal(){
+  document.getElementById('paymentModal').style.display = 'block';
+}
+
+// Complete fake checkout
+function completeImpulse(){
+  const paySound = new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg');
+  paySound.play();
+  document.getElementById('paymentModal').innerHTML = `
+    <h3>Processing payment...</h3>
+    <p>Charged to: <strong>98B Escolta Flood Control Taxes</strong></p>
+    <p>Thank you for your exposure.</p>
+    <button onclick="window.location.href='receipt.html'">View Receipt</button>
+  `;
+}
+</script>
+<!-- END IMPULSE UPDATE -->
 </body>
 </html>
