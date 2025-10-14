@@ -1,42 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Abandoned Cart · Yellow Basket</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abandoned Cart Museum · Yellow Basket</title>
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 body {
-  font-family:'IBM Plex Sans',system-ui,sans-serif;
-  background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
-  margin:0;padding:2rem;color:#222;
+  background:#0b0c09;
+  color:#cce0c0;
+  font-family:'IBM Plex Mono', monospace;
+  margin:0;
+  padding:0;
+  overflow:hidden;
 }
-h1{font-family:'Space Grotesk',sans-serif;}
-blockquote{
-  font-style:italic;
-  border-left:3px solid #000;
-  margin:1rem 0;
-  padding-left:1rem;
+h1 {
+  font-family:'Space Grotesk',sans-serif;
+  text-align:center;
+  margin-top:2rem;
+  font-size:1.6rem;
+  color:#d3f3d3;
+  text-shadow:0 0 4px #6fa86f;
 }
-footer{
-  font-family:'Courier New',monospace;
-  font-size:0.85rem;margin-top:3rem;text-align:center;
+.items {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:1rem;
+  margin-top:2rem;
+  padding:0 1rem;
 }
-a{color:#000;text-decoration:none;}
+.item {
+  background:rgba(30,40,25,0.3);
+  border:1px solid #6fa86f33;
+  border-radius:8px;
+  padding:1rem;
+  width:220px;
+  text-align:center;
+  backdrop-filter:blur(3px);
+  animation:floaty 6s infinite ease-in-out alternate;
+}
+.item:hover {
+  background:rgba(50,60,45,0.5);
+}
+@keyframes floaty {
+  0% { transform:translateY(0px); }
+  100% { transform:translateY(-6px); }
+}
+.item h3 {
+  font-family:'Space Grotesk';
+  margin-bottom:0.4rem;
+  color:#aee0a8;
+}
+.item p {
+  font-size:0.85rem;
+  color:#d7e6d3;
+  opacity:0.85;
+}
+footer {
+  text-align:center;
+  margin-top:3rem;
+  font-size:0.8rem;
+  color:#95a594;
+}
+button {
+  margin-top:2rem;
+  padding:0.6rem 1.2rem;
+  background:#1f2f1f;
+  border:1px solid #7ea97e;
+  color:#e8f8e6;
+  border-radius:8px;
+  cursor:pointer;
+}
+button:hover {
+  background:#334633;
+}
+#cursor {
+  display:inline-block;
+  animation:blink 1s infinite;
+}
+@keyframes blink {50%{opacity:0;}}
+/* ambient glitch flicker */
+@keyframes flicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {opacity:1;}
+  20%,24%,55% {opacity:0.4;}
+}
+.flicker {animation:flicker 3s infinite;}
 </style>
 </head>
 <body>
-<h1>Abandoned Cart</h1>
-<p>Iniwan mong bukas ‘yung tab, pero hindi ko naman sinarado.</p>
-<blockquote>
-  “Baka bumalik ka pa.  
-  Baka gusto mo lang magpahinga.  
-  Baka gusto mo lang maramdaman ulit ‘yung bilis ng Wi-Fi.”  
-  <br>– the algorithm, whispering softly
-</blockquote>
+<h1 class="flicker">🛒 Abandoned Cart Museum <span id="cursor">▋</span></h1>
 
-<p><a href="index.html">← Go back to shop</a></p>
+<div class="items">
+  <div class="item">
+    <h3>Premium Pagod (500g)</h3>
+    <p>“naiwan ako sa wishlist pero okay lang.”</p>
+  </div>
+  <div class="item">
+    <h3>Wi-Fi Tears Refill</h3>
+    <p>“sinubukan kong reconnect pero weak signal daw.”</p>
+  </div>
+  <div class="item">
+    <h3>Half-Eaten Tsinelas NFT</h3>
+    <p>“gusto ko sanang bilhin pero di ko alam kung legit.”</p>
+  </div>
+  <div class="item">
+    <h3>Laguna Lake Mist (Refill Pack)</h3>
+    <p>“inaantay pa rin i-deliver ng ulan.”</p>
+  </div>
+  <div class="item">
+    <h3>Tambay Time Voucher</h3>
+    <p>“expired na daw pero tambay pa rin ako.”</p>
+  </div>
+  <div class="item">
+    <h3>Mowgli’s Bite Mark (NFT)</h3>
+    <p>“nasa cart pa rin… parang memory.”</p>
+  </div>
+  <div class="item">
+    <h3>Budget Emotions (Trial Version)</h3>
+    <p>“free plan lang kasi ako ngayon.”</p>
+  </div>
+  <div class="item">
+    <h3>Low Signal Bundle (3G Edition)</h3>
+    <p>“sabi ng app: unstable connection, sabi ko rin.”</p>
+  </div>
+</div>
 
-<footer>© 2025 Low Bandwidth Dreams · made with love and lag.</footer>
+<center>
+  <button onclick="goBack()">← Return to Shop</button>
+</center>
+
+<footer>
+  still buffering feelings… powered by <i>Low Bandwidth Dreams</i> 🌙
+</footer>
+
+<script>
+function goBack(){
+  const sound=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+  sound.play();
+  setTimeout(()=>{window.location.href='index.html';},600);
+}
+// ambient hum
+const hum=new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_41bbd209a8.mp3?filename=ambient-room-tone-10418.mp3');
+hum.loop=true; hum.volume=0.05;
+hum.play().catch(()=>{});
+</script>
 </body>
 </html>

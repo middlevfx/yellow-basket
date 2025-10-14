@@ -1,187 +1,531 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your Cart · Yellow Basket</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yellow Basket — Cart</title>
+  <link rel="icon" href="/assets/img/yellow-basket-logo.png" />
+  <style>
+    /* --- Base layout --- */
+    :root{
+      --bg:#e6efe9; /* soft green */
+      --panel:#d7e6db;
+      --crt-tint: rgba(30,60,50,0.06);
+      --phosphor:#b8f0a8;
+      --accent:#3a6b5a;
+      --muted:#7b8f84;
+      --glow: 0 0 18px rgba(160,255,170,0.14), 0 0 60px rgba(120,240,140,0.06);
+      font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100%;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.015), rgba(0,0,0,0.02)) ,
+        var(--bg);
+      color:#072a1f;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
 
-<style>
-body {
-  font-family:'IBM Plex Sans', system-ui, sans-serif;
-  background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
-  margin:0; padding:2rem; color:#222;
-}
-h1,h2 { font-family:'Space Grotesk', sans-serif; }
-button {
-  background:#000; color:#fff; border:none; border-radius:6px;
-  padding:0.6rem 1.2rem; cursor:pointer;
-}
-button:hover { background:#333; }
-a { color:#000; text-decoration:none; }
-.cart-box {
-  border:1px solid #ddd; border-radius:10px; padding:1rem; background:#fff; max-width:500px;
-}
-footer {
-  text-align:center; font-family:'Courier New', monospace;
-  margin-top:3rem; font-size:0.85rem;
-}
-</style>
+    /* --- Card --- */
+    .cart-wrap{
+      width:100%;
+      max-width:980px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+      border:1px solid rgba(20,40,30,0.06);
+      border-radius:14px;
+      box-shadow: 0 6px 30px rgba(10,20,10,0.08), var(--glow);
+      padding:22px;
+      backdrop-filter: blur(2px) saturate(1.02);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* CRT scanline overlay */
+    .cart-wrap::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:linear-gradient(transparent 92%, rgba(0,0,0,0.02) 100%);
+      background-size:100% 3px;
+      pointer-events:none;
+      mix-blend-mode:overlay;
+      opacity:0.6;
+    }
+
+    header.top{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .logo{
+      width:80px;
+      height:48px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.15));
+    }
+    .logo img{
+      width:100%;
+      height:auto;
+      image-rendering:pixelated; /* subtle lo-res look */
+      transform: translateY(-2px);
+      mix-blend-mode:normal;
+      box-shadow: 0 0 18px rgba(170,255,170,0.14);
+    }
+    .site-title{
+      font-weight:700;
+      letter-spacing:0.6px;
+      font-size:18px;
+      text-transform:uppercase;
+      color:var(--accent);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6), 0 0 8px rgba(170,255,170,0.08);
+    }
+    .site-sub{font-size:12px;color:var(--muted); margin-top:2px}
+
+    /* --- grid --- */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:18px;
+    }
+    @media (max-width:900px){ .grid{ grid-template-columns:1fr } }
+
+    /* Cart list */
+    .items{
+      background:linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.25));
+      border-radius:10px;
+      padding:14px;
+      border:1px solid rgba(10,30,20,0.03);
+    }
+    .item{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:10px 6px;
+      border-bottom:1px dashed rgba(10,30,20,0.03);
+    }
+    .item:last-child{border-bottom:none}
+    .thumb{
+      width:64px;height:48px;background:#cfe6cc;border-radius:6px;display:block;
+      flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;
+      text-shadow:0 1px 0 rgba(0,0,0,0.2);
+    }
+    .meta{flex:1}
+    .meta b{display:block}
+    .qty{color:var(--muted);font-size:13px}
+
+    /* Side panel (checkout) */
+    .checkout{
+      background: linear-gradient(180deg,#f6fff3, #eef9ee);
+      border-radius:10px;padding:14px;border:1px solid rgba(10,30,20,0.03);
+    }
+    .total-row{display:flex;justify-content:space-between;align-items:center;font-weight:700;padding:8px 0;font-size:18px}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* Payment methods */
+    .payments{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
+    .pay-btn{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid rgba(10,20,10,0.06);
+      background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(245,255,240,0.6));
+      cursor:pointer;user-select:none;min-width:170px;
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .pay-btn:hover{transform:translateY(-3px); box-shadow:0 8px 20px rgba(20,50,30,0.06)}
+    .pay-btn[data-selected="true"]{outline:2px solid rgba(150,255,130,0.18); box-shadow: 0 0 28px rgba(120,240,140,0.08)}
+    .pay-icon{font-size:18px; width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff,#f0fff0);box-shadow:inset 0 -2px 0 rgba(0,0,0,0.03)}
+    .pay-label{font-weight:600;font-size:14px}
+    .pay-sub{font-size:12px;color:var(--muted)}
+
+    /* Tiny disclaimers */
+    .tiny{font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* Processing overlay */
+    .overlay{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;
+    }
+    .proc{
+      pointer-events:auto;
+      min-width:320px;max-width:90%;
+      background:linear-gradient(180deg,#f7fff6,#eefbf0);
+      border-radius:12px;padding:18px;border:1px solid rgba(10,30,20,0.04);
+      box-shadow:0 10px 40px rgba(5,20,10,0.12);
+      transform:translateY(6px);opacity:0;transition:opacity .18s ease, transform .18s ease;
+    }
+    .overlay.show .proc{opacity:1;transform:translateY(0);pointer-events:auto}
+    .progbar{height:10px;background:linear-gradient(90deg,#dfe6d9,#bfeec0);border-radius:10px;overflow:hidden;margin-top:10px}
+    .fill{height:100%;width:0%;background:linear-gradient(90deg,#9efeb0,#6fe68a);transition:width 1s linear}
+
+    /* Glitch effect for Crashout */
+    .glitch {
+      animation: glitch 420ms steps(2) infinite;
+    }
+    @keyframes glitch{
+      0%{transform:translateX(0)}
+      25%{transform:translateX(-2px)}
+      50%{transform:translateX(1px)}
+      75%{transform:translateX(-1px)}
+      100%{transform:translateX(0)}
+    }
+
+    /* receipt modal */
+    .receipt{
+      border-radius:10px;padding:16px;background:linear-gradient(180deg,#fff,#f8fff6);border:1px solid rgba(10,30,20,0.04);
+      box-shadow:0 8px 30px rgba(0,0,0,0.06);max-width:720px;margin:8px auto;
+    }
+    .receipt h3{margin:0 0 8px 0}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size:13px}
+  </style>
 </head>
 <body>
-<h1>Your Cart</h1>
-<p>Na-add mo na lahat ng gusto mong bilhin. Pero tanong: gusto ka rin ba ng mga ‘yon?</p>
+  <main class="cart-wrap" role="main" aria-labelledby="cartHeading">
+    <header class="top" >
+      <div class="logo" aria-hidden="true">
+        <img src="/assets/img/yellow-basket-logo.png" alt="Yellow Basket logo" />
+      </div>
+      <div>
+        <div class="site-title" id="cartHeading">Yellow Basket</div>
+        <div class="site-sub">Low Bandwidth Dreams — Official Fake Checkout</div>
+      </div>
+    </header>
 
-<div class="cart-box">
-  <p><strong>Items:</strong> Assorted dreams, desires, and digital dust.</p>
-  <p><strong>Subtotal:</strong> ₱0.00 + feelings</p>
-</div>
+    <div class="grid">
+      <!-- Left: Items -->
+      <section class="items" aria-label="Shopping cart items">
+        <div class="muted">Your cart</div>
 
-<br/>
-<button onclick="checkout()">Pay with Exposure</button>
-<p id="msg"></p>
+        <!-- example items -->
+        <div class="item">
+          <div class="thumb">Pagod</div>
+          <div class="meta">
+            <b>Premium Pagod (500g)</b>
+            <div class="qty">Qty: 1 · ₱0.00 (free emotional weight)</div>
+          </div>
+          <div class="mono">₱0</div>
+        </div>
 
-<a href="index.html">← Continue shopping</a>
+        <div class="item">
+          <div class="thumb">WiFi</div>
+          <div class="meta">
+            <b>Wi-Fi Tears (Pocket Edition)</b>
+            <div class="qty">Qty: 2 · 1 bottle = 3 missing pings</div>
+          </div>
+          <div class="mono">₱0</div>
+        </div>
 
-<footer>© 2025 Low Bandwidth Dreams</footer>
+        <div class="item">
+          <div class="thumb">Tears</div>
+          <div class="meta">
+            <b>Mowgli’s Bite Mark (1x NFT replica)</b>
+            <div class="qty">Qty: 1 · Half-eaten authenticity</div>
+          </div>
+          <div class="mono">₱0</div>
+        </div>
 
-<script>
-function checkout(){
-  const snd=new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
-  snd.play();
-  document.getElementById('msg').innerText="Processing payment in clout units…";
-  setTimeout(()=>{window.location.href='receipt.html';},1500);
-}
-</script>
+        <p class="tiny">Tip: This is a satire. No real transactions will occur. Embrace the low-bandwidth experience.</p>
+      </section>
 
-  <!-- IMPULSE UPDATE · Yellow Basket v7 -->
-<style>
-/* POPUP OVERLAY */
-#impulsePopup {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  font-family: 'Space Grotesk', sans-serif;
-  z-index: 9999;
-  text-align: center;
-  color: #111;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s;
-}
-#impulsePopup.active {
-  opacity: 1;
-  pointer-events: all;
-}
-#impulsePopup button {
-  background: #111;
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.3rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-  cursor: pointer;
-}
-#impulsePopup button:hover {
-  background: #333;
-}
+      <!-- Right: Checkout -->
+      <aside class="checkout" aria-label="Checkout panel">
+        <div class="muted">Order summary</div>
+        <div class="total-row">
+          <div>Estimated total</div>
+          <div class="mono">₱0.00</div>
+        </div>
 
-/* PAYMENT MODAL */
-#paymentModal {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 320px;
-  background: #fff;
-  border: 2px solid #000;
-  border-radius: 12px;
-  padding: 1.2rem;
-  font-family: 'IBM Plex Sans', sans-serif;
-  z-index: 99999;
-  display: none;
-  box-shadow: 5px 5px 0 #000;
-}
-#paymentModal h3 {
-  margin-top: 0;
-  font-family: 'Space Grotesk', sans-serif;
-}
-#paymentModal label {
-  display: block;
-  margin: 0.5rem 0;
-}
-#paymentModal button {
-  margin-top: 1rem;
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-}
-</style>
+        <div style="margin-top:8px">
+          <label class="muted" for="name">Name</label>
+          <input id="name" placeholder="Enter your name (or alias)" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(10,30,20,0.04);margin-top:6px" />
+        </div>
 
-<div id="impulsePopup">
-  <h2>⚠️ Flash Deal: Emotional Stability (Ends in <span id="rushTimer">5:00</span>)</h2>
-  <p>Detected location: <strong>98B Escolta Buma-Block Party</strong></p>
-  <p>Hurry up bago ka ma-overthink ulit! Only 3 left (in your heart).</p>
-  <button onclick="openPaymentModal()">Proceed to Checkout Now</button>
-</div>
+        <div style="margin-top:10px">
+          <label class="muted" for="addr">Address (optional)</label>
+          <input id="addr" placeholder="e.g. Purok San Pedro, Laguna" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(10,30,20,0.04);margin-top:6px" />
+        </div>
 
-<div id="paymentModal">
-  <h3>Choose a Payment Method</h3>
-  <label><input type="radio" name="pay" checked> Exposure (Creative Credit)</label>
-  <label><input type="radio" name="pay"> Card (VISA / Feeling Secure)</label>
-  <label><input type="radio" name="pay"> E-Wallet (GCash / PayMaya / Emo Coins)</label>
-  <label><input type="radio" name="pay"> NvrPayLater™ (Sabay utang, sabay iyak)</label>
-  <label><input type="radio" name="pay"> Flood Control Taxes (Charged to Barangay Budget)</label>
-  <button onclick="completeImpulse()">Confirm Payment</button>
-</div>
+        <div style="margin-top:12px">
+          <div class="muted">Payment methods</div>
+          <div class="payments" role="list" aria-label="Payment methods">
+            <button class="pay-btn" data-method="crashout" role="listitem" aria-pressed="false">
+              <span class="pay-icon">💥</span>
+              <div>
+                <div class="pay-label">Crashout</div>
+                <div class="pay-sub">Try to pay. System: *maybe*.</div>
+              </div>
+            </button>
 
-<script>
-// Show popup after 10s or first add-to-cart
-let impulseShown = false;
-function showImpulsePopup(){
-  if(impulseShown) return;
-  impulseShown = true;
-  document.getElementById('impulsePopup').classList.add('active');
-  startRushTimer();
-}
-setTimeout(showImpulsePopup, 10000);
+            <button class="pay-btn" data-method="gcash-tears" role="listitem" aria-pressed="false">
+              <span class="pay-icon">💧</span>
+              <div>
+                <div class="pay-label">GCash Tears</div>
+                <div class="pay-sub">Send money. We accept sadness.</div>
+              </div>
+            </button>
 
-// Rush timer countdown
-function startRushTimer(){
-  let mins = 5, secs = 0;
-  setInterval(()=>{
-    secs--;
-    if(secs < 0){ secs = 59; mins--; }
-    if(mins < 0){ mins = 0; secs = 0; }
-    document.getElementById('rushTimer').textContent = `${mins}:${secs<10?'0'+secs:secs}`;
-  }, 1000);
-}
+            <button class="pay-btn" data-method="paymaya-monalang" role="listitem" aria-pressed="false">
+              <span class="pay-icon">🟣</span>
+              <div>
+                <div class="pay-label">PayMaya MoNaLang</div>
+                <div class="pay-sub">The classic shrug payment.</div>
+              </div>
+            </button>
 
-// Open payment modal
-function openPaymentModal(){
-  document.getElementById('paymentModal').style.display = 'block';
-}
+            <button class="pay-btn" data-method="tambay-cod" role="listitem" aria-pressed="false">
+              <span class="pay-icon">📦</span>
+              <div>
+                <div class="pay-label">Tambay COD</div>
+                <div class="pay-sub">Cash upon tambay pickup.</div>
+              </div>
+            </button>
 
-// Complete fake checkout
-function completeImpulse(){
-  const paySound = new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg');
-  paySound.play();
-  document.getElementById('paymentModal').innerHTML = `
-    <h3>Processing payment...</h3>
-    <p>Charged to: <strong>98B Escolta Flood Control Taxes</strong></p>
-    <p>Thank you for your exposure.</p>
-    <button onclick="window.location.href='receipt.html'">View Receipt</button>
-  `;
-}
-</script>
-<!-- END IMPULSE UPDATE -->
+            <button class="pay-btn" data-method="karma-points" role="listitem" aria-pressed="false">
+              <span class="pay-icon">✨</span>
+              <div>
+                <div class="pay-label">KARMA Points</div>
+                <div class="pay-sub">Redeem good vibes instead of cash.</div>
+              </div>
+            </button>
+          </div>
+
+          <div class="tiny">If you choose <b>Crashout</b> — expect dramatic glitching. That is the point.</div>
+        </div>
+
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <button id="checkoutBtn" style="flex:1;padding:12px;border-radius:10px;border:none;background:linear-gradient(180deg,#bfffc0,#8df58a);font-weight:700;cursor:pointer">
+            Complete (kinda) purchase
+          </button>
+          <button id="clearBtn" style="padding:12px;border-radius:10px;border:1px solid rgba(10,30,20,0.04);background:transparent;cursor:pointer">Clear</button>
+        </div>
+
+        <div class="tiny" style="margin-top:10px">
+          <strong>Low bandwidth mode:</strong> images may be low-res, animations minimal, memory kept in localStorage.
+        </div>
+      </aside>
+    </div>
+
+    <!-- Processing overlay -->
+    <div class="overlay" id="overlay" aria-hidden="true">
+      <div class="proc" role="dialog" aria-modal="true" aria-labelledby="procTitle">
+        <div id="procTitle" style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong id="procLabel">Processing payment</strong>
+            <div class="muted" id="procSub">Please wait…</div>
+          </div>
+          <div id="procIcon" aria-hidden="true">⏳</div>
+        </div>
+
+        <div class="progbar" aria-hidden="true">
+          <div class="fill" id="fill"></div>
+        </div>
+        <div id="procMsg" class="tiny" style="margin-top:8px">This is a simulation. No real money moved.</div>
+      </div>
+    </div>
+
+    <!-- Receipt template (hidden) -->
+    <template id="receiptTpl">
+      <div class="receipt" role="document">
+        <h3>Yellow Basket — Fake Receipt</h3>
+        <div class="muted mono" id="ordId">Order #YB-000</div>
+        <div style="margin-top:8px">
+          <div><b>Buyer:</b> <span id="rName"></span></div>
+          <div><b>Payment:</b> <span id="rPay"></span></div>
+          <div style="margin-top:8px"><b>Items</b></div>
+          <ul id="rItems" class="mono"></ul>
+          <div style="margin-top:8px" class="muted">Total: ₱0.00 (emotional currency)</div>
+        </div>
+        <div style="margin-top:12px" class="tiny">Thank you for supporting Yellow Basket’s imaginary economy. Take care of your internet connection.</div>
+      </div>
+    </template>
+
+  </main>
+
+  <script>
+    // Simple interactivity: select payment method, process, and show receipt modal.
+    const payButtons = document.querySelectorAll('.pay-btn');
+    let selected = null;
+    payButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        payButtons.forEach(b=>{ b.dataset.selected = 'false'; b.setAttribute('aria-pressed','false'); b.classList.remove('glitch')});
+        btn.dataset.selected = 'true';
+        btn.setAttribute('aria-pressed','true');
+        selected = btn.dataset.method;
+        // If crashout is selected, add subtle glitch class to hint at drama
+        if(selected === 'crashout') btn.classList.add('glitch');
+      });
+    });
+
+    // Defaults: select PayMaya MoNaLang for immediate flow
+    document.querySelector('.pay-btn[data-method="paymaya-monalang"]').dataset.selected = 'true';
+    selected = 'paymaya-monalang';
+
+    const overlay = document.getElementById('overlay');
+    const fill = document.getElementById('fill');
+    const procLabel = document.getElementById('procLabel');
+    const procSub = document.getElementById('procSub');
+    const procIcon = document.getElementById('procIcon');
+    const procMsg = document.getElementById('procMsg');
+
+    function showOverlay(method){
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden','false');
+      fill.style.width = '0%';
+      procLabel.textContent = 'Processing payment';
+      procSub.textContent = 'Connecting to low-bandwidth gateway…';
+      procIcon.textContent = '⏳';
+      procMsg.textContent = 'Do not refresh. (Or do; we are satire.)';
+    }
+    function hideOverlay(){
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden','true');
+    }
+
+    function simulateProgress(duration=2500){
+      return new Promise(res=>{
+        const steps = 30;
+        let i=0;
+        const interval = duration / steps;
+        const t = setInterval(()=>{
+          i++;
+          fill.style.width = Math.round((i/steps)*100) + '%';
+          if(i>=steps){ clearInterval(t); res(); }
+        }, interval);
+      })
+    }
+
+    function crashEffect(){
+      // intentional fake 'crash' outcome
+      procLabel.textContent = 'CRASHED';
+      procSub.textContent = 'System encountered an existential error.';
+      procIcon.textContent = '💥alam mo ha! aray kohh💥';
+      procMsg.textContent = 'Your payment attempt detonated in style. Try another method or reload for penance.';
+    }
+
+    function showReceipt(payload){
+      hideOverlay();
+      // create modal-like inline receipt (simple)
+      const tpl = document.getElementById('receiptTpl');
+      const clone = tpl.content.cloneNode(true);
+      clone.getElementById('ordId').textContent = `Order #YB-${Math.floor(Math.random()*9000)+1000}`;
+      clone.getElementById('rName').textContent = payload.name || 'Anonymous Tambay';
+      clone.getElementById('rPay').textContent = payload.methodLabel;
+      const itemsEl = clone.getElementById('rItems');
+      const sampleItems = ['Premium Pagod (500g)', 'Wi-Fi Tears (Pocket Edition)', "Mowgli's Bite Mark (replica)"];
+      sampleItems.forEach(it=>{
+        const li = document.createElement('li'); li.textContent = it; itemsEl.appendChild(li);
+      });
+
+      // show at top of page as temporary "modal"
+      const parent = document.querySelector('.cart-wrap');
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'fixed';
+      wrapper.style.inset = '14px';
+      wrapper.style.overflow = 'auto';
+      wrapper.style.display = 'flex';
+      wrapper.style.alignItems = 'center';
+      wrapper.style.justifyContent = 'center';
+      wrapper.style.zIndex = '9999';
+      wrapper.appendChild(clone);
+      document.body.appendChild(wrapper);
+
+      // auto-remove after 6s
+      setTimeout(()=>{ wrapper.remove(); }, 6000);
+    }
+
+    // Map method keys to display labels and special behavior
+    const methodMap = {
+      'crashout': {label:'Crashout', behavior:'crash'},
+      'gcash-tears': {label:'GCash Tears', behavior:'ok'},
+      'paymaya-monalang': {label:'PayMaya MoNaLang', behavior:'ok'},
+      'tambay-cod': {label:'Tambay COD', behavior:'cod'},
+      'karma-points': {label:'KARMA Points', behavior:'karma'}
+    };
+
+    document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
+      const name = document.getElementById('name').value.trim();
+      const addr = document.getElementById('addr').value.trim();
+      const selectedBtn = document.querySelector('.pay-btn[data-selected="true"]');
+      const method = selectedBtn ? selectedBtn.dataset.method : null;
+      const methodLabel = methodMap[method] ? methodMap[method].label : 'Unknown';
+
+      if(!method){
+        alert('Pili ka muna ng payment method, bes.');
+        return;
+      }
+
+      showOverlay(method);
+      // playful processing times
+      if(method === 'crashout'){
+        // lengthened drama
+        await simulateProgress(2200);
+        // add little shake/glitch
+        crashEffect();
+        // leave overlay visible a bit so user can read crash
+        await new Promise(r=>setTimeout(r,1800));
+        hideOverlay();
+        // after crash, encourage alternate payment
+        alert('Crashout failed spectacularly. Try GCash Tears or PayMaya MoNaLang instead. ✨');
+        return;
+      }
+
+      // normal-ish flows
+      await simulateProgress(1800);
+      // behavior branches
+      const b = methodMap[method].behavior;
+      if(b === 'ok'){
+        procLabel.textContent = '✅ Payment (pretend) successful';
+        procSub.textContent = 'Generating fake receipt…';
+        procIcon.textContent = '🎉';
+        await new Promise(r=>setTimeout(r,800));
+        showReceipt({name, addr, methodLabel});
+        // small friendly localStorage save (so cart persists)
+        try{
+          localStorage.setItem('yb_last_order', JSON.stringify({name,addr,method:methodLabel,ts:Date.now()}));
+        }catch(e){}
+        return;
+      }
+      if(b === 'cod'){
+        procLabel.textContent = 'Hold up — Tambay COD selected';
+        procSub.textContent = 'Leave a note for the tambay: "don\'t forget to bring extra patience"';
+        procIcon.textContent = '📦';
+        await new Promise(r=>setTimeout(r,900));
+        showReceipt({name, addr, methodLabel});
+        return;
+      }
+      if(b === 'karma'){
+        procLabel.textContent = 'Redeeming KARMA Points';
+        procSub.textContent = 'Scanning good vibes…';
+        procIcon.textContent = '✨';
+        await new Promise(r=>setTimeout(r,900));
+        showReceipt({name, addr, methodLabel});
+        return;
+      }
+      // fallback
+      hideOverlay();
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      document.getElementById('name').value = '';
+      document.getElementById('addr').value = '';
+      payButtons.forEach(b=>b.dataset.selected='false');
+      document.querySelector('.pay-btn[data-method="paymaya-monalang"]').dataset.selected='true';
+      selected = 'paymaya-monalang';
+      alert('Cart cleared. Back to being low-bandwidth and unbothered.');
+    });
+
+    // small keyboard shortcut for fun: press "G" to select GCash Tears
+    document.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase() === 'g'){
+        document.querySelector('.pay-btn[data-method="gcash-tears"]').click();
+      }
+    });
+  </script>
 </body>
 </html>

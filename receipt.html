@@ -1,58 +1,247 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Receipt · Yellow Basket</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
-<style>
-body {
-  font-family:'IBM Plex Sans',system-ui,sans-serif;
-  background:linear-gradient(160deg,#d7f3f7 0%,#fbe7ef 40%,#d9f3e1 80%,#fffdf9 100%);
-  margin:0;padding:2rem;color:#222;text-align:center;
-}
-h1{font-family:'Space Grotesk',sans-serif;}
-pre {
-  font-family:'Courier New',monospace;
-  background:#fff;border:1px solid #ddd;border-radius:8px;
-  display:inline-block;text-align:left;padding:1rem 1.5rem;
-}
-button{
-  background:#111;color:#fff;border:none;border-radius:6px;
-  padding:0.6rem 1.2rem;margin-top:1rem;cursor:pointer;
-}
-button:hover{background:#333;}
-footer{
-  font-family:'Courier New',monospace;
-  font-size:0.85rem;margin-top:3rem;
-}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Yellow Basket — Receipt</title>
+  <link rel="icon" href="/assets/img/yellow-basket-logo.png"/>
+  <style>
+    :root{
+      --bg:#e6efe9;
+      --accent:#3a6b5a;
+      --muted:#7b8f84;
+      --glow:0 0 18px rgba(160,255,170,0.14);
+    }
+    html,body{margin:0;height:100%;background:var(--bg);color:#072a1f;
+      font-family:Inter,system-ui,-apple-system,Arial;display:flex;align-items:center;justify-content:center;padding:28px}
+    .wrap{max-width:760px;width:100%;background:rgba(255,255,255,0.5);
+      border:1px solid rgba(20,40,30,0.06);border-radius:14px;
+      padding:26px;box-shadow:var(--glow);position:relative;overflow:hidden}
+    .wrap::before{
+      content:"";position:absolute;inset:0;
+      background-image:linear-gradient(transparent 92%,rgba(0,0,0,0.02) 100%);
+      background-size:100% 3px;opacity:0.6;pointer-events:none
+    }
+    header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    header img{width:100px;image-rendering:pixelated}
+    h1{font-size:18px;margin:0;color:var(--accent);text-transform:uppercase;text-shadow:0 0 6px rgba(160,255,170,0.1)}
+    .muted{color:var(--muted);font-size:13px}
+    .section{margin-top:16px}
+    ul{padding-left:18px;margin:6px 0}
+    li{margin:3px 0}
+    .mono{font-family:ui-monospace,Menlo,monospace;font-size:13px}
+    .thanks{margin-top:18px;font-size:13px;color:var(--muted)}
+    a.btn,button.btn{
+      display:inline-block;margin-top:16px;padding:10px 14px;border-radius:10px;
+      background:linear-gradient(180deg,#bfffc0,#8df58a);font-weight:700;
+      color:#000;text-decoration:none;border:none;cursor:pointer;
+    }
+    .btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .option-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+    .small{font-size:13px;color:var(--muted)}
+  </style>
 </head>
 <body>
-<h1>🧾 Receipt</h1>
-<p>Payment Method: <strong>Exposure</strong></p>
+  <div class="wrap">
+    <header>
+      <img src="/assets/img/yellow-basket-logo.png" alt="Yellow Basket logo">
+      <div>
+        <h1>Yellow Basket</h1>
+        <div class="muted">Official Fake Receipt</div>
+      </div>
+    </header>
 
-<pre>
-╭──────────────────────────────╮
-│   LOW BANDWIDTH DREAMS       │
-│   144 kbps Cyber Purok       │
-│                              │
-│   ITEM(S): Assorted Pagod     │
-│   TOTAL:  ₱0.00 + Feelings   │
-│   STATUS: Emotionally Fulfilled │
-│                              │
-│   “Shipped from Laguna —      │
-│   may kagat lang ni Mowgli.”  │
-╰──────────────────────────────╯
-</pre>
+    <div class="section mono" id="orderInfo">
+      Loading fake data…
+    </div>
 
-<p>Thank you for your exposure.<br/>
-Your art will be processed once connection stabilizes.</p>
+    <div class="section">
+      <b>Items</b>
+      <ul id="itemList" class="mono"></ul>
+    </div>
 
-<button onclick="window.location.href='index.html'">← Back to Shop</button>
-<br/>
-<a href="abandoned.html" style="font-size:0.8rem;">View Abandoned Carts</a>
+    <div class="section mono">
+      Total: ₱0.00 (emotional currency only)
+    </div>
 
-<footer>© 2025 Low Bandwidth Dreams · buffering gratitude...</footer>
+    <div class="thanks">
+      Thank you for completing your imaginary purchase.<br>
+      Your transaction has been recorded in the collective daydream.<br>
+      Connection status: <span id="conn">checking…</span>
+    </div>
+
+    <div class="option-row">
+      <label style="display:flex;gap:8px;align-items:center;">
+        <input type="checkbox" id="soundToggle" checked>
+        <span class="small">Printer sound</span>
+      </label>
+      <div class="small" style="margin-left:6px;color:var(--muted)">Play a short dot-matrix sound during download</div>
+    </div>
+
+    <div class="btn-row">
+      <a href="index.html" class="btn">← Back to Yellow Basket</a>
+      <button id="saveTxt" class="btn">🧾 Print / Save as .txt Receipt</button>
+    </div>
+  </div>
+
+  <script>
+    // --- Order data & UI populate ---
+    const ord = JSON.parse(localStorage.getItem('yb_last_order')||'{}');
+    const orderInfo=document.getElementById('orderInfo');
+    const id = `YB-${Math.floor(Math.random()*9000)+1000}`;
+    if(Object.keys(ord).length){
+      orderInfo.innerHTML = `
+        <div>Order ID: ${id}</div>
+        <div>Name: ${ord.name||'Anonymous Tambay'}</div>
+        <div>Address: ${ord.addr||'Unspecified Purok'}</div>
+        <div>Payment Method: ${ord.method||'Unknown'}</div>
+        <div>Date: ${new Date(ord.ts||Date.now()).toLocaleString()}</div>`;
+    } else {
+      orderInfo.innerHTML = '<i>No cached order found. Maybe your browser forgot. That’s okay.</i>';
+    }
+
+    const items=['Premium Pagod (500g)','Wi-Fi Tears (Pocket Edition)',"Mowgli’s Bite Mark (replica)"];
+    const itemList=document.getElementById('itemList');
+    items.forEach(i=>{const li=document.createElement('li');li.textContent=i;itemList.appendChild(li);});
+
+    const conn=document.getElementById('conn');
+    setTimeout(()=>{conn.textContent=navigator.onLine?'Weak but alive':'Offline & thriving';},700);
+
+    // --- WebAudio dot-matrix printer sound synthesis ---
+    // Creates a short 'dot-matrix' style sequence of mechanical ticks + noise rasp.
+    function playDotMatrix(duration = 1100, volume = 0.35) {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if(!Ctx) return;
+        const ctx = new Ctx();
+        const now = ctx.currentTime;
+
+        // Master gain
+        const master = ctx.createGain();
+        master.gain.value = volume;
+        master.connect(ctx.destination);
+
+        // low "motor" hum (subtle)
+        const motor = ctx.createOscillator();
+        motor.type = 'sine';
+        motor.frequency.value = 80; // low rumble
+        const motorGain = ctx.createGain();
+        motorGain.gain.value = 0.02;
+        motor.connect(motorGain);
+        motorGain.connect(master);
+        motor.start(now);
+        motor.stop(now + duration/1000);
+
+        // create a bandpassed noise buffer for rasp (for dots)
+        const bufferSize = ctx.sampleRate * 1; // 1s buffer
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++){
+          data[i] = (Math.random() * 2 - 1) * 0.6;
+        }
+
+        // function to play a single dot 'tick' composed of filtered noise + click
+        function scheduleDot(startTime, intensity=1.0) {
+          // filtered noise burst
+          const src = ctx.createBufferSource();
+          src.buffer = noiseBuffer;
+          const bp = ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.value = 2500; // rasp region
+          bp.Q.value = 0.8 + Math.random()*2.0;
+          const ng = ctx.createGain();
+          ng.gain.value = 0.0001;
+          src.connect(bp);
+          bp.connect(ng);
+          ng.connect(master);
+
+          // envelope
+          ng.gain.setValueAtTime(0.0001, startTime);
+          ng.gain.linearRampToValueAtTime(0.12 * intensity, startTime + 0.005);
+          ng.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.10 + Math.random()*0.06);
+
+          // short click / mechanical impact via high-sine
+          const click = ctx.createOscillator();
+          click.type = 'square';
+          click.frequency.value = 1200 + Math.random()*800;
+          const clickGain = ctx.createGain();
+          clickGain.gain.value = 0;
+          click.connect(clickGain);
+          clickGain.connect(master);
+          clickGain.gain.setValueAtTime(0, startTime);
+          clickGain.gain.linearRampToValueAtTime(0.06 * intensity, startTime + 0.003);
+          clickGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.06 + Math.random()*0.04);
+          click.start(startTime);
+          click.stop(startTime + 0.08 + Math.random()*0.05);
+
+          src.start(startTime);
+          src.stop(startTime + 0.12 + Math.random()*0.06);
+        }
+
+        // schedule a rapid sequence of dots similar to dot-matrix printing
+        const start = now + 0.02;
+        const dotIntervals = [0, 0.06, 0.12, 0.18, 0.28, 0.36, 0.46, 0.56, 0.7, 0.84, 0.95]; // seconds
+        for (let i=0;i<dotIntervals.length;i++){
+          scheduleDot(start + dotIntervals[i], 1 - i*0.05);
+        }
+
+        // final "end" bit - little higher click
+        const endTime = start + dotIntervals[dotIntervals.length-1] + 0.18;
+        const finish = ctx.createOscillator();
+        finish.type = 'sine';
+        finish.frequency.value = 600;
+        const fg = ctx.createGain();
+        fg.gain.value = 0;
+        finish.connect(fg); fg.connect(master);
+        fg.gain.setValueAtTime(0, endTime);
+        fg.gain.linearRampToValueAtTime(0.06, endTime + 0.005);
+        fg.gain.exponentialRampToValueAtTime(0.0001, endTime + 0.15);
+        finish.start(endTime);
+        finish.stop(endTime + 0.2);
+
+        // Cleanup: close context after sound finished (gives time to play)
+        setTimeout(()=>{ try{ ctx.close(); }catch(e){} }, duration + 300);
+      } catch (e) {
+        // silently fail if audio not allowed
+        console.warn('Audio not available', e);
+      }
+    }
+
+    // --- Save as .txt receipt with optional sound ---
+    document.getElementById('saveTxt').addEventListener('click', async ()=>{
+      const useSound = document.getElementById('soundToggle').checked;
+      if(useSound){
+        // play short printer sound
+        playDotMatrix(1100, 0.35);
+        // wait a bit so user hears beginning before download triggers (short)
+        await new Promise(r=>setTimeout(r, 520));
+      }
+      // build text
+      const lines=[
+        'Yellow Basket — Official Fake Receipt',
+        '------------------------------------',
+        `Order ID: ${id}`,
+        `Name: ${ord.name||'Anonymous Tambay'}`,
+        `Address: ${ord.addr||'Unspecified Purok'}`,
+        `Payment Method: ${ord.method||'Unknown'}`,
+        `Date: ${new Date(ord.ts||Date.now()).toLocaleString()}`,
+        '',
+        'Items:',
+        ...items.map(i=>`- ${i}`),
+        '',
+        'Total: ₱0.00 (emotional currency)',
+        '',
+        'Thank you for supporting the imaginary economy.',
+        'Keep dreaming in low bandwidth 🫡'
+      ];
+      const blob=new Blob([lines.join('\n')],{type:'text/plain'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download=`yellowbasket_receipt_${id}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
 </body>
 </html>
