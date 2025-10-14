@@ -203,5 +203,69 @@
     toggle.addEventListener('change',()=>{if(toggle.checked){startHum();}else{stopHum();}});
     document.body.addEventListener('click',()=>{if(toggle.checked&&!ctx){startHum();}}, {once:true});
   </script>
+  <script>
+/* --- CRT PAGE FLICKER --- */
+const overlay = document.createElement('div');
+overlay.style.position='fixed';
+overlay.style.inset='0';
+overlay.style.background='radial-gradient(circle at center,#aef8c0 0%,#e6efe9 80%)';
+overlay.style.opacity='0';
+overlay.style.pointerEvents='none';
+overlay.style.transition='opacity .4s ease';
+overlay.style.zIndex='999999';
+document.body.appendChild(overlay);
+
+// trigger flicker when navigating
+document.querySelectorAll('a[href]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    const url=link.getAttribute('href');
+    if(url && !url.startsWith('#') && !url.startsWith('mailto:')){
+      e.preventDefault();
+      overlay.style.opacity='1';
+      setTimeout(()=>{window.location.href=url;},180);
+    }
+  });
+});
+
+/* --- SIMPLE SOUND ENGINE --- */
+let ctx;
+function initAudio(){
+  if(!ctx){const A=window.AudioContext||window.webkitAudioContext;ctx=new A();}
+  return ctx;
+}
+function playBeep(freq=440,dur=0.05,vol=0.05){
+  const ac=initAudio();
+  const osc=ac.createOscillator();
+  const g=ac.createGain();
+  osc.frequency.value=freq;
+  g.gain.value=vol;
+  osc.connect(g);g.connect(ac.destination);
+  osc.start();
+  osc.stop(ac.currentTime+dur);
+}
+function playPrintSound(){
+  const ac=initAudio();
+  const g=ac.createGain();g.gain.value=0.04;g.connect(ac.destination);
+  const n=ac.createBufferSource();
+  const b=ac.createBuffer(1,ac.sampleRate*0.4,ac.sampleRate);
+  const data=b.getChannelData(0);
+  for(let i=0;i<data.length;i++){data[i]=Math.random()*2-1;}
+  n.buffer=b;n.connect(g);n.start();
+}
+
+/* --- SOUND HOOKS --- */
+// generic click beep
+document.addEventListener('click',e=>{
+  if(e.target.closest('a.btn')) playBeep(520,0.06,0.06);
+});
+
+// special triggers
+if(window.location.pathname.includes('receipt')){
+  document.getElementById('saveTxt')?.addEventListener('click',()=>playPrintSound());
+}
+if(window.location.pathname.includes('abandoned')){
+  playBeep(220,0.4,0.03); // low hum when page opens
+}
+</script>
 </body>
 </html>
