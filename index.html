@@ -1,271 +1,127 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yellow Basket — Low Bandwidth Dreams</title>
-  <link rel="icon" href="assets/img/yellow-basket-logo.png" />
-  <style>
-    :root{
-      --bg:#e6efe9;
-      --accent:#3a6b5a;
-      --muted:#7b8f84;
-      --glow:0 0 20px rgba(160,255,170,0.14);
-      --scanline:linear-gradient(transparent 95%,rgba(0,0,0,0.03) 100%);
-    }
-    html,body{
-      margin:0;min-height:100%;
-      background:var(--bg);
-      font-family:Inter,system-ui,-apple-system,Arial;
-      color:#072a1f;
-      display:block;
-    }
-    main{
-      text-align:center;max-width:900px;width:90%;
-      background:rgba(255,255,255,0.4);
-      border:1px solid rgba(20,40,30,0.06);
-      border-radius:14px;
-      padding:40px 20px;
-      margin:60px auto;
-      box-shadow:var(--glow);
-      position:relative;overflow:hidden;
-    }
-    main::before{
-      content:"";position:absolute;inset:0;
-      background-image:var(--scanline);
-      background-size:100% 3px;
-      opacity:0.6;mix-blend-mode:overlay;pointer-events:none;
-    }
-    .logo img{width:180px;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(160,255,170,0.2))}
-    h1{margin:18px 0 6px 0;font-size:22px;color:var(--accent);text-transform:uppercase;text-shadow:0 0 6px rgba(160,255,170,0.1)}
-    p{margin:6px 0 18px 0;color:var(--muted);font-size:14px}
-    .btn-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-    a.btn{text-decoration:none;padding:12px 18px;border-radius:10px;background:linear-gradient(180deg,#bfffc0,#8df58a);
-      font-weight:700;color:#000;box-shadow:0 3px 8px rgba(20,50,30,0.06);
-      transition:transform .12s ease,box-shadow .12s ease;}
-    a.btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(20,50,30,0.08)}
-    .console{margin-top:28px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--muted)}
-    .cursor{display:inline-block;width:8px;background:var(--accent);animation:blink 1s steps(2) infinite;margin-left:2px}
-    @keyframes blink{50%{opacity:0}}
-    .hum-toggle{margin-top:18px;font-size:13px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-
-    /* Product grid */
-    section.products{margin-top:50px;text-align:left;}
-    section.products h2{text-transform:uppercase;font-size:14px;color:var(--accent);letter-spacing:1px;margin-bottom:12px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
-    .prod{
-      background:linear-gradient(180deg,#f5fff3,#e9f3e9);
-      border:1px solid rgba(10,30,20,0.06);
-      border-radius:10px;padding:10px;cursor:pointer;position:relative;
-      box-shadow:0 0 12px rgba(150,255,150,0.04);
-      transition:transform .1s ease, box-shadow .1s ease;
-    }
-    .prod:hover{transform:translateY(-3px);box-shadow:0 0 16px rgba(120,240,140,0.12);}
-    .thumb{width:100%;height:100px;background:#cfe6cc;border-radius:6px;margin-bottom:8px;
-      display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;
-      image-rendering:pixelated;position:relative;overflow:hidden;}
-    .name{font-weight:600;font-size:13px;}
-    .price{font-size:12px;color:var(--muted);}
-    footer{margin:60px 0 30px 0;text-align:center;font-size:12px;color:var(--muted);}
-
-    /* popup */
-    .popup{
-      position:absolute;
-      background:rgba(245,255,245,0.95);
-      border:1px solid rgba(20,50,30,0.1);
-      border-radius:8px;
-      box-shadow:0 0 18px rgba(120,240,140,0.1);
-      font-size:12px;
-      color:#05291f;
-      padding:10px;
-      width:200px;
-      z-index:999;
-      pointer-events:none;
-      backdrop-filter:blur(2px);
-      opacity:0;transition:opacity .15s ease;
-    }
-    .popup.show{opacity:1;}
-    .popup h4{margin:0 0 4px 0;font-size:13px;color:var(--accent)}
-    .popup .coupon{color:#0a441c;font-weight:700;font-size:13px;margin-bottom:4px}
-    .popup ul{margin:4px 0 0 12px;padding:0;}
-    .popup li{margin:2px 0;list-style:'⭐ ';}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>YELLOW BASKET — NETOPIA SUKI MARKET</title>
+<link rel="icon" href="assets/img/yellow-basket-logo.png"/>
+<style>
+:root{--bg:#0b1511;--panel:#eafaf0;--accent:#1bb86b;--muted:#9fb9a8}
+html,body{margin:0;min-height:100%;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--panel)}
+.container{max-width:980px;margin:40px auto;padding:22px;border-radius:12px;background:rgba(0,0,0,.28);box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.header{display:flex;align-items:center;gap:14px}
+.header img{width:72px;height:auto;image-rendering:pixelated}
+.header h1{margin:0;font-size:20px;color:var(--accent);letter-spacing:.8px}
+.header p{margin:0;color:var(--muted);font-size:13px}
+.controls{margin-top:14px;display:flex;gap:10px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-top:18px}
+.prod{background:linear-gradient(180deg,#f7fff8,#e9f9ea);padding:12px;border-radius:10px;color:#072a1f;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+.thumb{width:100%;height:100px;border-radius:8px;background:#cfe6cc;display:grid;place-items:center;font-size:28px}
+.name{font-weight:700;text-align:center}
+.price{font-size:13px;color:#4b6f5f}
+.add-btn{margin-top:6px;padding:8px 10px;border-radius:8px;border:none;background:#ffd54f;font-weight:700;cursor:pointer}
+.footer{margin-top:20px;color:rgba(180,255,200,.6);font-size:13px;text-align:center}
+.toast{position:fixed;right:16px;bottom:16px;background:rgba(0,0,0,.8);color:#cfffdf;padding:10px 14px;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+@media(max-width:520px){ .grid{grid-template-columns:repeat(2,1fr)} .thumb{height:84px;font-size:22px} }
+</style>
 </head>
 <body>
-  <main>
-    <div class="logo">
-      <img src="assets/img/yellow-basket-logo.png" alt="Yellow Basket logo" />
-    </div>
-    <h1>Yellow Basket</h1>
-    <p>Laguna’s #1 Source of Emotional Goods™</p>
-
-    <div class="btn-row">
-      <a href="cart.html" class="btn">🛒 Start Shopping</a>
-      <a href="receipt.html" class="btn">🧾 View Receipt</a>
-      <a href="abandoned.html" class="btn">🚧 Abandoned Cart</a>
+  <div class="container">
+    <div class="header">
+      <img src="assets/img/yellow-basket-logo.png" alt="Yellow Basket logo">
+      <div>
+        <h1>YELLOW BASKET - NETOPIA SUKI MARKET</h1>
+        <p>2ND FLOOR • SAN PEDRO BRANCH — SERVER: ESC Biennale - Tambay - Low Bandwidth Dreams - British Council</p>
+      </div>
     </div>
 
-    <div class="hum-toggle">
-      <input type="checkbox" id="humToggle" checked />
-      <label for="humToggle">Ambient hum</label>
+    <div class="controls">
+      <a href="cart.html" style="background:#1bb86b;padding:8px 12px;border-radius:8px;color:#001; font-weight:800;text-decoration:none">🛒 View Cart</a>
+      <a href="about.html" style="background:#ffd54f;padding:8px 12px;border-radius:8px;color:#001;font-weight:700;text-decoration:none">ℹ️ About</a>
     </div>
 
-    <div class="console">
-      &gt; Loading low-bandwidth dreams<span class="cursor"></span>
-    </div>
+    <section class="grid" id="productGrid">
+      <!-- 10 products -->
+      <div class="prod" data-id="pagod-001" data-price="0.00" data-info="Dehydrated exhaustion, packed with nostalgia." data-thumb="🧺">
+        <div class="thumb">🧺</div><div class="name">Premium Pagod (500g)</div><div class="price">₱0.00</div>
+        <button class="add-btn">Add</button>
+      </div>
 
-    <section class="products">
-      <h2>Featured Emotional Goods</h2>
-      <div class="grid" id="grid">
-        <div class="prod" data-info="Dehydrated exhaustion, packed with nostalgia."><div class="thumb">🧺</div><div class="name">Premium Pagod (500g)</div><div class="price">₱0.00 — out of stock since birth</div></div>
-        <div class="prod" data-info="Collected tears from buffering nights."><div class="thumb">💧</div><div class="name">Wi-Fi Tears (Pocket Edition)</div><div class="price">₱0.00 — signal strength: weak</div></div>
-        <div class="prod" data-info="Redeemable at any sari-sari or sidewalk."><div class="thumb">🕒</div><div class="name">Tambay Time Voucher</div><div class="price">₱0.00 — redeem anytime</div></div>
-        <div class="prod" data-info="Spiritual cashback with no expiration."><div class="thumb">✨</div><div class="name">KARMA Points</div><div class="price">₱0.00 — earn by doing nothing</div></div>
-        <div class="prod" data-info="Half-eaten artifact of domestic love."><div class="thumb">🐾</div><div class="name">Mowgli’s Bite Mark</div><div class="price">₱0.00 — limited chews</div></div>
-        <div class="prod" data-info="Sleep debt compounded daily, payable never."><div class="thumb">💤</div><div class="name">Sleep Debt</div><div class="price">₱0.00 — payable never</div></div>
+      <div class="prod" data-id="wifitears-002" data-price="0.00" data-info="Collected tears from buffering nights." data-thumb="💧">
+        <div class="thumb">💧</div><div class="name">Wi-Fi Tears (Pocket Edition)</div><div class="price">₱0.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="tambay-003" data-price="0.00" data-info="Redeemable at nearby sari-sari stores." data-thumb="🕒">
+        <div class="thumb">🕒</div><div class="name">Tambay Time Voucher</div><div class="price">₱0.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="karma-004" data-price="0.00" data-info="Spiritual cashback. No expiry." data-thumb="✨">
+        <div class="thumb">✨</div><div class="name">KARMA Points</div><div class="price">₱0.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="mowgli-005" data-price="0.00" data-info="Half-eaten artifact of domestic love." data-thumb="🐾">
+        <div class="thumb">🐾</div><div class="name">Mowgli’s Bite Mark</div><div class="price">₱0.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="sleep-006" data-price="0.00" data-info="Sleep debt, compounding daily." data-thumb="💤">
+        <div class="thumb">💤</div><div class="name">Sleep Debt</div><div class="price">₱0.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="minimodem-007" data-price="99.00" data-info="Limited edition: parang Wi-Fi pero mas masakit." data-thumb="📼">
+        <div class="thumb">📼</div><div class="name">Mini Modem Memory Tape</div><div class="price">₱99.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="cdr-008" data-price="150.00" data-info="CD-R with curated lo-fi playlist." data-thumb="💿">
+        <div class="thumb">💿</div><div class="name">Limited Lo-Fi CD-R</div><div class="price">₱150.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="sticker-009" data-price="29.00" data-info="Sticker pack: nostalgic internet icons." data-thumb="🏷️">
+        <div class="thumb">🏷️</div><div class="name">Netopia Sticker Pack</div><div class="price">₱29.00</div>
+        <button class="add-btn">Add</button>
+      </div>
+
+      <div class="prod" data-id="wifi-010" data-price="69.00" data-info="Emergency power bank for buffering nights." data-thumb="🔋">
+        <div class="thumb">🔋</div><div class="name">Buffer Power Bank</div><div class="price">₱69.00</div>
+        <button class="add-btn">Add</button>
       </div>
     </section>
-  </main>
 
-  <footer>© 2025 Yellow Basket. Powered by low bandwidth &amp; pure feelings.</footer>
+    <div class="footer">SERVER: ESC Biennale - Tambay - Low Bandwidth Dreams - British Council — CD-R King approved peripherals only</div>
+  </div>
 
-  <div class="popup" id="popup"></div>
+<script>
+/* Add-to-cart + small toast + UI beep */
+let AC;
+function ctx(){ if(!AC){ const A=window.AudioContext||window.webkitAudioContext; AC=new A(); } return AC; }
+function uiBeep(){ try{ const ac=ctx(), o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=520; g.gain.value=0.05; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.06);}catch(e){} }
+function flash(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),1400); }
+function getCart(){ try{return JSON.parse(localStorage.getItem('yb_cart')||'[]'); }catch(e){return [];}}
+function saveCart(c){ localStorage.setItem('yb_cart', JSON.stringify(c)); }
 
-  <script>
-    // --- popup + reviews logic ---
-    const popup = document.getElementById('popup');
-    const reviews = [
-      "super legit seller 😭 may kasamang lungkot",
-      "akala ko joke pero dumating talaga… sa puso 😢",
-      "fast shipping pero mabagal wifi",
-      "worth it sa emotional damage",
-      "seller responsive sa chat kahit 3AM nag rant ako",
-      "ambiance ng product parang 2009 internet cafe 🔥",
-      "5 stars! amoy nostalgia",
-      "di ko alam kung nabili ko o naranasan ko",
-      "sobrang aesthetic packaging, parang thesis defense",
-      "akala ko scam pero ako pala yung scam 😭",
-      "seller gave free anxiety as bonus 🤝",
-      "item smells like lost connection 🫠",
-      "nice one! perfect for softboi setup",
-      "lagyan mo lang ng ilaw, magiging art installation na",
-      "masarap kainin pero sabi nila concept art lang daw",
-      "nakakaiyak pero in a healing way 🧘‍♀️",
-      "may tagos sa system error ko",
-      "sobrang ganda, pwede na exhibit sa barangay hall",
-      "parang Shopee Live pero may existential dread",
-      "⭐⭐⭐⭐⭐ would buy again if may signal"
-    ];
-
-    document.querySelectorAll('.prod').forEach(prod=>{
-      prod.addEventListener('mouseenter',e=>{
-        const info = prod.dataset.info;
-        const randomReviews = [];
-        for(let i=0;i<3;i++){
-          randomReviews.push(reviews[Math.floor(Math.random()*reviews.length)]);
-        }
-        popup.innerHTML = `
-          <h4>${prod.querySelector('.name').textContent}</h4>
-          <div class="coupon">₱420.69 COUPON</div>
-          <div>${info}</div>
-          <ul>${randomReviews.map(r=>`<li>${r}</li>`).join('')}</ul>
-        `;
-        popup.classList.add('show');
-      });
-      prod.addEventListener('mousemove',e=>{
-        popup.style.left = e.pageX + 15 + 'px';
-        popup.style.top = e.pageY + 15 + 'px';
-      });
-      prod.addEventListener('mouseleave',()=>{popup.classList.remove('show');});
-    });
-
-    // ambient hum same as before
-    let ctx, source, filter, gain;
-    const toggle = document.getElementById('humToggle');
-    function startHum(){
-      try{
-        const AudioCtx = window.AudioContext||window.webkitAudioContext;
-        ctx = new AudioCtx();
-        const bufferSize = 2*ctx.sampleRate;
-        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = noiseBuffer.getChannelData(0);
-        for(let i=0;i<bufferSize;i++){ data[i] = Math.random()*2-1; }
-        source = ctx.createBufferSource();
-        source.buffer = noiseBuffer;
-        source.loop = true;
-        filter = ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=140;
-        gain = ctx.createGain();gain.gain.value=0.03;
-        source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
-        source.start(0);
-      }catch(e){}
-    }
-    function stopHum(){try{if(source){source.stop();source.disconnect();}if(gain){gain.disconnect();}if(ctx){ctx.close();}}catch(e){}}
-    toggle.addEventListener('change',()=>{if(toggle.checked){startHum();}else{stopHum();}});
-    document.body.addEventListener('click',()=>{if(toggle.checked&&!ctx){startHum();}}, {once:true});
-  </script>
-  <script>
-/* --- CRT PAGE FLICKER --- */
-const overlay = document.createElement('div');
-overlay.style.position='fixed';
-overlay.style.inset='0';
-overlay.style.background='radial-gradient(circle at center,#aef8c0 0%,#e6efe9 80%)';
-overlay.style.opacity='0';
-overlay.style.pointerEvents='none';
-overlay.style.transition='opacity .4s ease';
-overlay.style.zIndex='999999';
-document.body.appendChild(overlay);
-
-// trigger flicker when navigating
-document.querySelectorAll('a[href]').forEach(link=>{
-  link.addEventListener('click',e=>{
-    const url=link.getAttribute('href');
-    if(url && !url.startsWith('#') && !url.startsWith('mailto:')){
-      e.preventDefault();
-      overlay.style.opacity='1';
-      setTimeout(()=>{window.location.href=url;},180);
-    }
+document.querySelectorAll('.prod').forEach(prod=>{
+  const btn = prod.querySelector('.add-btn');
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const id = prod.dataset.id;
+    const name = prod.querySelector('.name').textContent;
+    const info = prod.dataset.info || '';
+    const thumb = prod.dataset.thumb || '';
+    const price = parseFloat(prod.dataset.price||'0')||0;
+    const cart = getCart();
+    const existing = cart.find(x=>x.id===id);
+    if(existing){ existing.qty = (existing.qty||1)+1; } else { cart.push({id,name,info,thumb,price,qty:1}); }
+    saveCart(cart);
+    flash(`${name} added to cart`);
+    uiBeep();
   });
 });
-
-/* --- SIMPLE SOUND ENGINE --- */
-let ctx;
-function initAudio(){
-  if(!ctx){const A=window.AudioContext||window.webkitAudioContext;ctx=new A();}
-  return ctx;
-}
-function playBeep(freq=440,dur=0.05,vol=0.05){
-  const ac=initAudio();
-  const osc=ac.createOscillator();
-  const g=ac.createGain();
-  osc.frequency.value=freq;
-  g.gain.value=vol;
-  osc.connect(g);g.connect(ac.destination);
-  osc.start();
-  osc.stop(ac.currentTime+dur);
-}
-function playPrintSound(){
-  const ac=initAudio();
-  const g=ac.createGain();g.gain.value=0.04;g.connect(ac.destination);
-  const n=ac.createBufferSource();
-  const b=ac.createBuffer(1,ac.sampleRate*0.4,ac.sampleRate);
-  const data=b.getChannelData(0);
-  for(let i=0;i<data.length;i++){data[i]=Math.random()*2-1;}
-  n.buffer=b;n.connect(g);n.start();
-}
-
-/* --- SOUND HOOKS --- */
-// generic click beep
-document.addEventListener('click',e=>{
-  if(e.target.closest('a.btn')) playBeep(520,0.06,0.06);
-});
-
-// special triggers
-if(window.location.pathname.includes('receipt')){
-  document.getElementById('saveTxt')?.addEventListener('click',()=>playPrintSound());
-}
-if(window.location.pathname.includes('abandoned')){
-  playBeep(220,0.4,0.03); // low hum when page opens
-}
 </script>
 </body>
 </html>

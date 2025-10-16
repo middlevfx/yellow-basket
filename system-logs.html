@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>YELLOW BASKET — System Logs</title>
+<link rel="icon" href="assets/img/yellow-basket-logo.png"/>
+<style>
+html,body{height:100%;margin:0;background:#000;color:#00ff90;font-family:monospace;overflow:auto}
+.container{max-width:920px;margin:40px auto;padding:22px}
+.line{white-space:pre-wrap}
+.cursor{display:inline-block;width:10px;height:1.2em;background:#00ff90;animation:blink 1s steps(2) infinite;vertical-align:bottom;margin-left:4px}
+@keyframes blink{50%{opacity:0}}
+footer{text-align:center;color:#00ff90;margin-top:40px}
+</style>
+</head>
+<body>
+  <div class="container" id="term"></div>
+  <footer>YELLOW BASKET - NETOPIA SUKI MARKET — Debug Mode</footer>
+
+<script>
+const lines=[
+  "[BOOT] Yellow Basket Debug Terminal",
+  "[INFO] Initializing emotional BIOS...",
+  "[OK] CPU: 3.33GHz of overthinking detected",
+  "[OK] GPU: Rendering nostalgic memories",
+  "[WARN] Wi-Fi: unstable (heart lag 92%)",
+  "[FAIL] joy.dll not found",
+  "[RECOVER] loading fallback: caffeine.sys",
+  "[INFO] Syncing with Barangay Cloud Storage...",
+  "[OK] Connection: 56kbps (emotional)",
+  "[SYS] Boot sequence complete.",
+  "[OK] System online. Press EXIT to return."
+];
+const term = document.getElementById('term');
+async function run(){
+  for(const l of lines){
+    const el = document.createElement('div'); el.className='line';
+    term.appendChild(el);
+    for(let i=0;i<l.length;i++){
+      el.textContent = l.slice(0,i+1);
+      tick(); await wait(18 + Math.random()*28);
+    }
+    await wait(180);
+  }
+  const cursor = document.createElement('span'); cursor.className='cursor'; term.appendChild(cursor);
+  const btn = document.createElement('button'); btn.textContent='↩ Return to Index'; btn.style.marginTop='18px'; btn.style.display='block'; btn.onclick = ()=> { try{ const ac=new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(), g=ac.createGain(); o.type='square'; o.frequency.value=440; g.gain.value=0.06; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.12);}catch(e){}; setTimeout(()=>location.href='index.html',180); }; term.appendChild(btn);
+}
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function tick(){ try{ const ac = new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(), g=ac.createGain(); o.type='square'; o.frequency.value=600 + Math.random()*80; g.gain.value=0.02; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.06);}catch(e){} }
+run();
+</script>
+</body>
+</html>

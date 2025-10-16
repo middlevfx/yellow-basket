@@ -1,527 +1,149 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yellow Basket — Cart</title>
-  <link rel="icon" href="/assets/img/yellow-basket-logo.png" />
-  <style>
-    /* --- Base layout --- */
-    :root{
-      --bg:#e6efe9; /* soft green */
-      --panel:#d7e6db;
-      --crt-tint: rgba(30,60,50,0.06);
-      --phosphor:#b8f0a8;
-      --accent:#3a6b5a;
-      --muted:#7b8f84;
-      --glow: 0 0 18px rgba(160,255,170,0.14), 0 0 60px rgba(120,240,140,0.06);
-      font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    html,body{
-  margin:0;
-  min-height:100%;
-  background:var(--bg);
-  font-family:Inter,system-ui,-apple-system,Arial;
-  color:#072a1f;
-  display:block;
-  padding:28px;
-}
-
-    /* --- Card --- */
-    .cart-wrap{
-      width:100%;
-      max-width:980px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
-      border:1px solid rgba(20,40,30,0.06);
-      border-radius:14px;
-      box-shadow: 0 6px 30px rgba(10,20,10,0.08), var(--glow);
-      padding:22px;
-      backdrop-filter: blur(2px) saturate(1.02);
-      position:relative;
-      overflow:hidden;
-    }
-
-    /* CRT scanline overlay */
-    .cart-wrap::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background-image:linear-gradient(transparent 92%, rgba(0,0,0,0.02) 100%);
-      background-size:100% 3px;
-      pointer-events:none;
-      mix-blend-mode:overlay;
-      opacity:0.6;
-    }
-
-    header.top{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-bottom:12px;
-    }
-    .logo{
-      width:80px;
-      height:48px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.15));
-    }
-    .logo img{
-      width:100%;
-      height:auto;
-      image-rendering:pixelated; /* subtle lo-res look */
-      transform: translateY(-2px);
-      mix-blend-mode:normal;
-      box-shadow: 0 0 18px rgba(170,255,170,0.14);
-    }
-    .site-title{
-      font-weight:700;
-      letter-spacing:0.6px;
-      font-size:18px;
-      text-transform:uppercase;
-      color:var(--accent);
-      text-shadow: 0 1px 0 rgba(255,255,255,0.6), 0 0 8px rgba(170,255,170,0.08);
-    }
-    .site-sub{font-size:12px;color:var(--muted); margin-top:2px}
-
-    /* --- grid --- */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:18px;
-    }
-    @media (max-width:900px){ .grid{ grid-template-columns:1fr } }
-
-    /* Cart list */
-    .items{
-      background:linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.25));
-      border-radius:10px;
-      padding:14px;
-      border:1px solid rgba(10,30,20,0.03);
-    }
-    .item{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      padding:10px 6px;
-      border-bottom:1px dashed rgba(10,30,20,0.03);
-    }
-    .item:last-child{border-bottom:none}
-    .thumb{
-      width:64px;height:48px;background:#cfe6cc;border-radius:6px;display:block;
-      flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;
-      text-shadow:0 1px 0 rgba(0,0,0,0.2);
-    }
-    .meta{flex:1}
-    .meta b{display:block}
-    .qty{color:var(--muted);font-size:13px}
-
-    /* Side panel (checkout) */
-    .checkout{
-      background: linear-gradient(180deg,#f6fff3, #eef9ee);
-      border-radius:10px;padding:14px;border:1px solid rgba(10,30,20,0.03);
-    }
-    .total-row{display:flex;justify-content:space-between;align-items:center;font-weight:700;padding:8px 0;font-size:18px}
-    .muted{color:var(--muted);font-size:13px}
-
-    /* Payment methods */
-    .payments{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
-    .pay-btn{
-      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid rgba(10,20,10,0.06);
-      background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(245,255,240,0.6));
-      cursor:pointer;user-select:none;min-width:170px;
-      transition:transform .12s ease, box-shadow .12s ease;
-    }
-    .pay-btn:hover{transform:translateY(-3px); box-shadow:0 8px 20px rgba(20,50,30,0.06)}
-    .pay-btn[data-selected="true"]{outline:2px solid rgba(150,255,130,0.18); box-shadow: 0 0 28px rgba(120,240,140,0.08)}
-    .pay-icon{font-size:18px; width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff,#f0fff0);box-shadow:inset 0 -2px 0 rgba(0,0,0,0.03)}
-    .pay-label{font-weight:600;font-size:14px}
-    .pay-sub{font-size:12px;color:var(--muted)}
-
-    /* Tiny disclaimers */
-    .tiny{font-size:12px;color:var(--muted);margin-top:8px}
-
-    /* Processing overlay */
-    .overlay{
-      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;
-    }
-    .proc{
-      pointer-events:auto;
-      min-width:320px;max-width:90%;
-      background:linear-gradient(180deg,#f7fff6,#eefbf0);
-      border-radius:12px;padding:18px;border:1px solid rgba(10,30,20,0.04);
-      box-shadow:0 10px 40px rgba(5,20,10,0.12);
-      transform:translateY(6px);opacity:0;transition:opacity .18s ease, transform .18s ease;
-    }
-    .overlay.show .proc{opacity:1;transform:translateY(0);pointer-events:auto}
-    .progbar{height:10px;background:linear-gradient(90deg,#dfe6d9,#bfeec0);border-radius:10px;overflow:hidden;margin-top:10px}
-    .fill{height:100%;width:0%;background:linear-gradient(90deg,#9efeb0,#6fe68a);transition:width 1s linear}
-
-    /* Glitch effect for Crashout */
-    .glitch {
-      animation: glitch 420ms steps(2) infinite;
-    }
-    @keyframes glitch{
-      0%{transform:translateX(0)}
-      25%{transform:translateX(-2px)}
-      50%{transform:translateX(1px)}
-      75%{transform:translateX(-1px)}
-      100%{transform:translateX(0)}
-    }
-
-    /* receipt modal */
-    .receipt{
-      border-radius:10px;padding:16px;background:linear-gradient(180deg,#fff,#f8fff6);border:1px solid rgba(10,30,20,0.04);
-      box-shadow:0 8px 30px rgba(0,0,0,0.06);max-width:720px;margin:8px auto;
-    }
-    .receipt h3{margin:0 0 8px 0}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size:13px}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>YELLOW BASKET — CD-R King Checkout</title>
+<link rel="icon" href="assets/img/yellow-basket-logo.png"/>
+<style>
+:root{--bg:#f2f4f8;--accent:#0078d7;--muted:#333}
+html,body{margin:0;min-height:100%;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--muted)}
+.wrap{max-width:920px;margin:32px auto;padding:18px}
+.header{display:flex;align-items:center;gap:12px}
+.header img{width:80px;image-rendering:pixelated}
+.header h1{margin:0;color:#0b7a4d}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-top:12px}
+@media(max-width:880px){ .layout{grid-template-columns:1fr} }
+.items{background:#fff;padding:12px;border-radius:8px}
+.sidebar{background:#fff;padding:12px;border-radius:8px}
+.item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #eee}
+.thumb{width:56px;height:46px;display:grid;place-items:center;background:#def;border-radius:6px}
+.meta b{display:block}
+.total{font-weight:800;margin-top:12px;text-align:right}
+input[type=text],textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;margin-top:6px}
+.pay-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pay-opt{padding:10px;border-radius:8px;border:1px solid #ddd;cursor:pointer;background:#f8f8f8}
+.pay-opt[data-selected="true"]{outline:2px solid rgba(0,120,215,.14);box-shadow:0 8px 18px rgba(0,0,0,.06)}
+.btn{display:inline-block;padding:10px 14px;border-radius:8px;background:#ffd54f;border:none;font-weight:800;cursor:pointer}
+.footer{margin-top:18px;color:#666;font-size:13px;text-align:center}
+</style>
 </head>
 <body>
-  <main class="cart-wrap" role="main" aria-labelledby="cartHeading">
-    <header class="top" >
-      <div class="logo" aria-hidden="true">
-        <img src="/assets/img/yellow-basket-logo.png" alt="Yellow Basket logo" />
-      </div>
+  <div class="wrap">
+    <div class="header">
+      <img src="assets/img/yellow-basket-logo.png" alt="logo">
       <div>
-        <div class="site-title" id="cartHeading">Yellow Basket</div>
-        <div class="site-sub">Low Bandwidth Dreams — Official Fake Checkout</div>
+        <h1>YELLOW BASKET - NETOPIA SUKI MARKET</h1>
+        <div style="font-size:13px;color:#888">2ND FLOOR • SAN PEDRO BRANCH</div>
       </div>
-    </header>
+    </div>
 
-    <div class="grid">
-      <!-- Left: Items -->
-      <section class="items" aria-label="Shopping cart items">
-        <div class="muted">Your cart</div>
-
-        <!-- example items -->
-        <div class="item">
-          <div class="thumb">Pagod</div>
-          <div class="meta">
-            <b>Premium Pagod (500g)</b>
-            <div class="qty">Qty: 1 · ₱0.00 (free emotional weight)</div>
-          </div>
-          <div class="mono">₱0</div>
-        </div>
-
-        <div class="item">
-          <div class="thumb">WiFi</div>
-          <div class="meta">
-            <b>Wi-Fi Tears (Pocket Edition)</b>
-            <div class="qty">Qty: 2 · 1 bottle = 3 missing pings</div>
-          </div>
-          <div class="mono">₱0</div>
-        </div>
-
-        <div class="item">
-          <div class="thumb">Tears</div>
-          <div class="meta">
-            <b>Mowgli’s Bite Mark (1x NFT replica)</b>
-            <div class="qty">Qty: 1 · Half-eaten authenticity</div>
-          </div>
-          <div class="mono">₱0</div>
-        </div>
-
-        <p class="tiny">Tip: This is a satire. No real transactions will occur. Embrace the low-bandwidth experience.</p>
+    <div class="layout">
+      <section class="items" id="cartItems">
+        <!-- dynamic items injected here -->
       </section>
 
-      <!-- Right: Checkout -->
-      <aside class="checkout" aria-label="Checkout panel">
-        <div class="muted">Order summary</div>
-        <div class="total-row">
-          <div>Estimated total</div>
-          <div class="mono">₱0.00</div>
+      <aside class="sidebar">
+        <div>
+          <label><strong>Name</strong></label>
+          <input type="text" id="buyerName" placeholder="Juan Dela Cruz">
         </div>
-
-        <div style="margin-top:8px">
-          <label class="muted" for="name">Name</label>
-          <input id="name" placeholder="Enter your name (or alias)" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(10,30,20,0.04);margin-top:6px" />
-        </div>
-
         <div style="margin-top:10px">
-          <label class="muted" for="addr">Address (optional)</label>
-          <input id="addr" placeholder="e.g. Purok San Pedro, Laguna" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(10,30,20,0.04);margin-top:6px" />
+          <label><strong>Address</strong></label>
+          <textarea id="buyerAddr" rows="3" placeholder="Purok / Barangay / City"></textarea>
         </div>
 
         <div style="margin-top:12px">
-          <div class="muted">Payment methods</div>
-          <div class="payments" role="list" aria-label="Payment methods">
-            <button class="pay-btn" data-method="crashout" role="listitem" aria-pressed="false">
-              <span class="pay-icon">💥</span>
-              <div>
-                <div class="pay-label">Crashout</div>
-                <div class="pay-sub">Try to pay. System: *maybe*.</div>
-              </div>
-            </button>
-
-            <button class="pay-btn" data-method="gcash-tears" role="listitem" aria-pressed="false">
-              <span class="pay-icon">💧</span>
-              <div>
-                <div class="pay-label">GCash Tears</div>
-                <div class="pay-sub">Send money. We accept sadness.</div>
-              </div>
-            </button>
-
-            <button class="pay-btn" data-method="paymaya-monalang" role="listitem" aria-pressed="false">
-              <span class="pay-icon">🟣</span>
-              <div>
-                <div class="pay-label">PayMaya MoNaLang</div>
-                <div class="pay-sub">The classic shrug payment.</div>
-              </div>
-            </button>
-
-            <button class="pay-btn" data-method="tambay-cod" role="listitem" aria-pressed="false">
-              <span class="pay-icon">📦</span>
-              <div>
-                <div class="pay-label">Tambay COD</div>
-                <div class="pay-sub">Cash upon tambay pickup.</div>
-              </div>
-            </button>
-
-            <button class="pay-btn" data-method="karma-points" role="listitem" aria-pressed="false">
-              <span class="pay-icon">✨</span>
-              <div>
-                <div class="pay-label">KARMA Points</div>
-                <div class="pay-sub">Redeem good vibes instead of cash.</div>
-              </div>
-            </button>
+          <label><strong>Mode of Payment</strong></label>
+          <div class="pay-list" id="payList">
+            <div class="pay-opt" data-method="Gcrash">Gcrash</div>
+            <div class="pay-opt" data-method="Crash Out">Crash Out</div>
+            <div class="pay-opt" data-method="PayMoLater">PayMoLater</div>
+            <div class="pay-opt" data-method="Bank Transfer">Bank Transfer (Fake)</div>
+            <div class="pay-opt" data-method="COD">COD — Cry On Delivery</div>
           </div>
-
-          <div class="tiny">If you choose <b>Crashout</b> — expect dramatic glitching. That is the point.</div>
         </div>
 
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <button id="checkoutBtn" style="flex:1;padding:12px;border-radius:10px;border:none;background:linear-gradient(180deg,#bfffc0,#8df58a);font-weight:700;cursor:pointer">
-            Complete (kinda) purchase
-          </button>
-          <button id="clearBtn" style="padding:12px;border-radius:10px;border:1px solid rgba(10,30,20,0.04);background:transparent;cursor:pointer">Clear</button>
-        </div>
-
-        <div class="tiny" style="margin-top:10px">
-          <strong>Low bandwidth mode:</strong> images may be low-res, animations minimal, memory kept in localStorage.
+        <div class="total" id="cartTotal">Total: ₱0.00</div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="fakeCheckout">Complete Purchase</button>
+          <a href="index.html" style="display:inline-block;padding:10px 14px;border-radius:8px;background:#eee;text-decoration:none;color:#333">Continue Shopping</a>
         </div>
       </aside>
     </div>
 
-    <!-- Processing overlay -->
-    <div class="overlay" id="overlay" aria-hidden="true">
-      <div class="proc" role="dialog" aria-modal="true" aria-labelledby="procTitle">
-        <div id="procTitle" style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <strong id="procLabel">Processing payment</strong>
-            <div class="muted" id="procSub">Please wait…</div>
-          </div>
-          <div id="procIcon" aria-hidden="true">⏳</div>
+    <div class="footer">SERVER: ESC Biennale - Tambay - Low Bandwidth Dreams - British Council — CD-R King approved peripherals only</div>
+  </div>
+
+<script>
+/* cart rendering + interactions */
+function getCart(){ try{ return JSON.parse(localStorage.getItem('yb_cart')||'[]'); }catch(e){return [];} }
+function saveCart(c){ localStorage.setItem('yb_cart', JSON.stringify(c)); }
+
+function renderCart(){
+  const items = getCart();
+  const container = document.getElementById('cartItems');
+  const totalEl = document.getElementById('cartTotal');
+  container.innerHTML = '';
+  if(!items.length){
+    container.innerHTML = '<p style="color:#777">🛒 Walang laman ang cart. Pumunta sa Start Shopping.</p>';
+    totalEl.textContent = 'Total: ₱0.00';
+    return;
+  }
+  let sum = 0;
+  items.forEach((it, idx)=>{
+    const row = document.createElement('div'); row.className='item';
+    row.innerHTML = `<div class="thumb">${it.thumb||'🧺'}</div>
+      <div class="meta"><b>${it.name}</b><div style="color:#666;font-size:13px">${it.info}</div></div>
+      <div style="margin-left:auto;text-align:right">
+        <div>₱${(it.price||0).toFixed(2)}</div>
+        <div style="font-size:13px;margin-top:6px">
+          Qty: <input type="number" min="1" value="${it.qty||1}" data-idx="${idx}" style="width:56px;padding:4px;border:1px solid #ccc;border-radius:6px">
+          <button data-rm="${idx}" style="margin-left:6px;padding:6px;border-radius:6px">Remove</button>
         </div>
+      </div>`;
+    container.appendChild(row);
+    sum += (it.price||0)*(it.qty||1);
+  });
+  totalEl.textContent = `Total: ₱${sum.toFixed(2)}`;
 
-        <div class="progbar" aria-hidden="true">
-          <div class="fill" id="fill"></div>
-        </div>
-        <div id="procMsg" class="tiny" style="margin-top:8px">This is a simulation. No real money moved.</div>
-      </div>
-    </div>
-
-    <!-- Receipt template (hidden) -->
-    <template id="receiptTpl">
-      <div class="receipt" role="document">
-        <h3>Yellow Basket — Fake Receipt</h3>
-        <div class="muted mono" id="ordId">Order #YB-000</div>
-        <div style="margin-top:8px">
-          <div><b>Buyer:</b> <span id="rName"></span></div>
-          <div><b>Payment:</b> <span id="rPay"></span></div>
-          <div style="margin-top:8px"><b>Items</b></div>
-          <ul id="rItems" class="mono"></ul>
-          <div style="margin-top:8px" class="muted">Total: ₱0.00 (emotional currency)</div>
-        </div>
-        <div style="margin-top:12px" class="tiny">Thank you for supporting Yellow Basket’s imaginary economy. Take care of your internet connection.</div>
-      </div>
-    </template>
-
-  </main>
-
-  <script>
-    // Simple interactivity: select payment method, process, and show receipt modal.
-    const payButtons = document.querySelectorAll('.pay-btn');
-    let selected = null;
-    payButtons.forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        payButtons.forEach(b=>{ b.dataset.selected = 'false'; b.setAttribute('aria-pressed','false'); b.classList.remove('glitch')});
-        btn.dataset.selected = 'true';
-        btn.setAttribute('aria-pressed','true');
-        selected = btn.dataset.method;
-        // If crashout is selected, add subtle glitch class to hint at drama
-        if(selected === 'crashout') btn.classList.add('glitch');
-      });
+  // attach qty change
+  container.querySelectorAll('input[type=number]').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const i = Number(inp.dataset.idx); const v = Math.max(1, Number(inp.value)||1);
+      const arr = getCart(); arr[i].qty = v; saveCart(arr); renderCart();
     });
-
-    // Defaults: select PayMaya MoNaLang for immediate flow
-    document.querySelector('.pay-btn[data-method="paymaya-monalang"]').dataset.selected = 'true';
-    selected = 'paymaya-monalang';
-
-    const overlay = document.getElementById('overlay');
-    const fill = document.getElementById('fill');
-    const procLabel = document.getElementById('procLabel');
-    const procSub = document.getElementById('procSub');
-    const procIcon = document.getElementById('procIcon');
-    const procMsg = document.getElementById('procMsg');
-
-    function showOverlay(method){
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden','false');
-      fill.style.width = '0%';
-      procLabel.textContent = 'Processing payment';
-      procSub.textContent = 'Connecting to low-bandwidth gateway…';
-      procIcon.textContent = '⏳';
-      procMsg.textContent = 'Do not refresh. (Or do; we are satire.)';
-    }
-    function hideOverlay(){
-      overlay.classList.remove('show');
-      overlay.setAttribute('aria-hidden','true');
-    }
-
-    function simulateProgress(duration=2500){
-      return new Promise(res=>{
-        const steps = 30;
-        let i=0;
-        const interval = duration / steps;
-        const t = setInterval(()=>{
-          i++;
-          fill.style.width = Math.round((i/steps)*100) + '%';
-          if(i>=steps){ clearInterval(t); res(); }
-        }, interval);
-      })
-    }
-
-    function crashEffect(){
-      // intentional fake 'crash' outcome
-      procLabel.textContent = 'CRASHED';
-      procSub.textContent = 'System encountered an existential error.';
-      procIcon.textContent = '💥alam mo ha! aray kohh💥';
-      procMsg.textContent = 'Your payment attempt detonated in style. Try another method or reload for penance.';
-    }
-
-    function showReceipt(payload){
-      hideOverlay();
-      // create modal-like inline receipt (simple)
-      const tpl = document.getElementById('receiptTpl');
-      const clone = tpl.content.cloneNode(true);
-      clone.getElementById('ordId').textContent = `Order #YB-${Math.floor(Math.random()*9000)+1000}`;
-      clone.getElementById('rName').textContent = payload.name || 'Anonymous Tambay';
-      clone.getElementById('rPay').textContent = payload.methodLabel;
-      const itemsEl = clone.getElementById('rItems');
-      const sampleItems = ['Premium Pagod (500g)', 'Wi-Fi Tears (Pocket Edition)', "Mowgli's Bite Mark (replica)"];
-      sampleItems.forEach(it=>{
-        const li = document.createElement('li'); li.textContent = it; itemsEl.appendChild(li);
-      });
-
-      // show at top of page as temporary "modal"
-      const parent = document.querySelector('.cart-wrap');
-      const wrapper = document.createElement('div');
-      wrapper.style.position = 'fixed';
-      wrapper.style.inset = '14px';
-      wrapper.style.overflow = 'auto';
-      wrapper.style.display = 'flex';
-      wrapper.style.alignItems = 'center';
-      wrapper.style.justifyContent = 'center';
-      wrapper.style.zIndex = '9999';
-      wrapper.appendChild(clone);
-      document.body.appendChild(wrapper);
-
-      // auto-remove after 6s
-      setTimeout(()=>{ wrapper.remove(); }, 6000);
-    }
-
-    // Map method keys to display labels and special behavior
-    const methodMap = {
-      'crashout': {label:'Crashout', behavior:'crash'},
-      'gcash-tears': {label:'GCash Tears', behavior:'ok'},
-      'paymaya-monalang': {label:'PayMaya MoNaLang', behavior:'ok'},
-      'tambay-cod': {label:'Tambay COD', behavior:'cod'},
-      'karma-points': {label:'KARMA Points', behavior:'karma'}
-    };
-
-    document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
-      const name = document.getElementById('name').value.trim();
-      const addr = document.getElementById('addr').value.trim();
-      const selectedBtn = document.querySelector('.pay-btn[data-selected="true"]');
-      const method = selectedBtn ? selectedBtn.dataset.method : null;
-      const methodLabel = methodMap[method] ? methodMap[method].label : 'Unknown';
-
-      if(!method){
-        alert('Pili ka muna ng payment method, bes.');
-        return;
-      }
-
-      showOverlay(method);
-      // playful processing times
-      if(method === 'crashout'){
-        // lengthened drama
-        await simulateProgress(2200);
-        // add little shake/glitch
-        crashEffect();
-        // leave overlay visible a bit so user can read crash
-        await new Promise(r=>setTimeout(r,1800));
-        hideOverlay();
-        // after crash, encourage alternate payment
-        alert('Crashout failed spectacularly. Try GCash Tears or PayMaya MoNaLang instead. ✨');
-        return;
-      }
-
-      // normal-ish flows
-      await simulateProgress(1800);
-      // behavior branches
-      const b = methodMap[method].behavior;
-      if(b === 'ok'){
-        procLabel.textContent = '✅ Payment (pretend) successful';
-        procSub.textContent = 'Generating fake receipt…';
-        procIcon.textContent = '🎉';
-        await new Promise(r=>setTimeout(r,800));
-        showReceipt({name, addr, methodLabel});
-        // small friendly localStorage save (so cart persists)
-        try{
-          localStorage.setItem('yb_last_order', JSON.stringify({name,addr,method:methodLabel,ts:Date.now()}));
-        }catch(e){}
-        return;
-      }
-      if(b === 'cod'){
-        procLabel.textContent = 'Hold up — Tambay COD selected';
-        procSub.textContent = 'Leave a note for the tambay: "don\'t forget to bring extra patience"';
-        procIcon.textContent = '📦';
-        await new Promise(r=>setTimeout(r,900));
-        showReceipt({name, addr, methodLabel});
-        return;
-      }
-      if(b === 'karma'){
-        procLabel.textContent = 'Redeeming KARMA Points';
-        procSub.textContent = 'Scanning good vibes…';
-        procIcon.textContent = '✨';
-        await new Promise(r=>setTimeout(r,900));
-        showReceipt({name, addr, methodLabel});
-        return;
-      }
-      // fallback
-      hideOverlay();
+  });
+  container.querySelectorAll('[data-rm]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = Number(btn.dataset.rm); const arr = getCart(); arr.splice(i,1); saveCart(arr); renderCart();
     });
+  });
+}
+renderCart();
 
-    document.getElementById('clearBtn').addEventListener('click', ()=>{
-      document.getElementById('name').value = '';
-      document.getElementById('addr').value = '';
-      payButtons.forEach(b=>b.dataset.selected='false');
-      document.querySelector('.pay-btn[data-method="paymaya-monalang"]').dataset.selected='true';
-      selected = 'paymaya-monalang';
-      alert('Cart cleared. Back to being low-bandwidth and unbothered.');
-    });
+/* payment selection */
+document.getElementById('payList').addEventListener('click', (e)=>{
+  const opt = e.target.closest('.pay-opt'); if(!opt) return;
+  document.querySelectorAll('.pay-opt').forEach(o=>o.removeAttribute('data-selected'));
+  opt.setAttribute('data-selected','true');
+});
 
-    // small keyboard shortcut for fun: press "G" to select GCash Tears
-    document.addEventListener('keydown', (e)=>{
-      if(e.key.toLowerCase() === 'g'){
-        document.querySelector('.pay-btn[data-method="gcash-tears"]').click();
-      }
-    });
-  </script>
+/* checkout */
+document.getElementById('fakeCheckout').addEventListener('click', ()=>{
+  const items = getCart();
+  if(!items.length){ alert('Cart is empty.'); return; }
+  const name = document.getElementById('buyerName').value || 'Anonymous';
+  const addr = document.getElementById('buyerAddr').value || 'Unspecified Purok';
+  const method = document.querySelector('.pay-opt[data-selected="true"]')?.dataset.method || 'Gcrash';
+  const total = items.reduce((s,it)=>s + (it.price||0)*(it.qty||1), 0);
+  const order = { id: 'YB-'+Math.floor(Math.random()*900000), name, addr, method, items, ts: Date.now(), total };
+  localStorage.setItem('yb_last_order', JSON.stringify(order));
+  localStorage.removeItem('yb_cart');
+  // small beep then redirect to receipt
+  try{ const ac = new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(), g=ac.createGain(); o.type='triangle'; o.frequency.value=880; g.gain.value=0.05; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.15);}catch(e){}
+  setTimeout(()=> window.location.href='receipt.html', 260);
+});
+</script>
 </body>
 </html>
