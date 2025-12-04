@@ -1,39 +1,101 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>YELLOW BASKET — Startup</title>
-<link rel="icon" href="assets/img/yellow-basket-logo.png"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YELLOW BASKET — San Pedro, Laguna 4023</title>
+<link rel="icon" href="assets/img/yellow-basket-logo.png">
 <style>
-  html,body{height:100%;margin:0;background:#000;color:#00ffd0;font-family:monospace;display:flex;align-items:center;justify-content:center;flex-direction:column;}
-  #logo{width:120px;height:auto;filter:drop-shadow(0 0 12px rgba(0,255,200,.3));margin-bottom:18px}
-  #box{width:320px;padding:20px;border:1px solid rgba(0,255,200,.12);border-radius:10px;text-align:center;background:rgba(0,0,0,.6);}
-  .bar{height:12px;border:1px solid rgba(0,255,200,.18);border-radius:8px;overflow:hidden;margin-top:12px;background:rgba(0,0,0,.2)}
-  .fill{background:#00ffd0;width:0;height:100%;animation:load 5.5s linear forwards}
-  @keyframes load{to{width:100%}}
-  footer{position:fixed;bottom:12px;color:rgba(0,255,200,.5);font-size:12px}
+html,body{
+  margin:0;padding:0;height:100%;
+  background:#000;
+  color:#00ff9c;
+  font-family:"Courier New",monospace;
+  overflow:hidden;
+}
+canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:1;
+}
+.boot{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  text-align:left;
+  width:320px;
+  z-index:2;
+}
+.line{
+  opacity:0;
+  animation:fadeIn 0.6s forwards;
+}
+@keyframes fadeIn{to{opacity:1}}
+.footer{
+  position:fixed;bottom:10px;left:0;width:100%;
+  text-align:center;font-size:12px;opacity:.6;z-index:3;
+  color:#00ff9c;
+}
+.glow{
+  text-shadow:0 0 4px #00ff9c, 0 0 12px #00ff9c;
+}
 </style>
 </head>
 <body>
-  <img id="logo" src="assets/img/yellow-basket-logo.png" alt="Yellow Basket logo">
-  <div id="box">
-    <div><strong>YELLOW BASKET - NETOPIA SUKI MARKET</strong></div>
-    <div style="font-size:13px;margin-top:6px">2ND FLOOR • SAN PEDRO BRANCH</div>
-    <div style="font-size:12px;margin-top:6px">SERVER: ESC Biennale - Tambay - Low Bandwidth Dreams - British Council</div>
-    <div class="bar"><div class="fill"></div></div>
-  </div>
 
-  <footer>CD-R King approved peripherals only</footer>
+<canvas id="matrix"></canvas>
+
+<div class="boot glow" id="boot">
+  <div class="line" style="animation-delay:0.4s">Initializing <b>YELLOW_BASKET.EXE</b> ...</div>
+  <div class="line" style="animation-delay:1.2s">Loading environment variables ...</div>
+  <div class="line" style="animation-delay:2s">LOCATION: San Pedro, Laguna 4023</div>
+  <div class="line" style="animation-delay:2.8s">NETWORK STATUS: Unstable</div>
+  <div class="line" style="animation-delay:3.4s">MODE: Testing Build 0.69</div>
+  <div class="line" style="animation-delay:4.2s">...</div>
+  <div class="line" style="animation-delay:5.6s">Press any key to continue_</div>
+</div>
+
+<div class="footer glow">
+  SAN PEDRO, LAGUNA 4023 — TESTING BUILD — SUPERBECKS APPROVED
+</div>
 
 <script>
-let AC;
-function ctx(){ if(!AC){ const A=window.AudioContext||window.webkitAudioContext; AC = new A(); } return AC; }
-function hum(){ try{ const ac=ctx(); const o=ac.createOscillator(); const g=ac.createGain(); o.type='sine'; o.frequency.value=90; g.gain.value=0.04; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+4);}catch(e){} }
-document.addEventListener('click', ()=> hum(), {once:true});
+// matrix rain
+const c=document.getElementById("matrix"),ctx=c.getContext("2d");
+c.height=window.innerHeight;c.width=window.innerWidth;
+const chars="アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&";
+const font=14,cols=c.width/font;
+const drops=Array(Math.floor(cols)).fill(1);
+function draw(){
+  ctx.fillStyle="rgba(0,0,0,0.08)";
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle="#00ff9c";
+  ctx.font=font+"px monospace";
+  for(let i=0;i<drops.length;i++){
+    const text=chars.charAt(Math.floor(Math.random()*chars.length));
+    ctx.fillText(text,i*font,drops[i]*font);
+    if(drops[i]*font>c.height && Math.random()>0.975) drops[i]=0;
+    drops[i]++;
+  }
+}
+setInterval(draw,33);
+window.addEventListener("resize",()=>{c.height=window.innerHeight;c.width=window.innerWidth;});
 
-// after loading go to index
-setTimeout(()=> window.location.href='index.html', 6200);
+// sound + key event
+let triggered=false;
+document.addEventListener("keydown",()=>proceed());
+document.addEventListener("click",()=>proceed());
+function proceed(){
+  if(triggered)return; triggered=true;
+  try{
+    const ac=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(), g=ac.createGain();
+    o.type='square'; o.frequency.value=120; g.gain.value=0.03;
+    o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.5);
+  }catch(e){}
+  document.body.style.transition="opacity 2s";
+  document.body.style.opacity=0;
+  setTimeout(()=>window.location.href="index.html",2000);
+}
 </script>
+
 </body>
 </html>
