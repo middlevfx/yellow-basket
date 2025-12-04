@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
+
+<meta name="theme-color" content="#0f0f0f">
+<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abandoned Zone — Yellow Basket</title>
+<style>
+    body {
+        margin: 0;
+        background: #020403;
+        color: #c8ffcc;
+        font-family: "Courier New", monospace;
+        overflow: hidden;
+        text-shadow: 0 0 4px #76ff9b;
+    }
+
+    .crt::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(0,0,0,0) 0px,
+            rgba(0,255,80,0.05) 2px,
+            rgba(0,0,0,0) 4px
+        );
+        opacity: 0.25;
+    }
+
+    .title {
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        letter-spacing: 2px;
+        opacity: 0.9;
+    }
+
+    .ghost-img {
+        position: absolute;
+        opacity: 0.14;
+        mix-blend-mode: screen;
+        filter: blur(0.3px);
+        animation: float 18s ease-in-out infinite alternate;
+    }
+
+    .ghost-img img {
+        width: 220px;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .g1 { top: 15%; left: 8%; }
+    .g2 { top: 55%; right: 6%; animation-duration: 22s; }
+    .g3 { top: 35%; left: 60%; animation-duration: 26s; }
+
+    @keyframes float {
+        0%   { transform: translate3d(0,0,0); }
+        100% { transform: translate3d(30px,-30px,0); }
+    }
+
+    .ghost-text {
+        position: absolute;
+        font-size: 12px;
+        opacity: 0.5;
+        max-width: 220px;
+        line-height: 1.4;
+        animation: drift 20s linear infinite;
+    }
+
+    .t1 { top: 30%; left: 16%; }
+    .t2 { top: 65%; left: 40%; animation-duration: 26s; }
+    .t3 { top: 20%; right: 10%; animation-duration: 22s; }
+
+    @keyframes drift {
+        0%   { transform: translateX(0); opacity: 0.2; }
+        50%  { opacity: 0.6; }
+        100% { transform: translateX(40px); opacity: 0.1; }
+    }
+
+    .back {
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        color: #aaffcc;
+        text-decoration: none;
+        opacity: 0.6;
+    }
+
+    .back:hover {
+        opacity: 1;
+        text-shadow: 0 0 6px #88ffbb;
+    }
+</style>
+</head>
+<body class="crt">
+
+<div class="nav">
+    <a href="index.html" class="nav-btn">HOME</a>
+    <a href="store.html" class="nav-btn">STORE</a>
+    <a href="about.html" class="nav-btn">ABOUT</a>
+    <a href="checkout.html" class="nav-btn">CHECKOUT</a>
+    <a href="abandoned.html" class="nav-btn">ABANDONED</a>
+</div>
+
+<div class="title">ABANDONED ZONE — LOW BANDWIDTH DREAM RESIDUE</div>
+
+<!-- Ghosted product echoes (optional: palitan filenames kung iba) -->
+<div class="ghost-img g1">
+    <img src="assets/premium-pagod.jpeg" alt="Premium Pagod Ghost">
+</div>
+<div class="ghost-img g2">
+    <img src="assets/wifi-tears.jpeg" alt="Wi-Fi Tears Ghost">
+</div>
+<div class="ghost-img g3">
+    <img src="assets/laguna-mist.jpeg" alt="Laguna Mist Ghost">
+</div>
+
+<div class="ghost-text t1">
+    “You left these items in your cart<br>
+    and never checked out.<br>
+    Pero nag-stay sila sa utak mo.”
+</div>
+<div class="ghost-text t2">
+    “Signal lost along Laguna Lake shoreline.<br>
+    Memory still trying to reconnect<br>
+    sa 2-bar network ng 4023.”
+</div>
+<div class="ghost-text t3">
+    “This is not a real store.<br>
+    Just an archive of things<br>
+    you almost needed.”
+</div>
+
+<a href="store.html" class="back">← Back to Store</a>
+
+</body>
+</html>

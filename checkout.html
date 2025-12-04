@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
+
+<meta name="theme-color" content="#0f0f0f">
+<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Yellow Basket 4023</title>
+<style>
+    body {
+        background: #0a0f0a;
+        color: #c8ffcc;
+        font-family: "Courier New", monospace;
+        padding: 20px;
+        text-shadow: 0 0 4px #76ff9b;
+    }
+    .crt::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(0,0,0,0) 0px,
+            rgba(0,255,80,0.06) 2px,
+            rgba(0,0,0,0) 4px
+        );
+        opacity: .25;
+    }
+    h1 { font-size: 20px; text-align: center; margin-bottom: 10px; }
+    p { max-width: 520px; margin: 0 auto 16px; line-height: 1.5; text-align: center; }
+
+    .box {
+        max-width: 420px;
+        margin: 20px auto;
+        padding: 16px;
+        border: 1px solid rgba(120,255,200,0.35);
+        background: rgba(10,20,16,0.45);
+        border-radius: 6px;
+        text-align: left;
+    }
+
+    .label { font-size: 12px; margin-bottom: 4px; }
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid rgba(120,255,200,0.35);
+        background: rgba(0,0,0,0.3);
+        color: #c8ffcc;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid rgba(120,255,200,0.5);
+        background: rgba(0,0,0,0.35);
+        color: #c8ffcc;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: .15s ease;
+    }
+    button:hover {
+        background: rgba(80,255,180,0.1);
+        box-shadow: 0 0 8px rgba(0,255,160,0.3);
+    }
+
+    .output {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 12px;
+        opacity: 0;
+        transition: 0.6s ease;
+    }
+</style>
+</head>
+<body class="crt">
+
+<div class="nav">
+    <a href="index.html" class="nav-btn">HOME</a>
+    <a href="store.html" class="nav-btn">STORE</a>
+    <a href="about.html" class="nav-btn">ABOUT</a>
+    <a href="checkout.html" class="nav-btn">CHECKOUT</a>
+    <a href="abandoned.html" class="nav-btn">ABANDONED</a>
+</div>
+
+<h1>CHECKOUT — SAN PEDRO NODE</h1>
+<p>Fill out the fields below and attempt a transaction in this unstable timeline.</p>
+
+<div class="box">
+    <div class="label">Name</div>
+    <input type="text" id="name">
+
+    <div class="label">Address</div>
+    <input type="text" id="address">
+
+    <div class="label">Signal Strength</div>
+    <input type="text" placeholder="0–1 bar recommended" id="signal">
+
+    <button onclick="process()">PROCESS ORDER</button>
+
+    <div class="output" id="result">
+        <!-- result text appears here -->
+    </div>
+</div>
+
+<script>
+function process() {
+    const r = document.getElementById('result');
+    r.style.opacity = 1;
+    r.innerHTML = `
+        <b>TRANSACTION FAILED.</b><br><br>
+        Your order drifted across Laguna Lake and never reached the server.<br>
+        Payment processed in a parallel timeline (not this one).<br><br>
+        <i>Estimated Delivery: 4023–4024<br>
+        (subject to signal interference)</i>
+    `;
+}
+</script>
+
+</body>
+</html>

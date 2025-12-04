@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
+
+<meta name="theme-color" content="#0f0f0f">
+<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yellow Basket — San Pedro 4023</title>
+<style>
+    body {
+        margin: 0;
+        background: #0a0f0a;
+        color: #c8ffcc;
+        font-family: "Courier New", monospace;
+        text-shadow: 0 0 4px #88ff88;
+        overflow: hidden;
+    }
+
+    /* CRT Scanline Overlay */
+    .crt::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(0,0,0,0) 0px,
+            rgba(0,255,80,0.06) 2px,
+            rgba(0,0,0,0) 4px
+        );
+        opacity: 0.25;
+    }
+
+    .screen {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 1.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .boot {
+        font-size: 14px;
+        margin-bottom: 40px;
+        white-space: pre-line;
+        opacity: 0;
+        animation: bootType 2.4s steps(24) forwards;
+    }
+
+    @keyframes bootType {
+        to { opacity: 1; }
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 24px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border: 1px solid #8aff9b;
+        color: #c8ffcc;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.12s;
+    }
+
+    .btn:hover {
+        background: rgba(0,255,120,0.1);
+        box-shadow: 0 0 6px #00ff80;
+    }
+</style>
+</head>
+<body class="crt">
+
+<div class="screen">
+    <div class="boot" id="bootText">
+Initializing Yellow Basket System…
+Scanning Laguna Nodes…
+Signal Weak — Continuing Anyway…
+
+PRESS ENTER TO CONTINUE
+    </div>
+
+    <div class="btn-row">
+        <a href="store.html" class="btn">ENTER STORE →</a>
+    </div>
+</div>
+/* --- Y2K BOXED NAV BAR --- */
+.nav {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(20,30,25,0.45);
+    border-bottom: 1px solid rgba(120,255,200,0.25);
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    color: #c8ffcc;
+    text-decoration: none;
+    border: 1px solid rgba(120,255,200,0.35);
+    background: rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-shadow: 0 0 4px #72ff9e;
+    transition: 0.15s ease-in-out;
+}
+
+.nav-btn:hover {
+    background: rgba(80,255,180,0.1);
+    border-color: rgba(120,255,200,0.7);
+    box-shadow: 0 0 8px rgba(0,255,160,0.3);
+}
+
+
+</body>
+</html>

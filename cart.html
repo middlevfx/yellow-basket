@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
+
+<meta name="theme-color" content="#0f0f0f">
+<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
+
+<meta charset="UTF-8">
+<title>Cart — Yellow Basket 4023</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        background: #050905;
+        color: #c8ffcc;
+        font-family: "Courier New", monospace;
+        padding: 20px;
+        text-shadow: 0 0 4px #76ff9b;
+        overflow-x: hidden;
+    }
+
+    .crt::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(0,0,0,0) 0px,
+            rgba(0,255,80,0.05) 2px,
+            rgba(0,0,0,0) 4px
+        );
+        opacity: .25;
+    }
+
+    h1 {
+        text-align:center;
+        margin-bottom: 20px;
+    }
+
+    .cart-box {
+        max-width: 580px;
+        margin: 0 auto;
+        padding: 14px;
+        border: 1px solid rgba(120,255,200,0.35);
+        background: rgba(10,20,16,0.45);
+        border-radius: 6px;
+        position: relative;
+    }
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(120,255,200,0.15);
+        transition: 0.3s;
+    }
+
+    .corrupted {
+        color: #ff7d7d;
+        text-shadow: 0 0 6px #ff4e4e;
+    }
+
+    .removed {
+        opacity: 0.2;
+        text-decoration: line-through;
+    }
+
+    .label { font-size: 12px; opacity: 0.8; }
+
+    .total {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        text-shadow: 0 0 6px #66ffcc;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 14px;
+        text-align: center;
+        color: #c8ffcc;
+        border: 1px solid rgba(120,255,200,0.4);
+        border-radius: 4px;
+        text-decoration: none;
+        background: rgba(0,0,0,0.3);
+        transition: .2s;
+    }
+
+    .btn:hover {
+        background: rgba(80,255,180,0.1);
+        border-color: rgba(120,255,200,0.7);
+    }
+
+    /* floating glitch squares */
+    .glitch {
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        background: rgba(0,255,180,0.2);
+        animation: float 6s infinite alternate ease-in-out;
+        pointer-events: none;
+    }
+
+    @keyframes float {
+        0%   { transform: translate(-10px, 0px); opacity: 0.3; }
+        100% { transform: translate(40px, -40px); opacity: 0.8; }
+    }
+</style>
+</head>
+<body class="crt">
+
+<h1>CART — UNSTABLE SERVER MODE</h1>
+
+<div class="cart-box" id="cartItems"></div>
+<div class="total" id="cartTotal"></div>
+
+<a href="checkout.html" class="btn">PROCEED TO CHECKOUT</a>
+<a href="store.html" class="btn">← BACK TO STORE</a>
+
+<script>
+// --- RANDOM PRODUCTS ---
+const products = [
+    "Mowgli’s Bite Mark",
+    "Broken Sim Card of Love",
+    "Lo-Fi CD-R Pack",
+    "Buffer Power Bank",
+    "Tambay Time Voucher",
+    "Laguna Lake Mist",
+    "Premium Pagod (500g)",
+    "Wi-Fi Tears Refill"
+];
+
+// corrupted variants
+const corruptions = {
+    "Wi-Fi Tears Refill": ["Wi-Fi Fears Refill", "Why Tears?", "W-?F3a Packet"],
+    "Broken Sim Card of Love": ["Broken Sim Card of Nothing", "SIM???", "Love Packet Expired"],
+    "Premium Pagod (500g)": ["Premium Pagod (???g)", "Overfatigue Bundle", "Laguna Stress Pack"],
+};
+
+// random helpers
+function rand(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+// build cart
+let container = document.getElementById("cartItems");
+let total = 0;
+let count = rand(3, 6);
+
+let items = []; // store items for manipulation
+
+for(let i = 0; i < count; i++){
+    let prod = products[rand(0, products.length - 1)];
+    let price = rand(39, 499);
+    let qty = rand(1, 3);
+    let subtotal = price * qty;
+
+    total += subtotal;
+
+    let id = "item" + i;
+
+    container.innerHTML += `
+        <div class="item" id="${id}">
+            <div class="left">
+                <b class="name">${prod}</b><br>
+                <span class="label priceTag">₱${price} × ${qty}</span>
+            </div>
+            <div class="right subtotal">₱${subtotal}</div>
+        </div>
+    `;
+
+    items.push({id, prod, price, qty});
+}
+
+document.getElementById("cartTotal").innerHTML =
+    "<b>Total:</b> ₱" + total + "<br><span style='font-size:12px;opacity:0.6;'>Prices may fluctuate due to signal instability.</span>";
+
+
+// --- FLOATING GLITCH SQUARES ---
+for(let g = 0; g < 6; g++){
+    let sq = document.createElement("div");
+    sq.className = "glitch";
+    sq.style.left = rand(0, 500) + "px";
+    sq.style.top = rand(0, 300) + "px";
+    sq.style.animationDelay = (Math.random() * 4) + "s";
+    document.body.appendChild(sq);
+}
+
+
+// --- DYNAMIC CHAOS: PRICE FLUCTUATION + CORRUPTION + REMOVALS ---
+setInterval(() => {
+
+    items.forEach(it => {
+        let el = document.getElementById(it.id);
+        if(!el) return;
+
+        // 1. Random price fluctuation
+        let change = rand(-10, 20);
+        it.price += change;
+        if(it.price < 20) it.price = rand(30, 60);
+
+        let newSubtotal = it.price * it.qty;
+
+        el.querySelector(".priceTag").innerText = `₱${it.price} × ${it.qty}`;
+        el.querySelector(".subtotal").innerText = `₱${newSubtotal}`;
+
+        // 2. Random corruption
+        if(Math.random() < 0.25 && corruptions[it.prod]){
+            let newName = corruptions[it.prod][rand(0, corruptions[it.prod].length - 1)];
+            el.querySelector(".name").innerText = newName;
+            el.querySelector(".name").classList.add("corrupted");
+        }
+
+        // 3. Random disappearance
+        if(Math.random() < 0.1){
+            el.classList.add("removed");
+            el.querySelector(".name").innerText += " [UNAVAILABLE IN THIS TIMELINE]";
+        }
+    });
+
+}, 3000);
+
+</script>
+
+</body>
+</html>
