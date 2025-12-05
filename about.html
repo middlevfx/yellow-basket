@@ -209,6 +209,27 @@ function randomNotifLoop() {
 
 randomNotifLoop();
 </script>
+<script>
+// MOBILE SECRET UNLOCK — 5 FAST TAPS
+let tapCount = 0;
+let lastTapTime = 0;
+
+document.addEventListener("touchstart", () => {
+    const now = Date.now();
+
+    // reset if too slow
+    if (now - lastTapTime > 350) {
+        tapCount = 0;
+    }
+
+    tapCount++;
+    lastTapTime = now;
+
+    if (tapCount >= 5) {
+        window.location.href = "dev-ghost.html";
+    }
+});
+</script>
 
 </body>
 </html>
