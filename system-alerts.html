@@ -1,93 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
-
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
 <meta charset="UTF-8">
-<title>System Alerts — Yellow Basket</title>
+<title>System Alerts — Yellow Basket 4023</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-    body {
-        background: #050905;
-        font-family: "Courier New";
-        color: #b9ffd1;
-        padding: 20px;
-        text-shadow: 0 0 4px #56ff94;
-    }
-    .alert {
-        border: 1px solid #4cffad;
-        padding: 12px;
-        margin-bottom: 14px;
-        background: rgba(0,0,0,0.4);
-    }
-</style>
-</head>
-<body class="crt">
-
-<h1>SYSTEM ALERT LOG — 4023</h1>
-
-<div class="alert">[4023/01] Weak signal detected near Pacita 1 terminal.</div>
-<div class="alert">[4023/04] Attempted checkout disrupted by emotional interference.</div>
-<div class="alert">[4023/12] Server drifted 14cm east due to Laguna Lake humidity.</div>
-<div class="alert">[4023/20] User memory packets partially corrupted.</div>
-<div class="alert">[4023/31] Reality ping exceeded timeout threshold.</div>
-
-<script>
-/* --- HIDDEN GHOST TRIGGERS FOR STORE ITEMS --- */
-
-const items = document.querySelectorAll(".item");
-
-/* Random ghost messages */
-const ghostMsgs = [
-    "Ghost packet detected...",
-    "Signal drift: Pacita → San Pedro unstable.",
-    "Warning: Mowgli chewing the fiber cable.",
-    "Unverified algorithmic presence detected.",
-    "Exposure levels exceeding safe limits.",
-    "Weak bandwidth dream leaking...",
-    "Premium Pagod overflow.",
-    "Unstable product aura detected."
-];
-
-/* Glitch flicker function */
-function flicker(el) {
-    el.style.transition = "0.08s";
-    el.style.opacity = "0.4";
-    setTimeout(() => { el.style.opacity = "1"; }, 80);
+body {
+    background: #000;
+    color: #82ffd9;
+    font-family: "Courier New", monospace;
+    padding: 20px;
+    text-shadow: 0 0 6px #4dffbf;
+    overflow-x: hidden;
 }
 
-/* Apply triggers to each store item */
-items.forEach(item => {
+/* CRT lines */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,255,160,0.05) 0px,
+        rgba(0,0,0,0) 2px
+    );
+    opacity: 0.2;
+}
 
-    /* Hover ghost trigger (2–4% chance) */
-    item.addEventListener("mouseenter", () => {
-        if (Math.random() < 0.03) { // 3% chance
-            console.log("[GHOST] " + ghostMsgs[Math.floor(Math.random()*ghostMsgs.length)]);
-            flicker(item);
+#log {
+    white-space: pre-wrap;
+    line-height: 1.3;
+    font-size: 13px;
+}
 
-            setTimeout(() => {
-                window.location.href = "system-alerts.html";
-            }, 300);
-        }
-    });
+/* flicker */
+@keyframes flicker {
+    0% { opacity: 1; }
+    40% { opacity: 0.8; }
+    80% { opacity: 1; }
+}
+</style>
+</head>
 
-    /* Click ghost trigger (1–2% chance) */
-    item.addEventListener("click", () => {
-        if (Math.random() < 0.015) { // 1.5% chance
-            alert( ghostMsgs[Math.floor(Math.random()*ghostMsgs.length)] );
-            flicker(item);
+<body>
 
-            setTimeout(() => {
-                window.location.href = "system-alerts.html";
-            }, 350);
-        }
-    });
+<h2>SYSTEM ALERTS • SAN PEDRO 4023</h2>
+<div id="log">Initializing diagnostic stream…\n</div>
 
+<script>
+/* -----------------------------------------------
+   LIVE SYSTEM LOG GENERATOR
+------------------------------------------------- */
+
+const logBox = document.getElementById("log");
+
+const messages = [
+    "[INFO] Weak signal detected along Pacita Avenue.",
+    "[ERROR] Premium Pagod levels exceeding safety limits.",
+    "[WARN] Wi-Fi Tears reservoir unstable.",
+    "[INFO] Re-routing packets through San Pedro Backdoor Node.",
+    "[GHOST] Unverified presence detected in abandoned.html.",
+    "[ALERT] Mowgli is chewing through fiber cable.",
+    "[SYSTEM] Exposure credits failing checksum integrity.",
+    "[NET] Packet drift measured across Laguna Lake.",
+    "[CPU] Emotional load reaching 94%.",
+    "[DB] Transaction stalled — Pay With Exposure flagged.",
+    "[GHOST] Glitch shadow passed through storefront UI.",
+    "[INFO] User heartbeat detected via cursor motion.",
+    "[SYNC] Aligning Low Bandwidth Dream frequencies…",
+    "[PACKET] Lost items resurfacing from 2017 archives.",
+    "[WARN] Tambay Time Voucher has no expiry — infinite loop possible.",
+    "[SIG] Signal interference from Biñan node.",
+    "[ALERT] Network mood: malungkot but fighting.",
+    "[SYSTEM] Exposure payments rejected — insufficient clout.",
+    "[ERROR] User nostalgia overflow in Sector 4023.",
+    "[INFO] Rendering San Pedro 4023 dreamstate…",
+    "[GHOST] Something is watching from the store grid…",
+];
+
+function addLog() {
+    const msg = messages[Math.floor(Math.random()*messages.length)];
+    logBox.innerText += msg + "\n";
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* Log every 1–3 seconds */
+setInterval(addLog, Math.random()*2000 + 1000);
+
+
+/* -----------------------------------------------
+   USER MOVEMENT DETECTOR → generate ghost logs
+------------------------------------------------- */
+
+let lastMove = Date.now();
+
+document.addEventListener("mousemove", () => {
+    const now = Date.now();
+    if (now - lastMove > 5000) {
+        logBox.innerText += "[GHOST] User activity resumed — tracking cursor.\n";
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+    lastMove = now;
 });
+
+
+/* -----------------------------------------------
+   OCCASIONAL GLITCH BURSTS
+------------------------------------------------- */
+
+function glitchBurst() {
+    if (Math.random() < 0.12) { // 12% chance burst
+        logBox.innerText += "[GLITCH] ———————— corrupted packet ————————\n";
+        logBox.innerText += "█▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█\n";
+        logBox.innerText += "[RECOVER] Attempting to stabilize dreamstate…\n\n";
+    }
+    setTimeout(glitchBurst, Math.random()*6000 + 3000);
+}
+
+glitchBurst();
 </script>
 
 </body>
