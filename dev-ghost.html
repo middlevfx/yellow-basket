@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>/dev/ghost — Yellow Basket 4023</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    background: #000;
+    color: #9bffd9;
+    font-family: "Courier New", monospace;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* CRT glow */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0,255,160,0.15), transparent 70%);
+    pointer-events: none;
+}
+
+/* drifting text */
+.ghost {
+    position: absolute;
+    font-size: 14px;
+    opacity: 0.1;
+    animation: drift 18s linear infinite;
+    pointer-events: none;
+    text-shadow: 0 0 6px #55ffcc;
+}
+
+@keyframes drift {
+    0% { transform: translateY(0); opacity: 0.15; }
+    50% { opacity: 0.35; }
+    100% { transform: translateY(-600px); opacity: 0; }
+}
+
+/* warp effect on cursor move */
+.warp {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,255,180,0.15), transparent 60%);
+}
+</style>
+</head>
+
+<body>
+<div id="container"></div>
+<div class="warp"></div>
+
+<script>
+/* -------------------------------------------
+   /dev/ghost — HIDDEN LOW-BANDWIDTH ZONE
+------------------------------------------- */
+
+const lines = [
+    "echoes from pacita terminal…",
+    "lost packets drifting over laguna lake",
+    "premium pagod buildup detected",
+    "ghost signature match: 40 23",
+    "retrieving abandoned memories...",
+    "exposure credit instability rising",
+    "low bandwidth dreams leaking through",
+    "signal distortion: san pedro → biñan",
+    "modem whisper: are you still there?",
+    "reconstructing emotional cache…",
+    "corrupt file recovered: /bite-mark.mwg",
+    "drift-event detected inside basket grid",
+    "server mood: pagod pero lumalaban",
+];
+
+const container = document.getElementById("container");
+
+/* spawn drifting text */
+function spawnGhost() {
+    const el = document.createElement("div");
+    el.className = "ghost";
+    el.innerText = lines[Math.floor(Math.random()*lines.length)];
+
+    el.style.left = Math.random() * window.innerWidth + "px";
+    el.style.top = (window.innerHeight + 200) + "px";
+
+    container.appendChild(el);
+
+    setTimeout(() => el.remove(), 18000);
+}
+
+/* spawn text every 800–2000ms */
+setInterval(spawnGhost, Math.random()*1200 + 800);
+
+
+/* cursor warp distortion */
+document.addEventListener("mousemove", (e) => {
+    document.body.querySelector(".warp").style.setProperty("--x", e.clientX + "px");
+    document.body.querySelector(".warp").style.setProperty("--y", e.clientY + "px");
+});
+</script>
+
+</body>
+</html>
