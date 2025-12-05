@@ -145,6 +145,80 @@
 </div>
 
 <a href="store.html" class="back">← Back to Store</a>
+<script>
+/* -------------------------------------------
+   ABANDONED ZONE — GLITCH PORTAL ENGINE
+   ------------------------------------------- */
+
+/* 1) Random ghost pull to system-alerts (rare) */
+setInterval(() => {
+    if (Math.random() < 0.03) { // 3% chance every 5 sec
+        console.log("[ABANDONED PORTAL] Ghost pull triggered.");
+        setTimeout(() => {
+            window.location.href = "system-alerts.html";
+        }, 600);
+    }
+}, 5000);
+
+
+/* 2) Random text flicker (disappears then returns) */
+const textBlocks = document.querySelectorAll("p, div, span, h1, h2, h3");
+
+function flickerText() {
+    const t = textBlocks[Math.floor(Math.random() * textBlocks.length)];
+    if (!t) return;
+
+    const original = t.style.opacity;
+    t.style.transition = "opacity 0.1s";
+    t.style.opacity = "0.15";
+
+    setTimeout(() => { t.style.opacity = original || "1"; }, 120);
+}
+
+setInterval(() => {
+    if (Math.random() < 0.2) flickerText(); // 20% chance per second
+}, 1000);
+
+
+/* 3) Whisper overlay appearing randomly */
+const whisper = document.createElement("div");
+whisper.innerText = "…are you still there…";
+whisper.style.position = "fixed";
+whisper.style.bottom = "12px";
+whisper.style.left = "50%";
+whisper.style.transform = "translateX(-50%)";
+whisper.style.color = "#9effd8";
+whisper.style.fontSize = "11px";
+whisper.style.opacity = "0";
+whisper.style.pointerEvents = "none";
+whisper.style.textShadow = "0 0 6px #6cffc0";
+document.body.appendChild(whisper);
+
+setInterval(() => {
+    if (Math.random() < 0.15) {
+        whisper.style.transition = "0.4s";
+        whisper.style.opacity = "0.8";
+
+        setTimeout(() => {
+            whisper.style.opacity = "0";
+        }, 1600);
+    }
+}, 4000);
+
+
+/* 4) Screen distortion ripple */
+function ripple() {
+    document.body.style.transition = "0.2s";
+    document.body.style.transform = "skewX(1deg) skewY(-1deg)";
+    setTimeout(() => {
+        document.body.style.transform = "none";
+    }, 200);
+}
+
+setInterval(() => {
+    if (Math.random() < 0.1) ripple(); // 10% chance
+}, 3000);
+</script>
 
 </body>
 </html>
