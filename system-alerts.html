@@ -36,5 +36,59 @@
 <div class="alert">[4023/20] User memory packets partially corrupted.</div>
 <div class="alert">[4023/31] Reality ping exceeded timeout threshold.</div>
 
+<script>
+/* --- HIDDEN GHOST TRIGGERS FOR STORE ITEMS --- */
+
+const items = document.querySelectorAll(".item");
+
+/* Random ghost messages */
+const ghostMsgs = [
+    "Ghost packet detected...",
+    "Signal drift: Pacita → San Pedro unstable.",
+    "Warning: Mowgli chewing the fiber cable.",
+    "Unverified algorithmic presence detected.",
+    "Exposure levels exceeding safe limits.",
+    "Weak bandwidth dream leaking...",
+    "Premium Pagod overflow.",
+    "Unstable product aura detected."
+];
+
+/* Glitch flicker function */
+function flicker(el) {
+    el.style.transition = "0.08s";
+    el.style.opacity = "0.4";
+    setTimeout(() => { el.style.opacity = "1"; }, 80);
+}
+
+/* Apply triggers to each store item */
+items.forEach(item => {
+
+    /* Hover ghost trigger (2–4% chance) */
+    item.addEventListener("mouseenter", () => {
+        if (Math.random() < 0.03) { // 3% chance
+            console.log("[GHOST] " + ghostMsgs[Math.floor(Math.random()*ghostMsgs.length)]);
+            flicker(item);
+
+            setTimeout(() => {
+                window.location.href = "system-alerts.html";
+            }, 300);
+        }
+    });
+
+    /* Click ghost trigger (1–2% chance) */
+    item.addEventListener("click", () => {
+        if (Math.random() < 0.015) { // 1.5% chance
+            alert( ghostMsgs[Math.floor(Math.random()*ghostMsgs.length)] );
+            flicker(item);
+
+            setTimeout(() => {
+                window.location.href = "system-alerts.html";
+            }, 350);
+        }
+    });
+
+});
+</script>
+
 </body>
 </html>
