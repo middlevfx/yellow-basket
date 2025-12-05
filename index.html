@@ -136,7 +136,19 @@ PRESS ENTER TO CONTINUE
     border-color: rgba(120,255,200,0.7);
     box-shadow: 0 0 8px rgba(0,255,160,0.3);
 }
+<script>
+/* KONAMI CODE → SECRET SYSTEM ALERTS PAGE */
+let k = [];
+const secret = "38384040373937396665";
 
+window.addEventListener("keydown", (e) => {
+    k.push(e.keyCode);
+    k = k.slice(-secret.length);
+    if (k.join("") === secret) {
+        window.location.href = "system-alerts.html";
+    }
+});
+</script>
 
 </body>
 </html>
