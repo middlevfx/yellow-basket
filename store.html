@@ -460,6 +460,72 @@ if (Math.random() < 0.05) {
     }, 1800);
 }
 </script>
+<script>
+/* -------------------------------------------
+   SAN PEDRO SIGNAL WEAKENING NOTIFICATIONS
+   ------------------------------------------- */
+
+const notifMessages = [
+    "⚠ Weak signal detected near Pacita Complex.",
+    "📡 Bandwidth drifting… Laguna Lake interference.",
+    "🛈 Premium Pagod levels rising. Slow mode activated.",
+    "⚠ Exposure credits insufficient. Please pay properly.",
+    "📡 Fiber line unstable — Mowgli may be involved.",
+    "🛈 Echo detected from abandoned zone…",
+    "⚠ Algorithmic ghost presence fluctuating.",
+    "📡 Server rerouting via San Pedro 4023 backroads.",
+    "🛈 Wi-Fi Tears levels unsafe. Seek comfort.",
+    "⚠ Data packet got lost trying to cross the bridge."
+];
+
+/* create notification bubble */
+function spawnNotif() {
+    const msg = notifMessages[Math.floor(Math.random() * notifMessages.length)];
+
+    const box = document.createElement("div");
+    box.innerText = msg;
+
+    box.style.position = "fixed";
+    box.style.bottom = "20px";
+    box.style.right = "20px";
+    box.style.background = "rgba(10,20,10,0.85)";
+    box.style.padding = "10px 14px";
+    box.style.border = "1px solid rgba(120,255,200,0.4)";
+    box.style.borderRadius = "6px";
+    box.style.fontSize = "12px";
+    box.style.color = "#c8ffcc";
+    box.style.textShadow = "0 0 4px #6cffc0";
+    box.style.opacity = "0";
+    box.style.transition = "opacity 0.6s, transform 0.6s";
+    box.style.zIndex = "9999";
+
+    document.body.appendChild(box);
+
+    // fade in
+    requestAnimationFrame(() => {
+        box.style.opacity = "1";
+        box.style.transform = "translateY(-6px)";
+    });
+
+    // fade out
+    setTimeout(() => {
+        box.style.opacity = "0";
+        box.style.transform = "translateY(0)";
+        setTimeout(() => box.remove(), 600);
+    }, 4000);
+}
+
+/* trigger notifications at random intervals */
+function randomNotifLoop() {
+    const delay = Math.floor(Math.random() * (25000 - 10000)) + 10000; 
+    setTimeout(() => {
+        spawnNotif();
+        randomNotifLoop();
+    }, delay);
+}
+
+randomNotifLoop();
+</script>
 
 </body>
 </html>
