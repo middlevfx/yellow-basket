@@ -452,6 +452,14 @@
         if (e.key === "Escape") closeModal();
     });
 </script>
+<script>
+/* RANDOM GHOST PORTAL: 5% chance to enter SYSTEM ALERTS */
+if (Math.random() < 0.05) {
+    setTimeout(() => {
+        window.location.href = "system-alerts.html";
+    }, 1800);
+}
+</script>
 
 </body>
 </html>
