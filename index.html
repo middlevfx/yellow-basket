@@ -109,6 +109,56 @@ PRESS ENTER TO CONTINUE
         <a href="store.html" class="btn">ENTER STORE →</a>
     </div>
 </div>
+    /* --- CENTERED TOP NAV — YELLOW BASKET --- */
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 12px 0 18px 0;
+    flex-wrap: wrap;
+}
+
+/* Links styling */
+.nav a {
+    color: #9affc8;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    border: 1px solid rgba(120,255,200,0.25);
+    border-radius: 4px;
+    background: rgba(0,0,0,0.35);
+    text-shadow:
+        0 0 4px rgba(120,255,200,0.8),
+        0 0 8px rgba(80,255,180,0.6);
+    transition: 0.2s ease;
+}
+
+/* Hover glow */
+.nav a:hover {
+    border-color: rgba(140,255,220,0.7);
+    box-shadow:
+        0 0 6px rgba(120,255,200,0.7),
+        0 0 12px rgba(80,255,180,0.5);
+    text-shadow:
+        0 0 6px rgba(160,255,220,1),
+        0 0 14px rgba(120,255,200,0.8);
+}
+
+/* Mobile polish */
+@media (max-width: 600px) {
+    .nav {
+        gap: 10px;
+        margin-top: 8px;
+    }
+
+    .nav a {
+        font-size: 11px;
+        padding: 5px 9px;
+    }
+}
+
 /* --- Y2K BOXED NAV BAR --- */
 .nav {
     display: flex;
@@ -236,6 +286,7 @@ document.addEventListener("touchstart", () => {
     }
 });
 </script>
+
 
 </body>
 </html>
