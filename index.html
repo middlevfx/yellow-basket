@@ -8,11 +8,6 @@ if (!sessionStorage.getItem("loadedOnce")) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
 <link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
 <link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
 <link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
@@ -23,6 +18,7 @@ if (!sessionStorage.getItem("loadedOnce")) {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Yellow Basket — San Pedro 4023</title>
+
 <style>
     body {
         margin: 0;
@@ -92,10 +88,54 @@ if (!sessionStorage.getItem("loadedOnce")) {
         background: rgba(0,255,120,0.1);
         box-shadow: 0 0 6px #00ff80;
     }
+
+    /* PATCH 02 INTRO SCREEN */
+    #intro-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0a0a0a;
+        color: #d2ffcc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        font-size: 1.6rem;
+        letter-spacing: 0.5px;
+        z-index: 99999;
+        text-align: center;
+        opacity: 1;
+        transition: opacity 1.2s ease;
+    }
+
+    #intro-text {
+        opacity: 0;
+        animation: softFlicker 3s infinite ease-in-out;
+    }
+
+    @keyframes softFlicker {
+        0% { opacity: 1; }
+        50% { opacity: 0.92; }
+        100% { opacity: 1; }
+    }
+
+    .fade-out {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+    }
 </style>
 </head>
+
 <body class="crt">
 
+<!-- PATCH 02 INTRO -->
+<div id="intro-screen">
+    <p id="intro-text"></p>
+</div>
+
+<!-- MAIN BOOT SCREEN -->
 <div class="screen">
     <div class="boot" id="bootText">
 Initializing Yellow Basket System…
@@ -108,6 +148,8 @@ PRESS ENTER TO CONTINUE
     <div class="btn-row">
         <a href="store.html" class="btn">ENTER STORE →</a>
     </div>
+</div>
+
 <style>
 /* --- Y2K BOXED NAV BAR --- */
 .nav {
@@ -139,8 +181,46 @@ PRESS ENTER TO CONTINUE
     box-shadow: 0 0 8px rgba(0,255,160,0.3);
 }
 </style>
+
 <script>
-/* KONAMI CODE → SECRET SYSTEM ALERTS PAGE */
+/* PATCH 02 TEXT SEQUENCE */
+const introText = document.getElementById("intro-text");
+const introScreen = document.getElementById("intro-screen");
+
+const lines = [
+  "Parating na…",
+  "…",
+  "Ang alin…",
+  "Patch #02…",
+  "Yellow Basket.",
+  "still loading—"
+];
+
+let i = 0;
+
+function showNextLine() {
+  introText.style.opacity = 0;
+
+  setTimeout(() => {
+    introText.textContent = lines[i];
+    introText.style.opacity = 1;
+    i++;
+
+    if (i < lines.length) {
+      setTimeout(showNextLine, 1200);
+    } else {
+      setTimeout(() => {
+        introScreen.classList.add("fade-out");
+      }, 1500);
+    }
+  }, 400);
+}
+
+showNextLine();
+</script>
+
+<script>
+/* KONAMI CODE */
 let k = [];
 const secret = "38384040373937396665";
 
@@ -151,62 +231,10 @@ window.addEventListener("keydown", (e) => {
         window.location.href = "dev-ghost.html";
     }
 });
-    /* --- CENTERED TOP NAV — YELLOW BASKET --- */
-.nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin: 12px 0 18px 0;
-    flex-wrap: wrap;
-}
-
-/* Links styling */
-.nav a {
-    color: #9affc8;
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 6px 10px;
-    border: 1px solid rgba(120,255,200,0.25);
-    border-radius: 4px;
-    background: rgba(0,0,0,0.35);
-    text-shadow:
-        0 0 4px rgba(120,255,200,0.8),
-        0 0 8px rgba(80,255,180,0.6);
-    transition: 0.2s ease;
-}
-
-/* Hover glow */
-.nav a:hover {
-    border-color: rgba(140,255,220,0.7);
-    box-shadow:
-        0 0 6px rgba(120,255,200,0.7),
-        0 0 12px rgba(80,255,180,0.5);
-    text-shadow:
-        0 0 6px rgba(160,255,220,1),
-        0 0 14px rgba(120,255,200,0.8);
-}
-
-/* Mobile polish */
-@media (max-width: 600px) {
-    .nav {
-        gap: 10px;
-        margin-top: 8px;
-    }
-
-    .nav a {
-        font-size: 11px;
-        padding: 5px 9px;
-    }
-}
-
 </script>
-<script>
-/* -------------------------------------------
-   SAN PEDRO SIGNAL WEAKENING NOTIFICATIONS
-   ------------------------------------------- */
 
+<script>
+/* SIGNAL WEAK NOTIFICATIONS */
 const notifMessages = [
     "⚠ Weak signal detected near Pacita Complex.",
     "📡 Bandwidth drifting… Laguna Lake interference.",
@@ -220,10 +248,8 @@ const notifMessages = [
     "⚠ Data packet got lost trying to cross the bridge."
 ];
 
-/* create notification bubble */
 function spawnNotif() {
     const msg = notifMessages[Math.floor(Math.random() * notifMessages.length)];
-
     const box = document.createElement("div");
     box.innerText = msg;
 
@@ -243,13 +269,11 @@ function spawnNotif() {
 
     document.body.appendChild(box);
 
-    // fade in
     requestAnimationFrame(() => {
         box.style.opacity = "1";
         box.style.transform = "translateY(-6px)";
     });
 
-    // fade out
     setTimeout(() => {
         box.style.opacity = "0";
         box.style.transform = "translateY(0)";
@@ -257,7 +281,6 @@ function spawnNotif() {
     }, 4000);
 }
 
-/* trigger notifications at random intervals */
 function randomNotifLoop() {
     const delay = Math.floor(Math.random() * (25000 - 10000)) + 10000; 
     setTimeout(() => {
@@ -268,6 +291,7 @@ function randomNotifLoop() {
 
 randomNotifLoop();
 </script>
+
 <script>
 // MOBILE SECRET UNLOCK — 5 FAST TAPS
 let tapCount = 0;
@@ -276,7 +300,6 @@ let lastTapTime = 0;
 document.addEventListener("touchstart", () => {
     const now = Date.now();
 
-    // reset if too slow
     if (now - lastTapTime > 350) {
         tapCount = 0;
     }
@@ -289,7 +312,6 @@ document.addEventListener("touchstart", () => {
     }
 });
 </script>
-
 
 </body>
 </html>
