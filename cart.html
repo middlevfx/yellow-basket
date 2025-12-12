@@ -1,237 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
-
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
-<meta charset="UTF-8">
-<title>Cart — Yellow Basket 4023</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Cart — Yellow Basket</title>
 
 <style>
-    body {
-        background: #050905;
-        color: #c8ffcc;
-        font-family: "Courier New", monospace;
-        padding: 20px;
-        text-shadow: 0 0 4px #76ff9b;
-        overflow-x: hidden;
-    }
+body {
+  margin: 0;
+  background: #0a0f0a;
+  color: #c8ffcc;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #88ff88;
+}
 
-    .crt::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-            to bottom,
-            rgba(0,0,0,0) 0px,
-            rgba(0,255,80,0.05) 2px,
-            rgba(0,0,0,0) 4px
-        );
-        opacity: .25;
-    }
+a { color: inherit; text-decoration: none; }
 
-    h1 {
-        text-align:center;
-        margin-bottom: 20px;
-    }
+.topbar {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 14px;
+  border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-size: 12px;
+}
 
-    .cart-box {
-        max-width: 580px;
-        margin: 0 auto;
-        padding: 14px;
-        border: 1px solid rgba(120,255,200,0.35);
-        background: rgba(10,20,16,0.45);
-        border-radius: 6px;
-        position: relative;
-    }
+.topbar a {
+  padding: 6px 10px;
+  border: 1px solid rgba(120,255,200,0.3);
+}
 
-    .item {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid rgba(120,255,200,0.15);
-        transition: 0.3s;
-    }
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
 
-    .corrupted {
-        color: #ff7d7d;
-        text-shadow: 0 0 6px #ff4e4e;
-    }
+h1 {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
 
-    .removed {
-        opacity: 0.2;
-        text-decoration: line-through;
-    }
+.item {
+  border: 1px solid rgba(120,255,200,0.25);
+  padding: 12px;
+  margin-bottom: 14px;
+  background: rgba(0,0,0,0.3);
+}
 
-    .label { font-size: 12px; opacity: 0.8; }
+.item h3 {
+  font-size: 14px;
+  margin: 0 0 4px;
+}
 
-    .total {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 14px;
-        text-shadow: 0 0 6px #66ffcc;
-    }
+.item p {
+  font-size: 12px;
+  opacity: 0.8;
+  margin: 0;
+}
 
-    .btn {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-top: 14px;
-        text-align: center;
-        color: #c8ffcc;
-        border: 1px solid rgba(120,255,200,0.4);
-        border-radius: 4px;
-        text-decoration: none;
-        background: rgba(0,0,0,0.3);
-        transition: .2s;
-    }
+.total {
+  margin-top: 24px;
+  font-size: 13px;
+  border-top: 1px dashed rgba(120,255,200,0.3);
+  padding-top: 14px;
+}
 
-    .btn:hover {
-        background: rgba(80,255,180,0.1);
-        border-color: rgba(120,255,200,0.7);
-    }
+.footer-text {
+  margin-top: 28px;
+  font-size: 11px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
 
-    /* floating glitch squares */
-    .glitch {
-        width: 14px;
-        height: 14px;
-        position: absolute;
-        background: rgba(0,255,180,0.2);
-        animation: float 6s infinite alternate ease-in-out;
-        pointer-events: none;
-    }
+.checkout {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 18px;
+  border: 1px solid #8aff9b;
+  transition: 0.15s;
+}
 
-    @keyframes float {
-        0%   { transform: translate(-10px, 0px); opacity: 0.3; }
-        100% { transform: translate(40px, -40px); opacity: 0.8; }
-    }
+.checkout:hover {
+  background: rgba(0,255,120,0.1);
+  box-shadow: 0 0 6px #00ff80;
+}
 </style>
 </head>
-<body class="crt">
-     <div class="nav">
-    <a href="index.html" class="nav-btn">HOME</a>
-    <a href="store.html" class="nav-btn">STORE</a>
-    <a href="cart.html" class="nav-btn">CART</a>
-    <a href="checkout.html" class="nav-btn">CHECKOUT</a>
-    <a href="about.html" class="nav-btn">ABOUT</a>
-    <a href="abandoned.html" class="nav-btn">ABANDONED</a>
+
+<body>
+
+<div class="topbar">
+  <a href="store.html">SHOP</a>
+  <a href="cart.html">CART</a>
+  <a href="checkout.html">CHECK OUT</a>
 </div>
 
-<h1>CART — UNSTABLE SERVER MODE</h1>
+<div class="wrap">
+  <h1>Your Cart</h1>
 
-<div class="cart-box" id="cartItems"></div>
-<div class="total" id="cartTotal"></div>
+  <div id="cartItems"></div>
 
-<a href="checkout.html" class="btn">PROCEED TO CHECKOUT</a>
-<a href="store.html" class="btn">← BACK TO STORE</a>
+  <div class="total" id="totalText"></div>
+
+  <a href="checkout.html" class="checkout">PROCEED ANYWAY →</a>
+
+  <div class="footer-text">
+    Prices may fluctuate due to signal instability.<br>
+    Ano, masaya ka na ba diyan? Di mo naman kailangan ’yan eh.
+  </div>
+</div>
 
 <script>
-// --- RANDOM PRODUCTS ---
-const products = [
-    "Mowgli’s Bite Mark",
-    "Broken Sim Card of Love",
-    "Lo-Fi CD-R Pack",
-    "Buffer Power Bank",
-    "Tambay Time Voucher",
-    "Laguna Lake Mist",
-    "Premium Pagod (500g)",
-    "Wi-Fi Tears Refill"
+const possibleItems = [
+  { name: "Wi-Fi Tears", desc: "Halos online." },
+  { name: "Premium Pagod (XL)", desc: "Mas malaki, mas pagod." },
+  { name: "Lifestyle Starter Pack", desc: "Bio-ready. Identity sold separately." },
+  { name: "Signal Booster (Placebo)", desc: "Gumagana sa paniniwala." },
+  { name: "Tambay Approved Chair", desc: "Para sa matagal na pag-iisip." },
+  { name: "Suki Card (Unlimited)", desc: "Hindi ka naman bibili." }
 ];
 
-// corrupted variants
-const corruptions = {
-    "Wi-Fi Tears Refill": ["Wi-Fi Fears Refill", "Why Tears?", "W-?F3a Packet"],
-    "Broken Sim Card of Love": ["Broken Sim Card of Nothing", "SIM???", "Love Packet Expired"],
-    "Premium Pagod (500g)": ["Premium Pagod (???g)", "Overfatigue Bundle", "Laguna Stress Pack"],
-};
+const cart = document.getElementById("cartItems");
+const totalText = document.getElementById("totalText");
 
-// random helpers
-function rand(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+// random items kahit walang add to cart
+const count = Math.floor(Math.random() * 3) + 2;
 
-// build cart
-let container = document.getElementById("cartItems");
 let total = 0;
-let count = rand(3, 6);
 
-let items = []; // store items for manipulation
+for (let i = 0; i < count; i++) {
+  const item = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+  const price = Math.floor(Math.random() * 900) + 99;
+  total += price;
 
-for(let i = 0; i < count; i++){
-    let prod = products[rand(0, products.length - 1)];
-    let price = rand(39, 499);
-    let qty = rand(1, 3);
-    let subtotal = price * qty;
-
-    total += subtotal;
-
-    let id = "item" + i;
-
-    container.innerHTML += `
-        <div class="item" id="${id}">
-            <div class="left">
-                <b class="name">${prod}</b><br>
-                <span class="label priceTag">₱${price} × ${qty}</span>
-            </div>
-            <div class="right subtotal">₱${subtotal}</div>
-        </div>
-    `;
-
-    items.push({id, prod, price, qty});
+  const div = document.createElement("div");
+  div.className = "item";
+  div.innerHTML = `
+    <h3>${item.name}</h3>
+    <p>${item.desc}</p>
+    <p>₱${price}</p>
+  `;
+  cart.appendChild(div);
 }
 
-document.getElementById("cartTotal").innerHTML =
-    "<b>Total:</b> ₱" + total + "<br><span style='font-size:12px;opacity:0.6;'>Prices may fluctuate due to signal instability.</span>";
-
-
-// --- FLOATING GLITCH SQUARES ---
-for(let g = 0; g < 6; g++){
-    let sq = document.createElement("div");
-    sq.className = "glitch";
-    sq.style.left = rand(0, 500) + "px";
-    sq.style.top = rand(0, 300) + "px";
-    sq.style.animationDelay = (Math.random() * 4) + "s";
-    document.body.appendChild(sq);
-}
-
-
-// --- DYNAMIC CHAOS: PRICE FLUCTUATION + CORRUPTION + REMOVALS ---
+// fake fluctuation
 setInterval(() => {
-
-    items.forEach(it => {
-        let el = document.getElementById(it.id);
-        if(!el) return;
-
-        // 1. Random price fluctuation
-        let change = rand(-10, 20);
-        it.price += change;
-        if(it.price < 20) it.price = rand(30, 60);
-
-        let newSubtotal = it.price * it.qty;
-
-        el.querySelector(".priceTag").innerText = `₱${it.price} × ${it.qty}`;
-        el.querySelector(".subtotal").innerText = `₱${newSubtotal}`;
-
-        // 2. Random corruption
-        if(Math.random() < 0.25 && corruptions[it.prod]){
-            let newName = corruptions[it.prod][rand(0, corruptions[it.prod].length - 1)];
-            el.querySelector(".name").innerText = newName;
-            el.querySelector(".name").classList.add("corrupted");
-        }
-
-        // 3. Random disappearance
-        if(Math.random() < 0.1){
-            el.classList.add("removed");
-            el.querySelector(".name").innerText += " [UNAVAILABLE IN THIS TIMELINE]";
-        }
-    });
-
-}, 3000);
-
+  totalText.innerText = "Subtotal: ₱" + (total + Math.floor(Math.random() * 40 - 20));
+}, 1800);
 </script>
 
 </body>
