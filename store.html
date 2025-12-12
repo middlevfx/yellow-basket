@@ -29,26 +29,33 @@ body {
   opacity: 0.9;
 }
 
-/* TOP NAV */
-.topbar {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-start;
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(120,255,200,0.3);
-  font-size: 11px;
-  overflow-x: auto;
-  white-space: nowrap;
-}
+/* =========================
+   PATCH 02 NAV COLOR LOCK
+   ========================= */
 
 .topbar a {
-  padding: 5px 8px;
-  border: 1px solid rgba(120,255,200,0.3);
-  flex-shrink: 0;
+  color: #c8ffcc !important;
+  text-shadow: 0 0 4px rgba(120,255,200,0.8);
+  border: 1px solid rgba(120,255,200,0.35);
+  background: rgba(0,0,0,0.35);
 }
 
-.topbar::-webkit-scrollbar {
-  display: none;
+.topbar a:hover {
+  border-color: rgba(140,255,220,0.7);
+  box-shadow:
+    0 0 6px rgba(120,255,200,0.7),
+    0 0 12px rgba(80,255,180,0.5);
+  text-shadow:
+    0 0 6px rgba(160,255,220,1),
+    0 0 14px rgba(120,255,200,0.8);
+}
+
+/* kill Patch 01 blue */
+.nav a,
+.nav-btn,
+a.blue,
+a:visited {
+  color: #c8ffcc !important;
 }
 
 /* GRID */
