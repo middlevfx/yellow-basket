@@ -1,338 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
-
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Abandoned Zone — Yellow Basket</title>
+<title>Abandoned Items — Yellow Basket</title>
+
 <style>
-    body {
-        margin: 0;
-        background: #020403;
-        color: #c8ffcc;
-        font-family: "Courier New", monospace;
-        overflow: hidden;
-        text-shadow: 0 0 4px #76ff9b;
-    }
+body {
+  margin: 0;
+  background: #0a0f0a;
+  color: #c8ffcc;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #88ff88;
+}
 
-    .crt::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-            to bottom,
-            rgba(0,0,0,0) 0px,
-            rgba(0,255,80,0.05) 2px,
-            rgba(0,0,0,0) 4px
-        );
-        opacity: 0.25;
-    }
+a { color: inherit; text-decoration: none; }
 
-    .title {
-        position: absolute;
-        top: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 14px;
-        letter-spacing: 2px;
-        opacity: 0.9;
-    }
+.topbar {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 14px;
+  border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-size: 12px;
+}
 
-    .ghost-img {
-        position: absolute;
-        opacity: 0.14;
-        mix-blend-mode: screen;
-        filter: blur(0.3px);
-        animation: float 18s ease-in-out infinite alternate;
-    }
+.topbar a {
+  padding: 6px 10px;
+  border: 1px solid rgba(120,255,200,0.3);
+}
 
-    .ghost-img img {
-        width: 220px;
-        height: auto;
-        object-fit: cover;
-    }
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 24px;
+}
 
-    .g1 { top: 15%; left: 8%; }
-    .g2 { top: 55%; right: 6%; animation-duration: 22s; }
-    .g3 { top: 35%; left: 60%; animation-duration: 26s; }
+h1 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
 
-    @keyframes float {
-        0%   { transform: translate3d(0,0,0); }
-        100% { transform: translate3d(30px,-30px,0); }
-    }
+.sub {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 28px;
+}
 
-    .ghost-text {
-        position: absolute;
-        font-size: 12px;
-        opacity: 0.5;
-        max-width: 220px;
-        line-height: 1.4;
-        animation: drift 20s linear infinite;
-    }
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 18px;
+}
 
-    .t1 { top: 30%; left: 16%; }
-    .t2 { top: 65%; left: 40%; animation-duration: 26s; }
-    .t3 { top: 20%; right: 10%; animation-duration: 22s; }
+.item {
+  border: 1px solid rgba(120,255,200,0.25);
+  padding: 12px;
+  background: rgba(0,0,0,0.3);
+}
 
-    @keyframes drift {
-        0%   { transform: translateX(0); opacity: 0.2; }
-        50%  { opacity: 0.6; }
-        100% { transform: translateX(40px); opacity: 0.1; }
-    }
+.item h3 {
+  font-size: 14px;
+  margin: 0 0 4px;
+}
 
-    .back {
-        position: absolute;
-        bottom: 16px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 11px;
-        color: #aaffcc;
-        text-decoration: none;
-        opacity: 0.6;
-    }
+.item p {
+  font-size: 12px;
+  opacity: 0.75;
+  margin: 0;
+}
 
-    .back:hover {
-        opacity: 1;
-        text-shadow: 0 0 6px #88ffbb;
-    }
+.note {
+  margin-top: 36px;
+  font-size: 11px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
 </style>
 </head>
-<body class="crt">
 
-<div class="nav">
-    <a href="index.html" class="nav-btn">HOME</a>
-    <a href="store.html" class="nav-btn">STORE</a>
-    <a href="cart.html" class="nav-btn">CART</a>
-    <a href="checkout.html" class="nav-btn">CHECKOUT</a>
-    <a href="about.html" class="nav-btn">ABOUT</a>
-    <a href="abandoned.html" class="nav-btn">ABANDONED</a>
+<body>
+
+<div class="topbar">
+  <a href="store.html">SHOP</a>
+  <a href="cart.html">CART</a>
+  <a href="checkout.html">CHECK OUT</a>
 </div>
 
-<div class="title">ABANDONED ZONE — LOW BANDWIDTH DREAM RESIDUE</div>
+<div class="wrap">
+  <h1>Mga nakalimutan mo oh.</h1>
+  <div class="sub">
+    Hindi naman sila nagmamadali.
+  </div>
 
-<!-- Ghosted product echoes (optional: palitan filenames kung iba) -->
-<div class="ghost-img g1">
-    <img src="assets/premium-pagod.jpeg" alt="Premium Pagod Ghost">
-</div>
-<div class="ghost-img g2">
-    <img src="assets/wifi-tears.jpeg" alt="Wi-Fi Tears Ghost">
-</div>
-<div class="ghost-img g3">
-    <img src="assets/laguna-mist.jpeg" alt="Laguna Mist Ghost">
-</div>
+  <div class="list" id="abandonedList"></div>
 
-<div class="ghost-text t1">
-    “You left these items in your cart<br>
-    and never checked out.<br>
-    Pero nag-stay sila sa utak mo.”
-</div>
-<div class="ghost-text t2">
-    “Signal lost along Laguna Lake shoreline.<br>
-    Memory still trying to reconnect<br>
-    sa 2-bar network ng 4023.”
-</div>
-<div class="ghost-text t3">
-    “This is not a real store.<br>
-    Just an archive of things<br>
-    you almost needed.”
+  <div class="note">
+    Tahimik lang sila dito.<br>
+    Pwede mo na silang iwan ulit.
+  </div>
 </div>
 
-<a href="store.html" class="back">← Back to Store</a>
 <script>
-/* -------------------------------------------
-   ABANDONED ZONE — GLITCH PORTAL ENGINE
-   ------------------------------------------- */
-
-/* 1) Random ghost pull to system-alerts (rare) */
-setInterval(() => {
-    if (Math.random() < 0.03) { // 3% chance every 5 sec
-        console.log("[ABANDONED PORTAL] Ghost pull triggered.");
-        setTimeout(() => {
-            window.location.href = "system-alerts.html";
-        }, 600);
-    }
-}, 5000);
-
-
-/* 2) Random text flicker (disappears then returns) */
-const textBlocks = document.querySelectorAll("p, div, span, h1, h2, h3");
-
-function flickerText() {
-    const t = textBlocks[Math.floor(Math.random() * textBlocks.length)];
-    if (!t) return;
-
-    const original = t.style.opacity;
-    t.style.transition = "opacity 0.1s";
-    t.style.opacity = "0.15";
-
-    setTimeout(() => { t.style.opacity = original || "1"; }, 120);
-}
-
-setInterval(() => {
-    if (Math.random() < 0.2) flickerText(); // 20% chance per second
-}, 1000);
-
-
-/* 3) Whisper overlay appearing randomly */
-const whisper = document.createElement("div");
-whisper.innerText = "…are you still there…";
-whisper.style.position = "fixed";
-whisper.style.bottom = "12px";
-whisper.style.left = "50%";
-whisper.style.transform = "translateX(-50%)";
-whisper.style.color = "#9effd8";
-whisper.style.fontSize = "11px";
-whisper.style.opacity = "0";
-whisper.style.pointerEvents = "none";
-whisper.style.textShadow = "0 0 6px #6cffc0";
-document.body.appendChild(whisper);
-
-setInterval(() => {
-    if (Math.random() < 0.15) {
-        whisper.style.transition = "0.4s";
-        whisper.style.opacity = "0.8";
-
-        setTimeout(() => {
-            whisper.style.opacity = "0";
-        }, 1600);
-    }
-}, 4000);
-
-
-/* 4) Screen distortion ripple */
-function ripple() {
-    document.body.style.transition = "0.2s";
-    document.body.style.transform = "skewX(1deg) skewY(-1deg)";
-    setTimeout(() => {
-        document.body.style.transform = "none";
-    }, 200);
-}
-
-setInterval(() => {
-    if (Math.random() < 0.1) ripple(); // 10% chance
-}, 3000);
-</script>
-<script>
-/* -------------------------------------------
-   SAN PEDRO SIGNAL WEAKENING NOTIFICATIONS
-   ------------------------------------------- */
-
-const notifMessages = [
-    "⚠ Weak signal detected near Pacita Complex.",
-    "📡 Bandwidth drifting… Laguna Lake interference.",
-    "🛈 Premium Pagod levels rising. Slow mode activated.",
-    "⚠ Exposure credits insufficient. Please pay properly.",
-    "📡 Fiber line unstable — Mowgli may be involved.",
-    "🛈 Echo detected from abandoned zone…",
-    "⚠ Algorithmic ghost presence fluctuating.",
-    "📡 Server rerouting via San Pedro 4023 backroads.",
-    "🛈 Wi-Fi Tears levels unsafe. Seek comfort.",
-    "⚠ Data packet got lost trying to cross the bridge."
+const items = [
+  { name: "Wi-Fi Tears", desc: "Halos online." },
+  { name: "Premium Pagod (XL)", desc: "Mas malaki, mas pagod." },
+  { name: "Lifestyle Starter Pack", desc: "Bio-ready. Identity sold separately." },
+  { name: "Specialty Coffee (Not Really)", desc: "Third wave sa presyo, instant sa lasa." },
+  { name: "Signal Booster (Placebo)", desc: "Gumagana sa paniniwala." },
+  { name: "Tambay Approved Chair", desc: "Para sa matagal na pag-iisip." },
+  { name: "Suki Card (Unlimited)", desc: "Hindi ka naman bibili." },
+  { name: "Low Bandwidth Candle", desc: "Amoy router na mainit." },
+  { name: "Broken SIM Card of Love", desc: "Hindi na nagre-reply." }
 ];
 
-/* create notification bubble */
-function spawnNotif() {
-    const msg = notifMessages[Math.floor(Math.random() * notifMessages.length)];
+const list = document.getElementById("abandonedList");
 
-    const box = document.createElement("div");
-    box.innerText = msg;
-
-    box.style.position = "fixed";
-    box.style.bottom = "20px";
-    box.style.right = "20px";
-    box.style.background = "rgba(10,20,10,0.85)";
-    box.style.padding = "10px 14px";
-    box.style.border = "1px solid rgba(120,255,200,0.4)";
-    box.style.borderRadius = "6px";
-    box.style.fontSize = "12px";
-    box.style.color = "#c8ffcc";
-    box.style.textShadow = "0 0 4px #6cffc0";
-    box.style.opacity = "0";
-    box.style.transition = "opacity 0.6s, transform 0.6s";
-    box.style.zIndex = "9999";
-
-    document.body.appendChild(box);
-
-    // fade in
-    requestAnimationFrame(() => {
-        box.style.opacity = "1";
-        box.style.transform = "translateY(-6px)";
-    });
-
-    // fade out
-    setTimeout(() => {
-        box.style.opacity = "0";
-        box.style.transform = "translateY(0)";
-        setTimeout(() => box.remove(), 600);
-    }, 4000);
-}
-/* --- CENTERED TOP NAV — YELLOW BASKET --- */
-.nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin: 12px 0 18px 0;
-    flex-wrap: wrap;
-}
-
-/* Links styling */
-.nav a {
-    color: #9affc8;
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 6px 10px;
-    border: 1px solid rgba(120,255,200,0.25);
-    border-radius: 4px;
-    background: rgba(0,0,0,0.35);
-    text-shadow:
-        0 0 4px rgba(120,255,200,0.8),
-        0 0 8px rgba(80,255,180,0.6);
-    transition: 0.2s ease;
-}
-
-/* Hover glow */
-.nav a:hover {
-    border-color: rgba(140,255,220,0.7);
-    box-shadow:
-        0 0 6px rgba(120,255,200,0.7),
-        0 0 12px rgba(80,255,180,0.5);
-    text-shadow:
-        0 0 6px rgba(160,255,220,1),
-        0 0 14px rgba(120,255,200,0.8);
-}
-
-/* Mobile polish */
-@media (max-width: 600px) {
-    .nav {
-        gap: 10px;
-        margin-top: 8px;
-    }
-
-    .nav a {
-        font-size: 11px;
-        padding: 5px 9px;
-    }
-}
-
-/* trigger notifications at random intervals */
-function randomNotifLoop() {
-    const delay = Math.floor(Math.random() * (25000 - 10000)) + 10000; 
-    setTimeout(() => {
-        spawnNotif();
-        randomNotifLoop();
-    }, delay);
-}
-
-randomNotifLoop();
+// show all items, shuffled
+items
+  .sort(() => Math.random() - 0.5)
+  .forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <h3>${item.name}</h3>
+      <p>${item.desc}</p>
+    `;
+    list.appendChild(div);
+  });
 </script>
 
 </body>
