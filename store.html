@@ -30,21 +30,41 @@ body {
 }
 
 /* =========================
-   PATCH 02 NAV COLOR LOCK
+   PATCH 02 — STORE NAV LOCK
+   (force uniform with rest)
    ========================= */
+
+.topbar,
+.topbar * {
+  all: unset;
+}
 
 .topbar {
   display: flex;
   gap: 10px;
-  justify-content: center;   /* 👈 ITO ANG KEY */
+  justify-content: center;
   align-items: center;
   padding: 10px 12px;
   border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-family: "Courier New", monospace;
   font-size: 11px;
   overflow-x: auto;
   white-space: nowrap;
 }
-  
+
+.topbar a {
+  all: unset;
+  cursor: pointer;
+  padding: 5px 8px;
+  border: 1px solid rgba(120,255,200,0.35);
+  color: #c8ffcc !important;
+  background: rgba(0,0,0,0.35);
+  text-shadow:
+    0 0 4px rgba(120,255,200,0.8),
+    0 0 8px rgba(80,255,180,0.6);
+  flex-shrink: 0;
+}
+
 .topbar a:hover {
   border-color: rgba(140,255,220,0.7);
   box-shadow:
@@ -55,11 +75,10 @@ body {
     0 0 14px rgba(120,255,200,0.8);
 }
 
-/* kill Patch 01 blue */
-.nav a,
-.nav-btn,
-a.blue,
-a:visited {
+/* kill browser blue states */
+.topbar a:visited,
+.topbar a:active,
+.topbar a:focus {
   color: #c8ffcc !important;
 }
 
