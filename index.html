@@ -1,316 +1,108 @@
-<script>
-if (!sessionStorage.getItem("loadedOnce")) {
-    sessionStorage.setItem("loadedOnce", "true");
-    window.location.href = "loading.html";
-}
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
-
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Yellow Basket — San Pedro 4023</title>
+<title>Yellow Basket — Welcome</title>
 
 <style>
-    body {
-        margin: 0;
-        background: #0a0f0a;
-        color: #c8ffcc;
-        font-family: "Courier New", monospace;
-        text-shadow: 0 0 4px #88ff88;
-        overflow: hidden;
-    }
-
-    /* CRT Scanline Overlay */
-    .crt::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-            to bottom,
-            rgba(0,0,0,0) 0px,
-            rgba(0,255,80,0.06) 2px,
-            rgba(0,0,0,0) 4px
-        );
-        opacity: 0.25;
-    }
-
-    .screen {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 1.2s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .boot {
-        font-size: 14px;
-        margin-bottom: 40px;
-        white-space: pre-line;
-        opacity: 0;
-        animation: bootType 2.4s steps(24) forwards;
-    }
-
-    @keyframes bootType {
-        to { opacity: 1; }
-    }
-
-    .btn-row {
-        display: flex;
-        gap: 24px;
-    }
-
-    .btn {
-        padding: 10px 18px;
-        border: 1px solid #8aff9b;
-        color: #c8ffcc;
-        text-decoration: none;
-        cursor: pointer;
-        transition: 0.12s;
-    }
-
-    .btn:hover {
-        background: rgba(0,255,120,0.1);
-        box-shadow: 0 0 6px #00ff80;
-    }
-
-    /* PATCH 02 INTRO SCREEN */
-    #intro-screen {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%;
-        height: 100%;
-        background: #0a0a0a;
-        color: #d2ffcc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: Arial, sans-serif;
-        font-size: 1.6rem;
-        letter-spacing: 0.5px;
-        z-index: 99999;
-        text-align: center;
-        opacity: 1;
-        transition: opacity 1.2s ease;
-    }
-
-    #intro-text {
-        opacity: 0;
-        animation: softFlicker 3s infinite ease-in-out;
-    }
-
-    @keyframes softFlicker {
-        0% { opacity: 1; }
-        50% { opacity: 0.92; }
-        100% { opacity: 1; }
-    }
-
-    .fade-out {
-        opacity: 0;
-        pointer-events: none;
-        visibility: hidden;
-    }
-</style>
-</head>
-
-<body class="crt">
-
-<!-- PATCH 02 INTRO -->
-<div id="intro-screen">
-    <p id="intro-text"></p>
-</div>
-
-<!-- MAIN BOOT SCREEN -->
-<div class="screen">
-    <div class="boot" id="bootText">
-Initializing Yellow Basket System…
-Scanning Laguna Nodes…
-Signal Weak — Continuing Anyway…
-
-PRESS ENTER TO CONTINUE
-    </div>
-
-    <div class="btn-row">
-        <a href="store.html" class="btn">ENTER STORE →</a>
-    </div>
-</div>
-
-<style>
-/* --- Y2K BOXED NAV BAR --- */
-.nav {
+  body {
+    margin: 0;
+    background: #0a0f0a;
+    color: #c8ffcc;
+    font-family: "Courier New", monospace;
+    text-shadow: 0 0 4px #88ff88;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    background: rgba(20,30,25,0.45);
-    border-bottom: 1px solid rgba(120,255,200,0.25);
-    margin-bottom: 20px;
-}
+    overflow: hidden;
+  }
 
-.nav-btn {
-    padding: 4px 10px;
-    font-size: 12px;
+  .wrap {
+    max-width: 520px;
+    text-align: center;
+    animation: fadeIn 1.2s ease;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .sub {
+    font-size: 14px;
+    opacity: 0.85;
+    min-height: 42px;
+    margin-bottom: 28px;
+    transition: opacity 0.4s;
+  }
+
+  .enter {
+    display: inline-block;
+    padding: 10px 18px;
+    border: 1px solid #8aff9b;
     color: #c8ffcc;
     text-decoration: none;
-    border: 1px solid rgba(120,255,200,0.35);
-    background: rgba(0,0,0,0.2);
-    border-radius: 3px;
-    text-shadow: 0 0 4px #72ff9e;
-    transition: 0.15s ease-in-out;
-}
+    font-size: 13px;
+    transition: 0.15s;
+  }
 
-.nav-btn:hover {
-    background: rgba(80,255,180,0.1);
-    border-color: rgba(120,255,200,0.7);
-    box-shadow: 0 0 8px rgba(0,255,160,0.3);
-}
+  .enter:hover {
+    background: rgba(0,255,120,0.1);
+    box-shadow: 0 0 6px #00ff80;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 </style>
+</head>
+
+<body>
+
+<div class="wrap">
+  <h1>
+    Hello. Kumusta ka?<br>
+    May “Lifestyle” pa rin ba sa Instagram bio mo?
+  </h1>
+
+  <div class="sub" id="randomLine"></div>
+
+  <a href="store.html" class="enter">
+    ENTER SHOP →
+  </a>
+</div>
 
 <script>
-/* PATCH 02 TEXT SEQUENCE */
-const introText = document.getElementById("intro-text");
-const introScreen = document.getElementById("intro-screen");
+  const lines = [
+    "Kung meron, lika dito. Suki ka.",
+    "Tingin lang muna tayo.",
+    "Walang minamadali dito.",
+    "Hindi lahat ng nandito kailangang bilhin.",
+    "Sale ‘to… emotionally.",
+    "Masaya ka ba sa mga binibili mo?",
+    "Scroll ka lang. Walang manghuhusga.",
+    "May oras ka pa.",
+    "Balik ka mamaya. Andito lang kami.",
+    "Hindi ka nag-iisa dito."
+  ];
 
-const lines = [
-  "Parating na…",
-  "…",
-  "Ang alin…",
-  "Patch #02…",
-  "Yellow Basket.",
-  "still loading—"
-];
+  const el = document.getElementById("randomLine");
 
-let i = 0;
-
-function showNextLine() {
-  introText.style.opacity = 0;
-
-  setTimeout(() => {
-    introText.textContent = lines[i];
-    introText.style.opacity = 1;
-    i++;
-
-    if (i < lines.length) {
-      setTimeout(showNextLine, 1200);
-    } else {
-      setTimeout(() => {
-        introScreen.classList.add("fade-out");
-      }, 1500);
-    }
-  }, 400);
-}
-
-showNextLine();
-</script>
-
-<script>
-/* KONAMI CODE */
-let k = [];
-const secret = "38384040373937396665";
-
-window.addEventListener("keydown", (e) => {
-    k.push(e.keyCode);
-    k = k.slice(-secret.length);
-    if (k.join("") === secret) {
-        window.location.href = "dev-ghost.html";
-    }
-});
-</script>
-
-<script>
-/* SIGNAL WEAK NOTIFICATIONS */
-const notifMessages = [
-    "⚠ Weak signal detected near Pacita Complex.",
-    "📡 Bandwidth drifting… Laguna Lake interference.",
-    "🛈 Premium Pagod levels rising. Slow mode activated.",
-    "⚠ Exposure credits insufficient. Please pay properly.",
-    "📡 Fiber line unstable — Mowgli may be involved.",
-    "🛈 Echo detected from abandoned zone…",
-    "⚠ Algorithmic ghost presence fluctuating.",
-    "📡 Server rerouting via San Pedro 4023 backroads.",
-    "🛈 Wi-Fi Tears levels unsafe. Seek comfort.",
-    "⚠ Data packet got lost trying to cross the bridge."
-];
-
-function spawnNotif() {
-    const msg = notifMessages[Math.floor(Math.random() * notifMessages.length)];
-    const box = document.createElement("div");
-    box.innerText = msg;
-
-    box.style.position = "fixed";
-    box.style.bottom = "20px";
-    box.style.right = "20px";
-    box.style.background = "rgba(10,20,10,0.85)";
-    box.style.padding = "10px 14px";
-    box.style.border = "1px solid rgba(120,255,200,0.4)";
-    box.style.borderRadius = "6px";
-    box.style.fontSize = "12px";
-    box.style.color = "#c8ffcc";
-    box.style.textShadow = "0 0 4px #6cffc0";
-    box.style.opacity = "0";
-    box.style.transition = "opacity 0.6s, transform 0.6s";
-    box.style.zIndex = "9999";
-
-    document.body.appendChild(box);
-
-    requestAnimationFrame(() => {
-        box.style.opacity = "1";
-        box.style.transform = "translateY(-6px)";
-    });
+  function showRandomLine() {
+    el.style.opacity = 0;
 
     setTimeout(() => {
-        box.style.opacity = "0";
-        box.style.transform = "translateY(0)";
-        setTimeout(() => box.remove(), 600);
-    }, 4000);
-}
+      el.textContent = lines[Math.floor(Math.random() * lines.length)];
+      el.style.opacity = 1;
+    }, 300);
+  }
 
-function randomNotifLoop() {
-    const delay = Math.floor(Math.random() * (25000 - 10000)) + 10000; 
-    setTimeout(() => {
-        spawnNotif();
-        randomNotifLoop();
-    }, delay);
-}
-
-randomNotifLoop();
-</script>
-
-<script>
-// MOBILE SECRET UNLOCK — 5 FAST TAPS
-let tapCount = 0;
-let lastTapTime = 0;
-
-document.addEventListener("touchstart", () => {
-    const now = Date.now();
-
-    if (now - lastTapTime > 350) {
-        tapCount = 0;
-    }
-
-    tapCount++;
-    lastTapTime = now;
-
-    if (tapCount >= 5) {
-        window.location.href = "dev-ghost.html";
-    }
-});
+  showRandomLine();
+  setInterval(showRandomLine, 2600);
 </script>
 
 </body>
