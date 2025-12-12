@@ -6,19 +6,16 @@
 <title>Yellow Basket — Store</title>
 
 <style>
-<body>
+body {
+  margin: 0;
+  background: #0a0f0a;
+  color: #c8ffcc;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #88ff88;
+}
 
-<header class="yb-header">
-  <a href="index.html" class="logo">YELLOW BASKET</a>
-</header>
-
-<div class="topbar">
-  <a href="store.html">SHOP</a>
-  <a href="cart.html">CART</a>
-  <a href="checkout.html">CHECK OUT</a>
-</div>
-
-  .yb-header {
+/* HEADER */
+.yb-header {
   text-align: center;
   padding: 10px 12px 6px;
   border-bottom: 1px solid rgba(120,255,200,0.25);
@@ -32,6 +29,7 @@
   opacity: 0.9;
 }
 
+/* TOP NAV */
 .topbar {
   display: flex;
   gap: 10px;
@@ -53,6 +51,7 @@
   display: none;
 }
 
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
@@ -88,8 +87,15 @@
   opacity: 0.6;
 }
 
-h3 { margin: 10px 0 4px; font-size: 14px; }
-p { font-size: 12px; opacity: 0.85; }
+h3 {
+  margin: 10px 0 4px;
+  font-size: 14px;
+}
+
+p {
+  font-size: 12px;
+  opacity: 0.85;
+}
 
 .review {
   font-size: 11px;
@@ -99,6 +105,7 @@ p { font-size: 12px; opacity: 0.85; }
   padding-top: 6px;
 }
 
+/* POPUP */
 .popup {
   position: fixed;
   bottom: 20px;
@@ -115,6 +122,10 @@ p { font-size: 12px; opacity: 0.85; }
 </head>
 
 <body>
+
+<header class="yb-header">
+  <a href="index.html" class="logo">YELLOW BASKET</a>
+</header>
 
 <div class="topbar">
   <a href="index.html">HOME</a>
@@ -141,7 +152,7 @@ p { font-size: 12px; opacity: 0.85; }
   <div class="review"></div>
 </div>
 
-<!-- PREMIUM PAGOD XL -->
+<!-- PREMIUM PAGOD -->
 <div class="product">
   <div class="slider">
     <img src="assets/premium-pagod-xl-2.jpeg" class="slide active">
@@ -153,7 +164,7 @@ p { font-size: 12px; opacity: 0.85; }
   <div class="review"></div>
 </div>
 
-<!-- LIFESTYLE STARTER -->
+<!-- LIFESTYLE -->
 <div class="product">
   <img src="assets/lifestyle-starter-pack.jpeg" class="slide active">
   <h3>Lifestyle Starter Pack</h3>
@@ -168,7 +179,7 @@ p { font-size: 12px; opacity: 0.85; }
     <img src="assets/suki-card-2.jpeg" class="slide">
     <div class="hint">swipe →</div>
   </div>
-  <h3>Suki Card</h3>
+  <h3>Suki Card (Unlimited)</h3>
   <p>Hindi ka naman bibili.</p>
   <div class="review"></div>
 </div>
@@ -189,15 +200,32 @@ p { font-size: 12px; opacity: 0.85; }
   <div class="review"></div>
 </div>
 
+<!-- LOW BANDWIDTH CANDLE -->
+<div class="product">
+  <img src="assets/low-bandwidth-candle.jpeg" class="slide active">
+  <h3>Low Bandwidth Candle</h3>
+  <p>Amoy router na mainit.</p>
+  <div class="review"></div>
+</div>
+
+<!-- BROKEN SIM -->
+<div class="product">
+  <img src="assets/broken-sim.jpeg" class="slide active">
+  <h3>Broken SIM Card of Love</h3>
+  <p>Hindi na nagre-reply.</p>
+  <div class="review"></div>
+</div>
+
 </div>
 
 <div class="popup" id="popup"></div>
 
 <script>
-// SLIDERS
+/* SLIDERS */
 document.querySelectorAll(".slider").forEach(slider => {
   const slides = slider.querySelectorAll(".slide");
   let i = 0;
+
   slider.addEventListener("click", () => {
     slides[i].classList.remove("active");
     i = (i + 1) % slides.length;
@@ -216,7 +244,7 @@ document.querySelectorAll(".slider").forEach(slider => {
   });
 });
 
-// REVIEWS
+/* REVIEWS */
 const reviews = [
   "★★★★★ di ko pa natatanggap pero solid na",
   "★★☆☆☆ mahal pero aesthetic",
@@ -230,7 +258,7 @@ document.querySelectorAll(".review").forEach(r => {
   r.textContent = reviews[Math.floor(Math.random() * reviews.length)];
 });
 
-// PROMO POPUPS
+/* PROMO POPUPS */
 const promos = [
   "SALE: SUKI10 — parang may bawas",
   "PROMO: ADD2CART — salamat sa pagtingin",
