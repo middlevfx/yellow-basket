@@ -1,39 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Loading — Yellow Basket</title>
 
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
-<meta charset="UTF-8">
-<title>Loading…</title>
 <style>
-    body {
-        background:#000;
-        color:#aaffcc;
-        font-family:"Courier New";
-        text-align:center;
-        padding-top:120px;
-        text-shadow:0 0 4px #72ff9e;
-    }
-    .dot {
-        animation: blink 1.5s infinite;
-    }
-    @keyframes blink {
-        0%,100%{opacity:0.2;}
-        50%{opacity:1;}
-    }
+  body {
+    margin: 0;
+    background: #0a0f0a;
+    color: #c8ffcc;
+    font-family: "Courier New", monospace;
+    text-shadow: 0 0 4px #88ff88;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .wrap {
+    text-align: center;
+    animation: flicker 2.8s infinite;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 14px;
+    opacity: 0.9;
+    min-height: 40px;
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.92; }
+  }
+
+  .blink {
+    animation: blink 1.4s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
 </style>
 </head>
+
 <body>
-Booting Yellow Basket…
-<div class="dot">● ● ●</div>
+
+<div class="wrap">
+  <h1>Uyy suki!!!</h1>
+  <p id="line"></p>
+  <p class="blink">loading…</p>
+</div>
 
 <script>
-setTimeout(()=>{ window.location.href="index.html"; }, 1800);
+  const lines = [
+    "Add to cart ka nang add to cart, hindi mo rin naman iche-checkout.",
+    "Libre mangarap. Bayad ang delivery.",
+    "Sale ’to kanina, mahal na ulit ngayon.",
+    "Okay lang. Tingnan mo lang.",
+    "Balik ka ulit mamaya, pareho pa rin ’yan.",
+    "Hindi mo kailangan ’yan. Pero gusto mo.",
+    "Low signal detected. High desire still active."
+  ];
+
+  const lineEl = document.getElementById("line");
+  let i = 0;
+
+  function rotateLines() {
+    lineEl.style.opacity = 0;
+
+    setTimeout(() => {
+      lineEl.textContent = lines[i % lines.length];
+      lineEl.style.opacity = 1;
+      i++;
+    }, 400);
+  }
+
+  rotateLines();
+  setInterval(rotateLines, 1800);
+
+  // auto-redirect to index after a bit
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 9000);
 </script>
 
 </body>
