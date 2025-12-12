@@ -1,127 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — Yellow Basket</title>
 
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout — Yellow Basket 4023</title>
 <style>
-    body {
-        background: #0a0f0a;
-        color: #c8ffcc;
-        font-family: "Courier New", monospace;
-        padding: 20px;
-        text-shadow: 0 0 4px #76ff9b;
-    }
-    .crt::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-            to bottom,
-            rgba(0,0,0,0) 0px,
-            rgba(0,255,80,0.06) 2px,
-            rgba(0,0,0,0) 4px
-        );
-        opacity: .25;
-    }
-    h1 { font-size: 20px; text-align: center; margin-bottom: 10px; }
-    p { max-width: 520px; margin: 0 auto 16px; line-height: 1.5; text-align: center; }
+body {
+  margin: 0;
+  background: #0a0f0a;
+  color: #c8ffcc;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #88ff88;
+}
 
-    .box {
-        max-width: 420px;
-        margin: 20px auto;
-        padding: 16px;
-        border: 1px solid rgba(120,255,200,0.35);
-        background: rgba(10,20,16,0.45);
-        border-radius: 6px;
-        text-align: left;
-    }
+a { color: inherit; text-decoration: none; }
 
-    .label { font-size: 12px; margin-bottom: 4px; }
-    input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid rgba(120,255,200,0.35);
-        background: rgba(0,0,0,0.3);
-        color: #c8ffcc;
-        margin-bottom: 10px;
-        border-radius: 4px;
-    }
+.topbar {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 14px;
+  border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-size: 12px;
+}
 
-    button {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid rgba(120,255,200,0.5);
-        background: rgba(0,0,0,0.35);
-        color: #c8ffcc;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: .15s ease;
-    }
-    button:hover {
-        background: rgba(80,255,180,0.1);
-        box-shadow: 0 0 8px rgba(0,255,160,0.3);
-    }
+.topbar a {
+  padding: 6px 10px;
+  border: 1px solid rgba(120,255,200,0.3);
+}
 
-    .output {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 12px;
-        opacity: 0;
-        transition: 0.6s ease;
-    }
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1 {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.section {
+  border: 1px solid rgba(120,255,200,0.25);
+  padding: 14px;
+  margin-bottom: 18px;
+  background: rgba(0,0,0,0.3);
+}
+
+label {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input, select {
+  width: 100%;
+  background: #0a0f0a;
+  border: 1px solid rgba(120,255,200,0.4);
+  color: #c8ffcc;
+  padding: 8px;
+  margin-bottom: 12px;
+  font-family: inherit;
+}
+
+.pay {
+  padding: 10px 14px;
+  border: 1px solid #8aff9b;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.pay:hover {
+  background: rgba(0,255,120,0.1);
+  box-shadow: 0 0 6px #00ff80;
+}
+
+.pay.crash {
+  border-color: #ff6b6b;
+}
+
+.pay.luggage {
+  border-color: #ffe66b;
+}
+
+.shake {
+  animation: shake 0.4s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+.small {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 12px;
+}
 </style>
 </head>
-<body class="crt">
- <div class="nav">
-    <a href="index.html" class="nav-btn">HOME</a>
-    <a href="store.html" class="nav-btn">STORE</a>
-    <a href="cart.html" class="nav-btn">CART</a>
-    <a href="checkout.html" class="nav-btn">CHECKOUT</a>
-    <a href="about.html" class="nav-btn">ABOUT</a>
-    <a href="abandoned.html" class="nav-btn">ABANDONED</a>
+
+<body>
+
+<div class="topbar">
+  <a href="store.html">SHOP</a>
+  <a href="cart.html">CART</a>
+  <a href="checkout.html">CHECK OUT</a>
 </div>
-    
-<h1>CHECKOUT — SAN PEDRO NODE</h1>
-<p>Fill out the fields below and attempt a transaction in this unstable timeline.</p>
 
-<div class="box">
-    <div class="label">Name</div>
-    <input type="text" id="name">
+<div class="wrap">
+  <h1>Checkout</h1>
 
-    <div class="label">Address</div>
-    <input type="text" id="address">
+  <div class="section">
+    <label>Name</label>
+    <input placeholder="Buong pangalan mo talaga?" />
 
-    <div class="label">Signal Strength</div>
-    <input type="text" placeholder="0–1 bar recommended" id="signal">
+    <label>Address</label>
+    <input placeholder="Sigurado ka ba dito?" />
 
-    <button onclick="process()">PROCESS ORDER</button>
+    <label>Typical Barista ka ba?</label>
+    <select>
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+  </div>
 
-    <div class="output" id="result">
-        <!-- result text appears here -->
-    </div>
+  <div class="section">
+    <h1>Payment Method</h1>
+
+    <div class="pay">GCRUSH my location sir</div>
+    <div class="pay">Paykomaya (daw)</div>
+    <div class="pay">Paying with Clout / Exposure</div>
+    <div class="pay crash">Crash Out Payment</div>
+    <div class="pay luggage">Flood Control Luggage 🧳 Payment</div>
+
+    <label>Promo Code</label>
+    <input placeholder="Kung meron man…" />
+  </div>
+
+  <div class="small">
+    By proceeding, inaamin mo na baka hindi mo kailangan ’to.
+  </div>
 </div>
 
 <script>
-function process() {
-    const r = document.getElementById('result');
-    r.style.opacity = 1;
-    r.innerHTML = `
-        <b>TRANSACTION FAILED.</b><br><br>
-        Your order drifted across Laguna Lake and never reached the server.<br>
-        Payment processed in a parallel timeline (not this one).<br><br>
-        <i>Estimated Delivery: 4023–4024<br>
-        (subject to signal interference)</i>
-    `;
-}
+const crash = document.querySelector(".pay.crash");
+const luggage = document.querySelector(".pay.luggage");
+
+crash.addEventListener("click", () => {
+  crash.classList.add("shake");
+  setTimeout(() => {
+    window.location.href = "404.html";
+  }, 1200);
+});
+
+luggage.addEventListener("click", () => {
+  luggage.classList.add("shake");
+  setTimeout(() => {
+    window.location.href = "404.html";
+  }, 1200);
+});
+
+// fake exposure check
+document.querySelectorAll(".pay").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (!btn.classList.contains("crash") && !btn.classList.contains("luggage")) {
+      alert("Processing… this may take longer than expected.");
+    }
+  });
+});
 </script>
 
 </body>
