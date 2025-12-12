@@ -1,602 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="assets/yb-pixel.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/basket-crt.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/glitch-square.svg" type="image/svg+xml">
-
-<meta name="theme-color" content="#0f0f0f">
-<meta name="description" content="Yellow Basket — Low Bandwidth Dreams from San Pedro 4023.">
-
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Yellow Basket Store — San Pedro 4023</title>
+<title>Yellow Basket — Store</title>
+
 <style>
-    body {
-        background: #0f0f0f;
-        color: #e0f2e9;
-        font-family: "Verdana", sans-serif;
-        margin: 0;
-        padding: 20px;
-        text-shadow: 0 0 4px rgba(0,255,200,0.4);
-    }
+body {
+  margin: 0;
+  background: #0a0f0a;
+  color: #c8ffcc;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #88ff88;
+}
 
-    .crt::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-            to bottom,
-            rgba(0,0,0,0) 0px,
-            rgba(0,255,80,0.05) 2px,
-            rgba(0,0,0,0) 4px
-        );
-        opacity: 0.25;
-    }
+a { color: inherit; text-decoration: none; }
 
-    .title {
-        text-align: center;
-        font-size: 20px;
-        letter-spacing: 1px;
-        margin-bottom: 10px;
-    }
+.topbar {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 14px;
+  border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-size: 12px;
+}
 
-    .subtitle {
-        text-align: center;
-        color: #9cc;
-        font-size: 12px;
-        margin-bottom: 30px;
-    }
+.topbar a {
+  padding: 6px 10px;
+  border: 1px solid rgba(120,255,200,0.3);
+}
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 20px;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 20px;
+  padding: 20px;
+}
 
-    .item {
-        background: rgba(20, 30, 25, 0.55);
-        border: 1px solid rgba(80, 120, 100, 0.4);
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 13px;
-        text-align: center;
-        transition: 0.12s ease-in-out;
-        cursor: pointer;
-    }
+.product {
+  border: 1px solid rgba(120,255,200,0.25);
+  padding: 12px;
+  background: rgba(0,0,0,0.3);
+}
 
-    .item:hover {
-        background: rgba(50, 255, 180, 0.08);
-        border-color: rgba(120, 255, 200, 0.5);
-        text-shadow: 0 0 6px rgba(0,255,200,0.8);
-    }
+.slider {
+  position: relative;
+  overflow: hidden;
+}
 
-    /* Thumbnail + shimmer (low-bandwidth vibe) */
-    .thumb {
-        position: relative;
-        height: 150px;
-        border-radius: 4px;
-        overflow: hidden;
-        margin-bottom: 8px;
-        border: 1px solid rgba(80,120,100,0.45);
-        background: #1b2520;
-    }
+.slide {
+  display: none;
+  width: 100%;
+}
 
-    .thumb::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            90deg,
-            rgba(10,30,20,0.8) 0%,
-            rgba(80,255,180,0.25) 50%,
-            rgba(10,30,20,0.8) 100%
-        );
-        background-size: 200% 100%;
-        animation: shimmer 1.1s linear infinite;
-    }
+.slide.active {
+  display: block;
+}
 
-    .thumb.loaded::before {
-        display: none;
-    }
+.hint {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 10px;
+  opacity: 0.6;
+}
 
-    .thumb img {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 4px;
-        opacity: 0;
-        transition: opacity 0.3s ease-out;
-    }
+h3 { margin: 10px 0 4px; font-size: 14px; }
+p { font-size: 12px; opacity: 0.85; }
 
-    .thumb.loaded img {
-        opacity: 1;
-    }
+.review {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 6px;
+  border-top: 1px dashed rgba(120,255,200,0.2);
+  padding-top: 6px;
+}
 
-    @keyframes shimmer {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
-    }
-
-    .item-name {
-        font-weight: 600;
-        margin-bottom: 4px;
-    }
-
-    .item-price {
-        font-size: 12px;
-        color: #b7ffd9;
-        margin-bottom: 6px;
-    }
-
-    .item-desc {
-        font-size: 11px;
-        color: #a2c9c0;
-        line-height: 1.35;
-    }
-
-    .back {
-        display: block;
-        margin: 40px auto 0;
-        width: fit-content;
-        color: #aaffcc;
-        text-decoration: none;
-        font-size: 14px;
-        transition: 0.12s;
-    }
-
-    .back:hover {
-        text-shadow: 0 0 6px #88ffbb;
-    }
-
-    /* Footer / lore */
-    .footer {
-        margin-top: 30px;
-        font-size: 11px;
-        text-align: center;
-        color: #88a9a0;
-        opacity: 0.8;
-    }
-
-    .footer a {
-        color: #b7ffd9;
-        text-decoration: none;
-    }
-
-    .footer a:hover {
-        text-shadow: 0 0 6px #88ffbb;
-    }
-
-    /* Modal (product preview) */
-    .modal.hidden {
-        display: none;
-    }
-
-    .modal {
-        position: fixed;
-        inset: 0;
-        z-index: 99;
-    }
-
-    .modal-backdrop {
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,0.65);
-        backdrop-filter: blur(2px);
-    }
-
-    .modal-box {
-        position: relative;
-        max-width: 360px;
-        margin: 60px auto;
-        background: #101b16;
-        border-radius: 8px;
-        border: 1px solid rgba(120,255,200,0.4);
-        padding: 14px 16px 16px;
-        box-shadow: 0 0 18px rgba(0,255,160,0.4);
-        text-align: left;
-    }
-
-    .modal-img-wrap {
-        height: 200px;
-        border-radius: 6px;
-        overflow: hidden;
-        border: 1px solid rgba(80,120,100,0.6);
-        margin-bottom: 10px;
-    }
-
-    .modal-img-wrap img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .modal-title {
-        font-size: 15px;
-        margin: 0 0 4px;
-    }
-
-    .modal-price {
-        font-size: 13px;
-        color: #b7ffd9;
-        margin: 0 0 8px;
-    }
-
-    .modal-desc {
-        font-size: 11px;
-        color: #a2c9c0;
-        line-height: 1.4;
-        margin-bottom: 6px;
-    }
-
-    .modal-note {
-        font-size: 10px;
-        color: #7aa39b;
-    }
-
-    .modal-close {
-        position: absolute;
-        top: 6px;
-        right: 8px;
-        border: none;
-        background: transparent;
-        color: #c8ffcc;
-        cursor: pointer;
-        font-size: 18px;
-        line-height: 1;
-        padding: 0;
-        text-shadow: 0 0 5px #00ff99;
-    }
-
-    .modal-close:hover {
-        color: #ffffff;
-    }
+.popup {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(10,20,10,0.9);
+  border: 1px solid rgba(120,255,200,0.4);
+  padding: 10px 14px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity .6s;
+  z-index: 9999;
+}
 </style>
 </head>
-    
-<body class="crt">
 
-<div class="nav">
-    <a href="index.html" class="nav-btn">HOME</a>
-    <a href="store.html" class="nav-btn">STORE</a>
-    <a href="cart.html" class="nav-btn">CART</a>
-    <a href="checkout.html" class="nav-btn">CHECKOUT</a>
-    <a href="about.html" class="nav-btn">ABOUT</a>
-    <a href="abandoned.html" class="nav-btn">ABANDONED</a>
+<body>
+
+<div class="topbar">
+  <a href="index.html">HOME</a>
+  <a href="cart.html">CART</a>
+  <a href="shopping.zodiac.html">SHOPPING ZODIAC</a>
+  <a href="abandoned.html">ABANDONED ITEMS</a>
+  <a href="random.items.html">RANDOM ITEM FOR YOU</a>
+  <a href="checkout.html">CHECK OUT</a>
 </div>
-
-<div class="title">YELLOW BASKET STORE — SAN PEDRO 4023</div>
-<div class="subtitle">Low Bandwidth Dreams • AI-Rendered Goods • Laguna-Core Artifacts</div>
 
 <div class="grid">
 
-    <div class="item"
-         data-name="Mowgli’s Bite Mark"
-         data-price="₱199.00"
-         data-desc="Limited-edition chew pattern, scanned from one (1) Laguna-based asong gala."
-         data-img="assets/mowgli.jpeg">
-        <div class="thumb">
-            <img src="assets/mowgli.jpeg" alt="Mowgli’s Bite Mark">
-        </div>
-        <div class="item-name">Mowgli’s Bite Mark</div>
-        <div class="item-price">₱199.00</div>
-        <div class="item-desc">Limited-edition chew pattern, scanned from one (1) Laguna-based asong gala.</div>
-    </div>
+<!-- WIFI TEARS -->
+<div class="product">
+  <div class="slider">
+    <img src="assets/wifi-tears-1.jpeg" class="slide active">
+    <img src="assets/wifi-tears-2.jpeg" class="slide">
+    <img src="assets/wifi-tears-3.jpeg" class="slide">
+    <img src="assets/wifi-tears-4.jpeg" class="slide">
+    <div class="hint">swipe →</div>
+  </div>
+  <h3>Wi-Fi Tears</h3>
+  <p>Halos online.</p>
+  <div class="review"></div>
+</div>
 
-    <div class="item"
-         data-name="Broken Sim Card of Love"
-         data-price="₱49.00"
-         data-desc="Expired load, active feelings. All networks unavailable since 20:23."
-         data-img="assets/broken-sim.jpeg">
-        <div class="thumb">
-            <img src="assets/broken-sim.jpeg" alt="Broken Sim Card of Love">
-        </div>
-        <div class="item-name">Broken Sim Card of Love</div>
-        <div class="item-price">₱49.00</div>
-        <div class="item-desc">Expired load, active feelings. All networks unavailable since 20:23.</div>
-    </div>
+<!-- PREMIUM PAGOD XL -->
+<div class="product">
+  <div class="slider">
+    <img src="assets/premium-pagod-xl-2.jpeg" class="slide active">
+    <img src="assets/premium-pagod-xl-3.jpeg" class="slide">
+    <div class="hint">swipe →</div>
+  </div>
+  <h3>Premium Pagod (XL)</h3>
+  <p>Mas malaki, mas pagod.</p>
+  <div class="review"></div>
+</div>
 
-    <div class="item"
-         data-name="Lo-Fi CD-R Pack (10pcs)"
-         data-price="₱123.00"
-         data-desc="For burning mixes, memories, and unfinished projects. Some sectors may skip."
-         data-img="assets/cdr-pack.jpeg">
-        <div class="thumb">
-            <img src="assets/cdr-pack.jpeg" alt="Lo-Fi CD-R Pack 10pcs">
-        </div>
-        <div class="item-name">Lo-Fi CD-R Pack (10pcs)</div>
-        <div class="item-price">₱123.00</div>
-        <div class="item-desc">For burning mixes, memories, and unfinished projects. Some sectors may skip.</div>
-    </div>
+<!-- SPECIALTY COFFEE -->
+<div class="product">
+  <img src="assets/cdr-pack.jpeg" class="slide active">
+  <h3>Specialty Coffee (Not Really)</h3>
+  <p>Third wave sa presyo, instant sa lasa.</p>
+  <div class="review"></div>
+</div>
 
-    <div class="item"
-         data-name="Buffer Power Bank"
-         data-price="₱4023.00"
-         data-desc="Keeps your phone at 3% forever. Perfect for emotionally unavailable charging."
-         data-img="assets/buffer-pb.jpeg">
-        <div class="thumb">
-            <img src="assets/buffer-pb.jpeg" alt="Buffer Power Bank">
-        </div>
-        <div class="item-name">Buffer Power Bank</div>
-        <div class="item-price">₱4023.00</div>
-        <div class="item-desc">Keeps your phone at 3% forever. Perfect for emotionally unavailable charging.</div>
-    </div>
+<!-- LIFESTYLE STARTER -->
+<div class="product">
+  <img src="assets/lifestyle-starter-pack.jpeg" class="slide active">
+  <h3>Lifestyle Starter Pack</h3>
+  <p>Bio-ready. Identity sold separately.</p>
+  <div class="review"></div>
+</div>
 
-    <div class="item"
-         data-name="Tambay Time Voucher"
-         data-price="₱0.00"
-         data-desc="Redeemable at any sari-sari, waiting shed, or kanto. No expiry, no Wi-Fi."
-         data-img="assets/tambay-voucher.jpeg">
-        <div class="thumb">
-            <img src="assets/tambay-voucher.jpeg" alt="Tambay Time Voucher">
-        </div>
-        <div class="item-name">Tambay Time Voucher</div>
-        <div class="item-price">₱0.00</div>
-        <div class="item-desc">Redeemable at any sari-sari, waiting shed, or kanto. No expiry, no Wi-Fi.</div>
-    </div>
+<!-- SUKI CARD -->
+<div class="product">
+  <div class="slider">
+    <img src="assets/suki-card-1.jpeg" class="slide active">
+    <img src="assets/suki-card-2.jpeg" class="slide">
+    <div class="hint">swipe →</div>
+  </div>
+  <h3>Suki Card</h3>
+  <p>Hindi ka naman bibili.</p>
+  <div class="review"></div>
+</div>
 
-    <div class="item"
-         data-name="Laguna Lake Mist — Limited Edition"
-         data-price="₱319.00"
-         data-desc="Collected at dawn along the lakeside. Contents may include memories and microplastics."
-         data-img="assets/laguna-mist.jpeg">
-        <div class="thumb">
-            <img src="assets/laguna-mist.jpeg" alt="Laguna Lake Mist Limited Edition">
-        </div>
-        <div class="item-name">Laguna Lake Mist — Limited Edition</div>
-        <div class="item-price">₱319.00</div>
-        <div class="item-desc">Collected at dawn along the lakeside. Contents may include memories and microplastics.</div>
-    </div>
+<!-- SIGNAL BOOSTER -->
+<div class="product">
+  <img src="assets/signal-booster.jpeg" class="slide active">
+  <h3>Signal Booster (Placebo)</h3>
+  <p>Gumagana sa paniniwala.</p>
+  <div class="review"></div>
+</div>
 
-    <div class="item"
-         data-name="Premium Pagod (500g)"
-         data-price="₱159.00"
-         data-desc="Slow-brewed exhaustion from overthinking, commuting, and side quests."
-         data-img="assets/premium-pagod.jpeg">
-        <div class="thumb">
-            <img src="assets/premium-pagod.jpeg" alt="Premium Pagod">
-        </div>
-        <div class="item-name">Premium Pagod (500g)</div>
-        <div class="item-price">₱159.00</div>
-        <div class="item-desc">Slow-brewed exhaustion from overthinking, commuting, and side quests.</div>
-    </div>
-
-    <div class="item"
-         data-name="Wi-Fi Tears — Refill Pack"
-         data-price="₱88.00"
-         data-desc="Distilled from every “no internet connection” pop-up. Best served with buffering."
-         data-img="assets/wifi-tears.jpeg">
-        <div class="thumb">
-            <img src="assets/wifi-tears.jpeg" alt="Wi-Fi Tears Refill Pack">
-        </div>
-        <div class="item-name">Wi-Fi Tears — Refill Pack</div>
-        <div class="item-price">₱88.00</div>
-        <div class="item-desc">Distilled from every “no internet connection” pop-up. Best served with buffering.</div>
-    </div>
+<!-- TAMBAY CHAIR -->
+<div class="product">
+  <img src="assets/tambay-approved-chair.jpeg" class="slide active">
+  <h3>Tambay Approved Chair</h3>
+  <p>Para sa matagal na pag-iisip.</p>
+  <div class="review"></div>
+</div>
 
 </div>
 
-<a href="index.html" class="back">← Back to Home</a>
-
-<div class="footer">
-    © 4023 • Yellow Basket — San Pedro Node<br>
-    Powered by weak signal & strong feelings.<br>
-    Shipments may be delayed due to existential buffering.<br>
-    <a href="abandoned.html">Enter Abandoned Zone →</a>
-</div>
-
-<!-- Modal -->
-<div id="productModal" class="modal hidden">
-    <div class="modal-backdrop"></div>
-    <div class="modal-box">
-        <button class="modal-close" aria-label="Close">×</button>
-        <div class="modal-img-wrap">
-            <img id="modalImg" src="" alt="">
-        </div>
-        <h2 id="modalName" class="modal-title"></h2>
-        <p id="modalPrice" class="modal-price"></p>
-        <p id="modalDesc" class="modal-desc"></p>
-        <p class="modal-note">This is a fictional product in a low-bandwidth dream. No actual delivery will arrive.</p>
-    </div>
-</div>
+<div class="popup" id="popup"></div>
 
 <script>
-    // shimmer → mark thumbnails as loaded when images finish
-    document.querySelectorAll(".thumb img").forEach(img => {
-        const parent = img.parentElement;
-        const markLoaded = () => parent.classList.add("loaded");
+// SLIDERS
+document.querySelectorAll(".slider").forEach(slider => {
+  const slides = slider.querySelectorAll(".slide");
+  let i = 0;
+  slider.addEventListener("click", () => {
+    slides[i].classList.remove("active");
+    i = (i + 1) % slides.length;
+    slides[i].classList.add("active");
+  });
 
-        if (img.complete) {
-            markLoaded();
-        } else {
-            img.addEventListener("load", markLoaded);
-            img.addEventListener("error", markLoaded);
-        }
-    });
-
-    // Modal logic
-    const modal = document.getElementById("productModal");
-    const modalImg = document.getElementById("modalImg");
-    const modalName = document.getElementById("modalName");
-    const modalPrice = document.getElementById("modalPrice");
-    const modalDesc = document.getElementById("modalDesc");
-
-    function openModal(item) {
-        const name = item.dataset.name;
-        const price = item.dataset.price;
-        const desc = item.dataset.desc;
-        const img = item.dataset.img;
-
-        modalImg.src = img;
-        modalImg.alt = name;
-        modalName.textContent = name;
-        modalPrice.textContent = price;
-        modalDesc.textContent = desc;
-
-        modal.classList.remove("hidden");
+  let startX = 0;
+  slider.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  slider.addEventListener("touchend", e => {
+    let diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      slides[i].classList.remove("active");
+      i = diff > 0 ? (i + 1) % slides.length : (i - 1 + slides.length) % slides.length;
+      slides[i].classList.add("active");
     }
+  });
+});
 
-    function closeModal() {
-        modal.classList.add("hidden");
-    }
-
-    document.querySelectorAll(".item").forEach(item => {
-        item.addEventListener("click", () => openModal(item));
-    });
-
-    document.querySelector(".modal-backdrop").addEventListener("click", closeModal);
-    document.querySelector(".modal-close").addEventListener("click", closeModal);
-
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
-    });
-    /* --- CENTERED TOP NAV — YELLOW BASKET --- */
-.nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin: 12px 0 18px 0;
-    flex-wrap: wrap;
-}
-
-/* Links styling */
-.nav a {
-    color: #9affc8;
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 6px 10px;
-    border: 1px solid rgba(120,255,200,0.25);
-    border-radius: 4px;
-    background: rgba(0,0,0,0.35);
-    text-shadow:
-        0 0 4px rgba(120,255,200,0.8),
-        0 0 8px rgba(80,255,180,0.6);
-    transition: 0.2s ease;
-}
-
-/* Hover glow */
-.nav a:hover {
-    border-color: rgba(140,255,220,0.7);
-    box-shadow:
-        0 0 6px rgba(120,255,200,0.7),
-        0 0 12px rgba(80,255,180,0.5);
-    text-shadow:
-        0 0 6px rgba(160,255,220,1),
-        0 0 14px rgba(120,255,200,0.8);
-}
-
-/* Mobile polish */
-@media (max-width: 600px) {
-    .nav {
-        gap: 10px;
-        margin-top: 8px;
-    }
-
-    .nav a {
-        font-size: 11px;
-        padding: 5px 9px;
-    }
-}
-
-</script>
-<script>
-/* RANDOM GHOST PORTAL: 5% chance to enter SYSTEM ALERTS */
-if (Math.random() < 0.05) {
-    setTimeout(() => {
-        window.location.href = "system-alerts.html";
-    }, 1800);
-}
-</script>
-<script>
-/* -------------------------------------------
-   SAN PEDRO SIGNAL WEAKENING NOTIFICATIONS
-   ------------------------------------------- */
-
-const notifMessages = [
-    "⚠ Weak signal detected near Pacita Complex.",
-    "📡 Bandwidth drifting… Laguna Lake interference.",
-    "🛈 Premium Pagod levels rising. Slow mode activated.",
-    "⚠ Exposure credits insufficient. Please pay properly.",
-    "📡 Fiber line unstable — Mowgli may be involved.",
-    "🛈 Echo detected from abandoned zone…",
-    "⚠ Algorithmic ghost presence fluctuating.",
-    "📡 Server rerouting via San Pedro 4023 backroads.",
-    "🛈 Wi-Fi Tears levels unsafe. Seek comfort.",
-    "⚠ Data packet got lost trying to cross the bridge."
+// REVIEWS
+const reviews = [
+  "★★★★★ di ko pa natatanggap pero solid na",
+  "★★☆☆☆ mahal pero aesthetic",
+  "★★★★★ pang-my day lang",
+  "★☆☆☆☆ hindi ako ang target market",
+  "★★★★★ binili kahit walang pera",
+  "★★★☆☆ okay lang siguro"
 ];
 
-/* create notification bubble */
-function spawnNotif() {
-    const msg = notifMessages[Math.floor(Math.random() * notifMessages.length)];
-
-    const box = document.createElement("div");
-    box.innerText = msg;
-
-    box.style.position = "fixed";
-    box.style.bottom = "20px";
-    box.style.right = "20px";
-    box.style.background = "rgba(10,20,10,0.85)";
-    box.style.padding = "10px 14px";
-    box.style.border = "1px solid rgba(120,255,200,0.4)";
-    box.style.borderRadius = "6px";
-    box.style.fontSize = "12px";
-    box.style.color = "#c8ffcc";
-    box.style.textShadow = "0 0 4px #6cffc0";
-    box.style.opacity = "0";
-    box.style.transition = "opacity 0.6s, transform 0.6s";
-    box.style.zIndex = "9999";
-
-    document.body.appendChild(box);
-
-    // fade in
-    requestAnimationFrame(() => {
-        box.style.opacity = "1";
-        box.style.transform = "translateY(-6px)";
-    });
-
-    // fade out
-    setTimeout(() => {
-        box.style.opacity = "0";
-        box.style.transform = "translateY(0)";
-        setTimeout(() => box.remove(), 600);
-    }, 4000);
-}
-
-/* trigger notifications at random intervals */
-function randomNotifLoop() {
-    const delay = Math.floor(Math.random() * (25000 - 10000)) + 10000; 
-    setTimeout(() => {
-        spawnNotif();
-        randomNotifLoop();
-    }, delay);
-}
-
-randomNotifLoop();
-</script>
-<script>
-// MOBILE SECRET UNLOCK — 5 FAST TAPS
-let tapCount = 0;
-let lastTapTime = 0;
-
-document.addEventListener("touchstart", () => {
-    const now = Date.now();
-
-    // reset if too slow
-    if (now - lastTapTime > 350) {
-        tapCount = 0;
-    }
-
-    tapCount++;
-    lastTapTime = now;
-
-    if (tapCount >= 5) {
-        window.location.href = "dev-ghost.html";
-    }
+document.querySelectorAll(".review").forEach(r => {
+  r.textContent = reviews[Math.floor(Math.random() * reviews.length)];
 });
+
+// PROMO POPUPS
+const promos = [
+  "SALE: SUKI10 — parang may bawas",
+  "PROMO: ADD2CART — salamat sa pagtingin",
+  "LOWBANDWIDTH — signal dependent",
+  "CHECKOUTNA — mamaya na",
+  "LIFESTYLE — bio use only"
+];
+
+const popup = document.getElementById("popup");
+
+function showPopup() {
+  popup.textContent = promos[Math.floor(Math.random() * promos.length)];
+  popup.style.opacity = 1;
+  setTimeout(() => popup.style.opacity = 0, 4000);
+}
+
+setInterval(showPopup, 15000);
 </script>
 
 </body>
