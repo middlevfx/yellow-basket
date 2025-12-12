@@ -1,105 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>/dev/ghost — Yellow Basket 4023</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>dev-ghost — Yellow Basket</title>
 
 <style>
 body {
-    background: #000;
-    color: #9bffd9;
-    font-family: "Courier New", monospace;
-    overflow: hidden;
-    margin: 0;
+  margin: 0;
+  background: #050805;
+  color: #9affc8;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #6cffc0;
+  height: 100vh;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-/* CRT glow */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(0,255,160,0.15), transparent 70%);
-    pointer-events: none;
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  opacity: 0.4;
+  animation: flicker 2.5s infinite;
 }
 
-/* drifting text */
-.ghost {
-    position: absolute;
-    font-size: 14px;
-    opacity: 0.1;
-    animation: drift 18s linear infinite;
-    pointer-events: none;
-    text-shadow: 0 0 6px #55ffcc;
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+  display: none;
 }
 
-@keyframes drift {
-    0% { transform: translateY(0); opacity: 0.15; }
-    50% { opacity: 0.35; }
-    100% { transform: translateY(-600px); opacity: 0; }
+h1 {
+  font-size: 14px;
+  margin-bottom: 22px;
+  opacity: 0.7;
 }
 
-/* warp effect on cursor move */
-.warp {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    mix-blend-mode: screen;
-    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,255,180,0.15), transparent 60%);
+.line {
+  font-size: 13px;
+  margin: 14px 0;
+  min-height: 20px;
+  transition: opacity 0.4s;
+}
+
+.names {
+  margin-top: 36px;
+  font-size: 11px;
+  line-height: 1.7;
+  opacity: 0.55;
+}
+
+.flash {
+  animation: flash 0.15s;
+}
+
+@keyframes flicker {
+  0%,100% { opacity: 0.45; }
+  50% { opacity: 0.25; }
+}
+
+@keyframes flash {
+  from { background: rgba(0,255,160,0.15); }
+  to { background: transparent; }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.4s;
 }
 </style>
 </head>
 
 <body>
-<div id="container"></div>
-<div class="warp"></div>
+
+<div class="overlay" id="hint">
+  system idle — tap / click repeatedly
+</div>
+
+<div class="wrap" id="ghost">
+  <h1>system whispers</h1>
+  <div class="line" id="line"></div>
+
+  <div class="names">
+    Red · Chaleb · Jayceon · Keith · Jayvee · Cacius · Jimo · James · Boiler Boyz<br>
+    M82 · Bangungot-Paul<br>
+    I LOVE YOU MOWGLI! · PACITA 2 · GREATLAND<br>
+    Baller Room · Freestyle Analogue<br>
+    MLSDO · KATH · Multicab Press<br>
+    Franco Mamaril · Roan Alvarez · Rhaz Oriente · Gab Ferrer<br>
+    Luyo Space · Kolown · Salawaki
+  </div>
+</div>
 
 <script>
-/* -------------------------------------------
-   /dev/ghost — HIDDEN LOW-BANDWIDTH ZONE
-------------------------------------------- */
+/* --- HARD CLICK / TAP UNLOCK --- */
+let count = 0;
+let last = 0;
+const threshold = 350;
+const unlockCount = 5;
 
-const lines = [
-    "echoes from pacita terminal…",
-    "lost packets drifting over Laguna Lake",
-    "premium pagod buildup detected",
-    "ghost signature match: 40 23",
-    "retrieving abandoned memories...",
-    "exposure credit instability rising",
-    "low bandwidth dreams leaking through",
-    "signal distortion: san pedro → biñan",
-    "modem whisper: are you still there?",
-    "reconstructing emotional cache…",
-    "corrupt file recovered: /bite-mark.mwg",
-    "drift-event detected inside basket grid",
-    "server mood: pagod pero lumalaban",
-];
+document.addEventListener("mousedown", register);
+document.addEventListener("touchstart", register);
 
-const container = document.getElementById("container");
+function register() {
+  const now = Date.now();
+  if (now - last > threshold) count = 0;
+  count++;
+  last = now;
 
-/* spawn drifting text */
-function spawnGhost() {
-    const el = document.createElement("div");
-    el.className = "ghost";
-    el.innerText = lines[Math.floor(Math.random()*lines.length)];
+  document.body.classList.add("shake");
+  setTimeout(() => document.body.classList.remove("shake"), 300);
 
-    el.style.left = Math.random() * window.innerWidth + "px";
-    el.style.top = (window.innerHeight + 200) + "px";
-
-    container.appendChild(el);
-
-    setTimeout(() => el.remove(), 18000);
+  if (count >= unlockCount) {
+    document.getElementById("hint").style.display = "none";
+    document.getElementById("ghost").style.display = "block";
+    startWhispers();
+  }
 }
 
-/* spawn text every 800–2000ms */
-setInterval(spawnGhost, Math.random()*1200 + 800);
+/* --- WHISPER + TRASHTALK LINES --- */
+const lines = [
+  "echoes from pacita terminal…",
+  "lost packets drifting over Laguna Lake",
+  "premium pagod buildup detected",
+  "ghost signature match: 40 23",
+  "retrieving abandoned memories...",
+  "exposure credit instability rising",
+  "low bandwidth dreams leaking through",
+  "signal distortion: san pedro → biñan",
+  "modem whisper: are you still there?",
+  "reconstructing emotional cache…",
+  "corrupt file recovered: /bite-mark.mwg",
+  "drift-event detected inside basket grid",
+  "server mood: pagod pero lumalaban",
 
+  "Nobody ka lang.",
+  "Porket nag-SCA ka lang.",
+  "Nag-bike lang si Franco.",
+  "An0 rati0 m0 diyan, master?",
+  "Borgy.",
+  "Baka may crazy ka na.",
+  "Follow tas unfollow tas follow ulit?",
+  "Mukha kang tanga niyan.",
+  "Sige spam likes lang.",
+  "Asim ba ng mukha ko?",
+  "Mukha ka nang bungo diyan ah.",
+  "Nasisinagan ka ng araw? Eh wala namang araw.",
+  "Protector of the huzz.",
+  "Hindi typical barista si Ali. Malupit bumuhos yan."
+];
 
-/* cursor warp distortion */
-document.addEventListener("mousemove", (e) => {
-    document.body.querySelector(".warp").style.setProperty("--x", e.clientX + "px");
-    document.body.querySelector(".warp").style.setProperty("--y", e.clientY + "px");
-});
+const lineEl = document.getElementById("line");
+
+function randomLine() {
+  lineEl.style.opacity = 0;
+  setTimeout(() => {
+    lineEl.textContent = lines[Math.floor(Math.random() * lines.length)];
+    lineEl.style.opacity = 1;
+    lineEl.classList.add("flash");
+    setTimeout(() => lineEl.classList.remove("flash"), 150);
+  }, 400);
+}
+
+function startWhispers() {
+  randomLine();
+  setInterval(randomLine, 2400);
+}
 </script>
 
 </body>
