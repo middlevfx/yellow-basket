@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shopping Zodiac — Yellow Basket</title>
+
+<style>
+body {
+  margin: 0;
+  background: #0a0f0a;
+  color: #c8ffcc;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 4px #88ff88;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.topbar {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 14px;
+  border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-size: 12px;
+}
+
+.topbar a {
+  padding: 6px 10px;
+  border: 1px solid rgba(120,255,200,0.3);
+}
+
+.wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.sub {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 24px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  background: #0a0f0a;
+  border: 1px solid rgba(120,255,200,0.4);
+  color: #c8ffcc;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+
+button {
+  padding: 10px 18px;
+  border: 1px solid #8aff9b;
+  background: transparent;
+  color: #c8ffcc;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+button:hover {
+  background: rgba(0,255,120,0.1);
+  box-shadow: 0 0 6px #00ff80;
+}
+
+.result {
+  margin-top: 28px;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 80px;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.note {
+  margin-top: 30px;
+  font-size: 11px;
+  opacity: 0.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <a href="store.html">SHOP</a>
+  <a href="cart.html">CART</a>
+  <a href="abandoned.html">ABANDONED ITEMS</a>
+</div>
+
+<div class="wrap">
+  <h1>Shopping Zodiac</h1>
+  <div class="sub">
+    Ilagay ang birthday mo.<br>
+    Hindi ito hulaan. Obserbasyon ito.
+  </div>
+
+  <input id="bday" type="date" />
+  <button onclick="readZodiac()">TIGNAN MO</button>
+
+  <div class="result" id="result"></div>
+
+  <div class="note">
+    Hindi lahat ng sagot ay para sa’yo.<br>
+    Pero tinatamaan ka.
+  </div>
+</div>
+
+<script>
+const readings = [
+  "Impulse buyer ka. Hindi mo alam kung kailan ka hihinto.",
+  "Tambay ka sa cart. Checkout takot ka.",
+  "Hindi ka naghahanap ng bagay. Naghahanap ka ng validation.",
+  "Mas okay ka nung wala ka pang shopping app.",
+  "Hindi ka target market. Pero pilit mong pinapasok.",
+  "Gusto mo lang ma-feel na may binili ka.",
+  "Hindi mo kailangan ’to. Alam mo ’yan.",
+  "Sale lang ang dahilan, hindi ang solusyon.",
+  "Mahilig ka sa ‘limited’ kahit hindi naman.",
+  "Bumibili ka pag pagod ka.",
+  "Tingin ka lang daw, pero nasasaktan ka na.",
+  "Hindi ka nag-iipon. Nagko-cope ka."
+];
+
+const items = [
+  "Wi-Fi Tears",
+  "Premium Pagod (XL)",
+  "Lifestyle Starter Pack",
+  "Signal Booster (Placebo)",
+  "Suki Card (Unlimited)",
+  "Low Bandwidth Candle",
+  "Tambay Approved Chair"
+];
+
+function readZodiac() {
+  const res = document.getElementById("result");
+  const r = readings[Math.floor(Math.random() * readings.length)];
+  const i = items[Math.floor(Math.random() * items.length)];
+
+  res.innerHTML = `
+    ${r}<br><br>
+    <em>Bagay sa’yo ngayon:</em><br>
+    <strong>${i}</strong>
+  `;
+  res.style.opacity = 1;
+}
+</script>
+
+</body>
+</html>
