@@ -33,13 +33,18 @@ body {
    PATCH 02 NAV COLOR LOCK
    ========================= */
 
-.topbar a {
-  color: #c8ffcc !important;
-  text-shadow: 0 0 4px rgba(120,255,200,0.8);
-  border: 1px solid rgba(120,255,200,0.35);
-  background: rgba(0,0,0,0.35);
+.topbar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;   /* 👈 ITO ANG KEY */
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(120,255,200,0.3);
+  font-size: 11px;
+  overflow-x: auto;
+  white-space: nowrap;
 }
-
+  
 .topbar a:hover {
   border-color: rgba(140,255,220,0.7);
   box-shadow:
