@@ -3,182 +3,117 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>dev-ghost — Yellow Basket</title>
+<title>Dev Ghost — Yellow Basket</title>
 
 <style>
 body {
   margin: 0;
   background: #050805;
-  color: #9affc8;
+  color: #c8ffcc;
   font-family: "Courier New", monospace;
-  text-shadow: 0 0 4px #6cffc0;
-  height: 100vh;
+  text-shadow: 0 0 4px #88ff88;
   overflow: hidden;
-  cursor: pointer;
 }
 
-.overlay {
+.center {
   position: fixed;
   inset: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 13px;
-  opacity: 0.4;
-  animation: flicker 2.5s infinite;
-}
-
-.wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  justify-content: center;
   text-align: center;
-  display: none;
-}
-
-h1 {
-  font-size: 14px;
-  margin-bottom: 22px;
+  font-size: 12px;
   opacity: 0.7;
 }
 
-.line {
-  font-size: 13px;
-  margin: 14px 0;
-  min-height: 20px;
-  transition: opacity 0.4s;
-}
-
-.names {
-  margin-top: 36px;
-  font-size: 11px;
-  line-height: 1.7;
-  opacity: 0.55;
-}
-
-.flash {
-  animation: flash 0.15s;
-}
-
-@keyframes flicker {
-  0%,100% { opacity: 0.45; }
-  50% { opacity: 0.25; }
-}
-
-@keyframes flash {
-  from { background: rgba(0,255,160,0.15); }
-  to { background: transparent; }
-}
-
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  75% { transform: translateX(-4px); }
-  100% { transform: translateX(0); }
-}
-
-.shake {
-  animation: shake 0.4s;
+.note {
+  position: fixed;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.6s, transform 0.6s;
+  pointer-events: none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="overlay" id="hint">
-  system idle — tap / click repeatedly
-</div>
-
-<div class="wrap" id="ghost">
-  <h1>system whispers</h1>
-  <div class="line" id="line"></div>
-
-  <div class="names">
-    Red · Chaleb · Jayceon · Keith · Jayvee · Cacius · Jimo · James · Boiler Boyz<br>
-    M82 · Bangungot-Paul<br>
-    I LOVE YOU MOWGLI! · PACITA 2 · GREATLAND<br>
-    Baller Room · Freestyle Analogue<br>
-    MLSDO · KATH · Multicab Press<br>
-    Franco Mamaril · Roan Alvarez · Rhaz Oriente · Gab Ferrer<br>
-    Luyo Space · Kolown · Salawaki
-  </div>
+<div class="center" id="hint">
+signal unstable…<br>
+hold device steady
 </div>
 
 <script>
-/* --- HARD CLICK / TAP UNLOCK --- */
-let count = 0;
-let last = 0;
-const threshold = 350;
-const unlockCount = 5;
-
-document.addEventListener("mousedown", register);
-document.addEventListener("touchstart", register);
-
-function register() {
-  const now = Date.now();
-  if (now - last > threshold) count = 0;
-  count++;
-  last = now;
-
-  document.body.classList.add("shake");
-  setTimeout(() => document.body.classList.remove("shake"), 300);
-
-  if (count >= unlockCount) {
-    document.getElementById("hint").style.display = "none";
-    document.getElementById("ghost").style.display = "block";
-    startWhispers();
-  }
-}
-
-/* --- WHISPER + TRASHTALK LINES --- */
-const lines = [
-  "echoes from pacita terminal…",
-  "lost packets drifting over Laguna Lake",
-  "premium pagod buildup detected",
+const notes = [
+  "Red · Chaleb · Jayceon · Keith · Jayvee · Cacius · Jimo · James · Boiler Boyz",
+  "SP TOWN · PACITA 2 GREAT LAND",
+  "Baller Room · Freestyle Analogue",
+  "MLSDO · KATH · Multicab Press",
+  "Franco Mamaril · Roan Alvarez · Rhaz Oriente · Gab Ferrer",
+  "Luyo Space · Kolown · Salawaki",
   "ghost signature match: 40 23",
-  "retrieving abandoned memories...",
-  "exposure credit instability rising",
   "low bandwidth dreams leaking through",
-  "signal distortion: san pedro → biñan",
-  "modem whisper: are you still there?",
-  "reconstructing emotional cache…",
-  "corrupt file recovered: /bite-mark.mwg",
-  "drift-event detected inside basket grid",
   "server mood: pagod pero lumalaban",
-
   "Nobody ka lang.",
   "Porket nag-SCA ka lang.",
   "Nag-bike lang si Franco.",
-  "An0 rati0 m0 diyan, master?",
-  "Borgy.",
-  "Baka may crazy ka na.",
-  "Follow tas unfollow tas follow ulit?",
-  "Mukha kang tanga niyan.",
-  "Sige spam likes lang.",
-  "Asim ba ng mukha ko?",
-  "Mukha ka nang bungo diyan ah.",
-  "Nasisinagan ka ng araw? Eh wala namang araw.",
-  "Protector of the huzz.",
-  "Hindi typical barista si Ali. Malupit bumuhos yan."
+  "Ano ratio mo diyan, master?"
 ];
 
-const lineEl = document.getElementById("line");
+let index = 0;
+let active = false;
 
-function randomLine() {
-  lineEl.style.opacity = 0;
+function spawnNote(text) {
+  const n = document.createElement("div");
+  n.className = "note";
+  n.textContent = text;
+
+  n.style.left = Math.random() * 80 + "vw";
+  n.style.top = Math.random() * 80 + "vh";
+
+  document.body.appendChild(n);
+
+  requestAnimationFrame(() => {
+    n.style.opacity = 1;
+    n.style.transform = "translateY(-6px)";
+  });
+
   setTimeout(() => {
-    lineEl.textContent = lines[Math.floor(Math.random() * lines.length)];
-    lineEl.style.opacity = 1;
-    lineEl.classList.add("flash");
-    setTimeout(() => lineEl.classList.remove("flash"), 150);
-  }, 400);
+    n.style.opacity = 0;
+    setTimeout(() => n.remove(), 800);
+  }, 4000);
 }
 
-function startWhispers() {
-  randomLine();
-  setInterval(randomLine, 2400);
+function handleOrientation(e) {
+  const tilt = Math.abs(e.beta); // front-back tilt
+
+  if (tilt < 6 && !active) {
+    active = true;
+    document.getElementById("hint").style.opacity = 0;
+
+    spawnNote(notes[index % notes.length]);
+    index++;
+    setTimeout(() => active = false, 1200);
+  }
 }
+
+// iOS permission
+if (typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function") {
+
+  document.body.addEventListener("click", () => {
+    DeviceOrientationEvent.requestPermission().then(p => {
+      if (p === "granted") {
+        window.addEventListener("deviceorientation", handleOrientation);
+      }
+    });
+  }, { once: true });
+
+  document.getElementById("hint").innerHTML += "<br><br>tap to sync signal";
+
+} else {
+  window.addEventListener("deviceorientation", handleOrientation);
+  }
 </script>
 
 </body>
